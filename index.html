@@ -2437,6 +2437,297 @@ YEARS[1] = { title: "Primary 1", terms: [
 ] };
 
 /* =====================================================================
+   SCHOOL ENGLISH · PRIMARY 2 (NERDC English Studies: vowels, picture reading, tenses, describing words…)
+   18 topics, 6 per term. Same shape as Primary 1: learn slides (last = English superpower) + generators (≥ 60 questions each).
+   ===================================================================== */
+const P2NAMES = () => pick([...BOYS, ...GIRLS]);
+const isBoy = (n) => BOYS.includes(n);
+const art = (w) => ("aeiou".includes(w[0]) ? "an " : "a ") + w;
+const s3 = (v) => (/[^aeiou]y$/.test(v) ? v.slice(0, -1) + "ies" : /(s|sh|ch|x|o)$/.test(v) ? v + "es" : v + "s");
+const edWrong = (v) => (v.endsWith("e") ? v + "d" : v + "ed");
+/* --- term 1 --- */
+// short and long vowel pairs: [short, long, emoji short, emoji long]
+const VPAIRS = [["ship", "sheep", "🚢", "🐑"], ["sit", "seat", "🧍", "💺"], ["cat", "cart", "🐱", "🛒"], ["hat", "heart", "🎩", "❤️"], ["fit", "feet", "💪", "🦶"], ["hill", "heel", "⛰️", "👠"],
+  ["bit", "beat", "🤏", "🥁"], ["fill", "feel", "🫗", "🤗"], ["man", "main", "👨", "🛣️"], ["pan", "pain", "🍳", "🤕"], ["kit", "kite", "🧰", "🪁"], ["cap", "cape", "🧢", "🦸"],
+  ["tub", "tube", "🛁", "🧪"], ["not", "note", "🚫", "🎵"], ["pin", "pine", "📌", "🌲"], ["cub", "cube", "🐻", "🧊"], ["hop", "hope", "🐇", "🙏"], ["rod", "rode", "🎣", "🚴"],
+  ["bed", "bead", "🛏️", "📿"], ["cot", "coat", "🛏️", "🧥"], ["got", "goat", "✅", "🐐"], ["mad", "maid", "😠", "🧹"], ["chip", "cheap", "🍟", "🏷️"], ["sock", "soak", "🧦", "🛁"]];
+const SHORTV = ["a", "e", "i", "o", "u"];
+// picture scenes with questions (who / what / how many / where)
+const SCENES = [
+  { e: "👩‍🍳🍲🔥", c: "Mummy is cooking soup in the kitchen.", q: [["Who is cooking?", "Mummy", ["Daddy", "the baby"]], ["What is she cooking?", "soup", ["bread", "ice cream"]], ["Where is she?", "in the kitchen", ["in the garden", "at school"]]] },
+  { e: "🧒⚽🥅🌳", c: "Felix is playing football on the field.", q: [["What is Felix playing?", "football", ["a drum", "with a kite"]], ["Where is he playing?", "on the field", ["in the bath", "in the bus"]], ["Who is playing?", "Felix", ["Grace", "Grandma"]]] },
+  { e: "👧📚🏫", c: "Grace is reading a book at school.", q: [["What is Grace doing?", "reading a book", ["eating rice", "sleeping"]], ["Where is Grace?", "at school", ["at the market", "in the river"]], ["What is she holding?", "a book", ["a ball", "a cup"]]] },
+  { e: "🐔🐣🐣🐣", c: "A hen has three chicks.", q: [["How many chicks are there?", "three", ["two", "five"]], ["Which bird is the mother?", "the hen", ["the duck", "the owl"]], ["What are the small birds called?", "chicks", ["calves", "puppies"]]] },
+  { e: "🌧️☂️👦", c: "It is raining. David has an umbrella.", q: [["What is the weather like?", "rainy", ["sunny", "snowy"]], ["What does David have?", "an umbrella", ["a kite", "a fan"]], ["Why does David need an umbrella?", "because it is raining", ["because it is hot", "because he is hungry"]]] },
+  { e: "🚌🧒🧒🧒🏫", c: "The children are going to school by bus.", q: [["How are the children going to school?", "by bus", ["by boat", "on foot"]], ["Where are they going?", "to school", ["to the farm", "to the beach"]], ["Who is on the bus?", "the children", ["the goats", "the soldiers"]]] },
+  { e: "🎂🎈🎁👧", c: "It is Amina's birthday. She has a cake and balloons.", q: [["Whose birthday is it?", "Amina's", ["Felix's", "Daddy's"]], ["What does Amina have?", "a cake and balloons", ["a goat and a hen", "shoes and socks"]], ["What is the party for?", "a birthday", ["a wedding", "a football match"]]] },
+  { e: "👨‍🌾🌽🌽🚜", c: "Uncle Musa is harvesting maize on his farm.", q: [["Who is on the farm?", "Uncle Musa", ["Aunty Joy", "the teacher"]], ["What is he harvesting?", "maize", ["fish", "oranges"]], ["What machine is on the farm?", "a tractor", ["a plane", "a bicycle"]]] },
+  { e: "🏖️🌊🦀👫", c: "Ruth and Samuel are at the beach. They see a crab.", q: [["Where are Ruth and Samuel?", "at the beach", ["at the market", "in church"]], ["What animal do they see?", "a crab", ["a lion", "a goat"]], ["How many children are there?", "two", ["four", "one"]]] },
+  { e: "🧑‍⚕️💉👶", c: "The nurse is giving the baby an injection.", q: [["Who is giving the injection?", "the nurse", ["the farmer", "the driver"]], ["Who is getting the injection?", "the baby", ["the dog", "the teacher"]], ["Where could this be?", "at the hospital", ["at the beach", "at the stadium"]]] },
+  { e: "🛒🍅🧅🌶️👵", c: "Grandma is buying tomatoes, onions and pepper at the market.", q: [["Who is at the market?", "Grandma", ["Felix", "the doctor"]], ["What is she buying?", "tomatoes, onions and pepper", ["shoes and bags", "books and pens"]], ["Where is Grandma?", "at the market", ["at the airport", "in bed"]]] },
+  { e: "🌙⭐🛏️😴", c: "It is night. Tobi is sleeping in his bed.", q: [["What time of day is it?", "night", ["morning", "afternoon"]], ["What is Tobi doing?", "sleeping", ["running", "cooking"]], ["Where is Tobi sleeping?", "in his bed", ["on the bus", "under a tree"]]] },
+];
+const PICSENT = [["🐱🛏️", "The cat is on the bed."], ["🐶🦴", "The dog has a bone."], ["👦🚴", "The boy is riding a bicycle."], ["👧🎤", "The girl is singing."], ["🐟🌊", "The fish is in the water."],
+  ["✈️☁️", "The plane is in the sky."], ["🍌🍌🍌", "There are three bananas."], ["👩‍🏫📖", "The teacher is reading."], ["🧒🍦", "The child is eating ice cream."], ["🐓🌅", "The cock crows in the morning."],
+  ["🐘💧", "The elephant is drinking water."], ["👨‍🍳🍕", "The cook is making pizza."], ["🐒🌴", "The monkey is in the tree."], ["🚗🛞", "The car has four wheels."], ["⚽🥅", "The ball is in the net."],
+  ["🐄🌾", "The cow is eating grass."], ["👶🍼", "The baby is drinking milk."], ["🦆🦆", "Two ducks are swimming."], ["🌻☀️", "The sunflower faces the sun."], ["👵🧶", "Grandma is knitting."]];
+// this / that / these / those
+const DEM = NOUNS.filter(([w]) => !["bus", "fish", "sun", "moon", "bread", "mango", "house", "orange", "phone", "plane"].includes(w));
+const demPic = (e, near, many) => (near ? `🫴${many ? e + e + e : e}` : `🧍 ➖➖➖ ${many ? e + e + e : e}`);
+// adjectives: [adjective, noun, emoji, opposite-ish distractor]
+const ADJ = [["big", "elephant", "🐘"], ["small", "ant", "🐜"], ["tall", "giraffe", "🦒"], ["hot", "sun", "☀️"], ["cold", "ice", "🧊"], ["happy", "face", "😀"], ["sad", "face", "😢"],
+  ["fast", "car", "🏎️"], ["slow", "snail", "🐌"], ["long", "snake", "🐍"], ["round", "ball", "⚽"], ["sweet", "cake", "🍰"], ["sour", "lemon", "🍋"], ["red", "tomato", "🍅"],
+  ["soft", "pillow", "🛏️"], ["sharp", "knife", "🔪"], ["wet", "umbrella", "☔"], ["angry", "face", "😠"], ["tired", "face", "😫"], ["shiny", "star", "🌟"], ["old", "man", "👴"], ["new", "car", "🚙"], ["noisy", "drum", "🥁"], ["heavy", "rock", "🪨"]];
+const NOT_ADJ = ["run", "table", "sing", "Musa", "eat", "book", "jump", "school", "write", "Lagos", "goat", "swim"];
+const P2SENT = ["My name is Joy.", "I live in Abuja.", "Felix has a red bike.", "We play at break time.", "Our teacher is kind.", "The market is busy today.", "I eat beans and plantain.",
+  "Grace likes to sing.", "The sun is very hot.", "Daniel goes to church on Sunday.", "My school has a big field.", "The goat is under the tree.", "We wash our hands before we eat.",
+  "Musa reads every night.", "The bus is full.", "Ruth draws a big house.", "I love my country Nigeria.", "Esther sweeps the classroom.", "The baby is crying.", "My father is a driver."];
+const NAMESENT = [["my friend grace is kind.", 2], ["we went to lagos by bus.", 3], ["i saw daniel at the shop.", 2], ["the shop opens on monday.", 4], ["my uncle lives in enugu.", 4],
+  ["this is my sister esther.", 4], ["we eat rice on sunday.", 4], ["my birthday is in june.", 4], ["the children sang for amina.", 4], ["my dog is called bingo.", 4], ["we love our country nigeria.", 4], ["i go to school in jos.", 5]];
+const SHORTW = ["cat", "dog", "pig", "sun", "bus", "hat", "bed", "pen", "map", "fox", "box", "hen", "cup", "egg", "fish", "ship", "frog", "drum", "milk", "duck", "nest", "tent", "hand", "lamp", "desk", "jug", "net", "bag", "leg", "lip"];
+const WEM = { cat: "🐱", dog: "🐶", pig: "🐷", sun: "☀️", bus: "🚌", hat: "🎩", bed: "🛏️", pen: "🖊️", map: "🗺️", fox: "🦊", box: "📦", hen: "🐔", cup: "☕", egg: "🥚", fish: "🐟", ship: "🚢", frog: "🐸",
+  drum: "🥁", milk: "🥛", duck: "🦆", nest: "🪺", tent: "⛺", hand: "✋", lamp: "💡", desk: "🪑", jug: "🫗", net: "🥅", bag: "👜", leg: "🦵", lip: "👄" };
+/* --- term 2 --- */
+const DIG = { sh: [["ship", "🚢"], ["shoe", "👟"], ["sheep", "🐑"], ["shell", "🐚"], ["shirt", "👕"], ["shark", "🦈"]], ch: [["chair", "🪑"], ["chick", "🐤"], ["church", "⛪"], ["cheese", "🧀"], ["chin", "🫦"], ["cherry", "🍒"]],
+  th: [["thumb", "👍"], ["three", "3️⃣"], ["thorn", "🌹"], ["thin", "🥢"], ["thief", "🦹"], ["think", "🤔"]] };
+const DIGEND = { sh: [["fish", "🐟"], ["brush", "🪥"], ["dish", "🍽️"], ["wash", "🧼"]], ch: [["watch", "⌚"], ["lunch", "🍱"], ["bench", "🪑"], ["peach", "🍑"]], th: [["bath", "🛁"], ["tooth", "🦷"], ["mouth", "👄"], ["teeth", "😁"]] };
+const DPAIRS = [["ship", "chip"], ["shop", "chop"], ["sheep", "cheap"], ["shoe", "chew"], ["ship", "sip"], ["shock", "sock"], ["she", "see"], ["thin", "tin"], ["three", "tree"], ["thank", "tank"],
+  ["math", "mat"], ["bath", "bat"], ["chin", "shin"], ["cheese", "these"], ["wash", "watch"], ["catch", "cash"]];
+const FLUENT = ["The sun comes up in the morning.", "Felix and Joy walk to school together.", "Grandma tells us stories at night.", "We clap our hands and sing a song.", "The little goat ran into the yard.",
+  "My mother sells fruit at the market.", "Please close the door when you come in.", "The children are happy because it is Friday.", "Daniel found a blue pen under his desk.", "We must cross the road with care.",
+  "The rain fell all night long.", "Esther gave her friend some groundnuts.", "Our class has twenty chairs.", "The farmer plants yam and cassava.", "I brush my teeth every morning.",
+  "The bird made a nest in the mango tree.", "Musa can count up to one hundred.", "The library is quiet and clean.", "We planted flowers in the school garden.", "The keke stopped near the gate."];
+const IRREG = [["go", "went", "Yesterday Musa ___ to the market."], ["eat", "ate", "Last night we ___ pounded yam."], ["see", "saw", "Yesterday I ___ a big lizard."], ["come", "came", "Grandma ___ to visit us last week."],
+  ["run", "ran", "Yesterday Felix ___ very fast."], ["sit", "sat", "Joy ___ near the window yesterday."], ["drink", "drank", "The baby ___ all the milk."], ["write", "wrote", "Grace ___ a letter to her aunt."],
+  ["buy", "bought", "Daddy ___ a new radio yesterday."], ["sing", "sang", "We ___ the national anthem this morning."], ["swim", "swam", "The ducks ___ in the pond."], ["take", "took", "Tobi ___ his bag to school."],
+  ["give", "gave", "The teacher ___ us homework."], ["sleep", "slept", "I ___ early last night."], ["make", "made", "Mummy ___ moi moi on Sunday."], ["have", "had", "We ___ a party last Saturday."],
+  ["fly", "flew", "The bird ___ away."], ["catch", "caught", "David ___ the ball."], ["bring", "brought", "Ruth ___ her crayons to class."], ["tell", "told", "Grandpa ___ us a story."],
+  ["get", "got", "Esther ___ a prize at school."], ["find", "found", "Samuel ___ his lost shoe."], ["stand", "stood", "We ___ in a straight line."], ["wear", "wore", "Amina ___ her new dress."]];
+const ING = [["run", "running", "🏃"], ["swim", "swimming", "🏊"], ["sit", "sitting", "🧘"], ["dance", "dancing", "💃"], ["write", "writing", "✍️"], ["ride", "riding", "🚴"], ["read", "reading", "📖"],
+  ["sing", "singing", "🎤"], ["cook", "cooking", "🍳"], ["sleep", "sleeping", "😴"], ["clap", "clapping", "👏"], ["cry", "crying", "😢"], ["drink", "drinking", "🥤"], ["climb", "climbing", "🧗"],
+  ["paint", "painting", "🎨"], ["sweep", "sweeping", "🧹"], ["skip", "skipping", "🪢"], ["shop", "shopping", "🛍️"], ["make", "making", "🛠️"], ["smile", "smiling", "😊"], ["eat", "eating", "🍽️"], ["play", "playing", "🎮"]];
+const ingWrong = (b, i) => uniq([b + "ing", i.replace(/(.)\1ing$/, "$1ing"), b.replace(/e$/, "") + "eing", b + b.slice(-1) + "ing", b + "s"].filter((x) => x !== i)).slice(0, 2);
+const OWN = NOUNS.filter(([w]) => !["sun", "moon", "star", "lion", "plane", "house", "tree", "bread", "fish", "cake"].includes(w)).slice(0, 26);
+const ME = ["My name is Felix.", "I am seven years old.", "I am in Primary Two.", "My school is in Ibadan.", "My teacher is Mrs Okon.", "I like reading stories.", "My best subject is English.",
+  "I walk to school with my sister.", "We have a big school field.", "I wear a blue uniform.", "At break time I play football.", "I love my school.",
+  "My favourite food is jollof rice.", "I have two brothers.", "My mother is a nurse.", "We live in Kaduna.", "I can ride a bicycle.", "My school starts at eight.", "I sit next to Grace.", "I want to be a doctor."];
+const BE = [["My name ___ Joy.", "is"], ["I ___ eight years old.", "am"], ["We ___ in Primary Two.", "are"], ["My teachers ___ kind.", "are"], ["I ___ a good reader.", "am"], ["Our classroom ___ clean.", "is"],
+  ["The children ___ happy.", "are"], ["My school ___ big.", "is"], ["I ___ the class captain.", "am"], ["My friends ___ funny.", "are"], ["Our school bus ___ yellow.", "is"], ["You ___ my friend.", "are"]];
+const PROPER = ["I", "Felix", "Ibadan", "Mrs", "Okon", "English", "Primary", "Two", "Joy", "Kaduna", "Grace"];
+const scramble = (s) => { const w = s.slice(0, -1).split(" "); if (!PROPER.includes(w[0])) w[0] = w[0].toLowerCase(); const out = new Set(); for (let k = 0; k < 20 && out.size < 2; k++) { const x = shuffle(w).join(" "); if (x !== w.join(" ")) out.add(x[0].toUpperCase() + x.slice(1) + "."); } return [...out]; };
+/* --- term 3 --- */
+const COUPLETS = [["The cat sat on the ___.", "mat", ["bed", "cup"]], ["The frog sat on a ___.", "log", ["rock", "chair"]], ["Twinkle, twinkle, little ___.", "star", ["moon", "light"]], ["I see a bee up in the ___.", "tree", ["sky", "house"]],
+  ["The goat is in the ___.", "boat", ["bus", "pot"]], ["A fox is in a ___.", "box", ["bag", "car"]], ["Ten red hens and one blue ___.", "pen", ["cup", "cat"]], ["The duck is in the ___.", "truck", ["pond", "bath"]],
+  ["The rain makes a ___ for the snail on the trail.", "pail", ["pot", "bowl"]], ["Come and play, it is a sunny ___.", "day", ["night", "time"]], ["Jump up high and touch the ___.", "sky", ["roof", "tree"]], ["Clap your hands and stamp your ___.", "feet", ["hands", "nose"]],
+  ["The moon is like a silver ___.", "spoon", ["fork", "cup"]], ["The little mouse ran in the ___.", "house", ["school", "barn"]], ["We eat cake by the lake. Yummy ___!", "cake", ["rice", "bread"]],
+  ["Run, run, have some ___!", "fun", ["rest", "tea"]], ["My red ball is on the ___.", "wall", ["floor", "bed"]], ["Rub-a-dub, the baby is in the ___.", "tub", ["bed", "car"]]];
+const RHWORDS = [["cat", "hat", "mat", "bat"], ["dog", "log", "frog", "fog"], ["bee", "tree", "see", "key"], ["car", "star", "jar", "far"], ["goat", "boat", "coat", "float"], ["day", "play", "say", "way"],
+  ["cake", "lake", "snake", "bake"], ["ten", "hen", "pen", "men"], ["fun", "sun", "run", "bun"], ["night", "light", "kite", "white"], ["ball", "wall", "tall", "call"], ["moon", "spoon", "soon", "noon"], ["red", "bed", "head", "bread"], ["book", "look", "cook", "hook"]];
+const STORIES2 = [
+  { t: "The Football Match", s: "On Saturday morning, Daniel played football at the school field. His team wore green shirts. Daniel scored two goals. His friends carried him on their shoulders.",
+    q: [["Who played football?", "Daniel", ["Grace", "Grandpa"]], ["When did he play?", "on Saturday morning", ["on Monday night", "at Christmas"]], ["Where did he play?", "at the school field", ["at the beach", "in the kitchen"]],
+      ["What did his team wear?", "green shirts", ["red caps", "white shoes"]], ["How many goals did Daniel score?", "two", ["five", "none"]], ["What did his friends do?", "They carried him on their shoulders.", ["They went home.", "They cried."]]] },
+  { t: "Joy Helps Grandma", s: "Joy visited her grandma in the village during the holiday. Every morning she fetched water from the well. In the evening Grandma told her stories by the fire.",
+    q: [["Who did Joy visit?", "her grandma", ["her teacher", "her cousin"]], ["Where does Grandma live?", "in the village", ["in a big city", "on a boat"]], ["When did Joy visit?", "during the holiday", ["on a school day", "last night"]],
+      ["What did Joy fetch every morning?", "water", ["firewood", "eggs"]], ["Where did she get the water?", "from the well", ["from the tap", "from the shop"]], ["When did Grandma tell stories?", "in the evening", ["in the morning", "at noon"]]] },
+  { t: "The New Pupil", s: "A new pupil came to Primary Two on Monday. Her name was Chioma. The teacher asked Ruth to show her the classroom. By break time they were best friends.",
+    q: [["Who was the new pupil?", "Chioma", ["Ruth", "the teacher"]], ["When did she come?", "on Monday", ["on Friday", "on Sunday"]], ["What class did she join?", "Primary Two", ["Primary Six", "nursery"]],
+      ["Who showed her the classroom?", "Ruth", ["the head teacher", "Felix"]], ["What happened by break time?", "They were best friends.", ["They had a fight.", "Chioma went home."]], ["What is the story about?", "a new pupil", ["a lost goat", "a rainy day"]]] },
+  { t: "The Big Storm", s: "Last night there was a big storm. The wind blew and the rain fell. In the morning Tobi saw a fallen tree near the gate. Daddy and Tobi cleared the road.",
+    q: [["When was the storm?", "last night", ["last year", "this afternoon"]], ["What did the wind do?", "It blew.", ["It stopped.", "It sang."]], ["What did Tobi see in the morning?", "a fallen tree", ["a rainbow", "a new car"]],
+      ["Where was the tree?", "near the gate", ["on the roof", "in the river"]], ["Who cleared the road?", "Daddy and Tobi", ["the soldiers", "Grandma"]], ["What fell from the sky?", "rain", ["stones", "leaves"]]] },
+  { t: "Market Day in Kano", s: "Musa went to Kurmi Market in Kano with his father. They bought a blue cap and some groundnuts. Musa saw men dyeing cloth in big pits. He wants to go again next week.",
+    q: [["Who went to the market?", "Musa and his father", ["Musa and his sister", "the teacher"]], ["Which city is the market in?", "Kano", ["Lagos", "Enugu"]], ["What did they buy?", "a blue cap and some groundnuts", ["a goat and a hen", "a bicycle"]],
+      ["What did Musa see?", "men dyeing cloth", ["a big ship", "a football match"]], ["When does Musa want to go again?", "next week", ["never", "yesterday"]], ["What colour was the cap?", "blue", ["red", "yellow"]]] },
+  { t: "Esther's Garden", s: "Esther planted tomato seeds in a small garden behind her house. She watered them every evening. After six weeks the plants had red tomatoes. Mummy used them to cook stew.",
+    q: [["What did Esther plant?", "tomato seeds", ["mango trees", "flowers"]], ["Where was the garden?", "behind her house", ["at school", "near the river"]], ["When did she water them?", "every evening", ["every Sunday", "only once"]],
+      ["How long did the tomatoes take to grow?", "six weeks", ["two days", "ten years"]], ["What colour were the tomatoes?", "red", ["blue", "purple"]], ["What did Mummy cook?", "stew", ["cake", "tea"]]] },
+];
+const WHQ = [["___ is your teacher?", "Who"], ["___ is your name?", "What"], ["___ do you live?", "Where"], ["___ is your birthday?", "When"], ["___ is in your bag?", "What"], ["___ is the market?", "Where"],
+  ["___ wrote this book?", "Who"], ["___ do we go home?", "When"], ["___ is that noise?", "What"], ["___ is my pencil?", "Where"], ["___ is knocking at the door?", "Who"], ["___ does school start?", "When"],
+  ["___ colour is the sky?", "What"], ["___ did you put my cup?", "Where"], ["___ is your best friend?", "Who"], ["___ will you visit Grandma?", "When"], ["___ did Daddy buy?", "What"], ["___ do fish live?", "Where"]];
+const WHA = [["Felix is in the kitchen.", "Where is Felix?"], ["Grace came yesterday.", "When did Grace come?"], ["Mrs Bello is our teacher.", "Who is our teacher?"], ["I am eating rice.", "What are you eating?"],
+  ["The party is on Saturday.", "When is the party?"], ["The goat is under the tree.", "Where is the goat?"], ["Daniel kicked the ball.", "Who kicked the ball?"], ["She is holding a book.", "What is she holding?"]];
+const PLUR = [["box", "boxes", "📦"], ["bus", "buses", "🚌"], ["dish", "dishes", "🍽️"], ["watch", "watches", "⌚"], ["glass", "glasses", "🥛"], ["tomato", "tomatoes", "🍅"], ["potato", "potatoes", "🥔"],
+  ["brush", "brushes", "🪥"], ["fox", "foxes", "🦊"], ["church", "churches", "⛪"], ["baby", "babies", "👶"], ["lady", "ladies", "👩"], ["city", "cities", "🏙️"], ["story", "stories", "📚"], ["cherry", "cherries", "🍒"],
+  ["man", "men", "👨"], ["woman", "women", "👩"], ["child", "children", "🧒"], ["foot", "feet", "🦶"], ["tooth", "teeth", "🦷"], ["mouse", "mice", "🐭"], ["goose", "geese", "🪿"], ["sheep", "sheep", "🐑"],
+  ["fish", "fish", "🐟"], ["person", "people", "🧑"], ["knife", "knives", "🔪"], ["leaf", "leaves", "🍃"], ["wolf", "wolves", "🐺"]];
+const plWrong = (s, p) => uniq([s + "s", s + "es", s.replace(/y$/, "ys"), p + "s", s].filter((x) => x !== p)).slice(0, 2);
+const WILL = [["visit", "Grandma", "visited", "visiting"], ["play", "football", "played", "playing"], ["read", "a new book", "read", "reading"], ["clean", "my room", "cleaned", "cleaning"], ["cook", "rice", "cooked", "cooking"],
+  ["wash", "the car", "washed", "washing"], ["help", "Mummy", "helped", "helping"], ["paint", "a picture", "painted", "painting"], ["plant", "a tree", "planted", "planting"], ["call", "Uncle Musa", "called", "calling"],
+  ["watch", "a film", "watched", "watching"], ["write", "a letter", "wrote", "writing"], ["buy", "bread", "bought", "buying"], ["sing", "in the choir", "sang", "singing"]];
+const BELONG = [["bag", "👜"], ["pen", "🖊️"], ["ball", "⚽"], ["hat", "🎩"], ["book", "📖"], ["shoe", "👟"], ["cup", "☕"], ["bike", "🚲"], ["kite", "🪁"], ["doll", "🪆"]];
+const OPP = [["big", "small"], ["hot", "cold"], ["tall", "short"], ["fast", "slow"], ["happy", "sad"], ["open", "close"], ["up", "down"], ["day", "night"], ["old", "new"], ["wet", "dry"], ["full", "empty"],
+  ["heavy", "light"], ["clean", "dirty"], ["good", "bad"], ["early", "late"], ["inside", "outside"], ["first", "last"], ["push", "pull"], ["come", "go"], ["buy", "sell"], ["give", "take"], ["strong", "weak"],
+  ["hard", "soft"], ["thick", "thin"], ["loud", "quiet"], ["rich", "poor"], ["yes", "no"], ["near", "far"], ["laugh", "cry"], ["win", "lose"]];
+const GEND = [["boy", "girl"], ["man", "woman"], ["king", "queen"], ["father", "mother"], ["son", "daughter"], ["brother", "sister"], ["uncle", "aunt"], ["husband", "wife"], ["prince", "princess"],
+  ["cock", "hen"], ["bull", "cow"], ["nephew", "niece"], ["grandfather", "grandmother"], ["Mr", "Mrs"], ["waiter", "waitress"], ["lion", "lioness"], ["actor", "actress"], ["he", "she"], ["sir", "madam"], ["groom", "bride"]];
+const FRIENDS = [
+  ["My best friend is Joy.", "She is seven years ___.", "old", ["tall", "big"], "She has long black ___.", "hair", ["legs", "shoes"], "We sit ___ each other in class.", "next to", ["under", "on top of"],
+    "Joy likes to eat jollof ___.", "rice", ["shoes", "chair"], "We play ten-ten at break ___.", "time", ["room", "day"], "Joy is kind and ___.", "helpful", ["rude", "lazy"], "I love my best friend."],
+  ["My best friend is Felix.", "He lives on our ___.", "street", ["roof", "cup"], "Felix is tall and ___.", "strong", ["sleepy", "angry"], "He is very good at ___.", "football", ["sleeping", "crying"],
+    "Every Saturday we ride our ___.", "bicycles", ["goats", "beds"], "He shares his snacks ___ me.", "with", ["on", "at"], "Felix always tells the ___.", "truth", ["lies", "table"], "I am happy to have a friend like Felix."],
+  ["My best friend is Amina.", "She is in Primary ___.", "Two", ["Ten", "Twelve"], "Amina has a big ___.", "smile", ["nose", "tail"], "She can ___ very well.", "draw", ["fly", "bark"],
+    "We do our homework ___.", "together", ["never", "upside down"], "Her favourite colour is ___.", "green", ["Monday", "rice"], "When I am sad, she makes me ___.", "laugh", ["cry", "sleep"], "Amina is the best friend in the world."],
+  ["My best friend is Samuel.", "He is ___ years old.", "eight", ["eighty", "one hundred"], "Samuel wears ___.", "glasses", ["a crown", "a tail"], "He loves reading ___.", "books", ["spoons", "stones"],
+    "We walk ___ school together.", "to", ["at", "under"], "Samuel helps me with ___.", "maths", ["sleeping", "shouting"], "He is ___ to everyone.", "polite", ["rude", "late"], "Samuel is a true friend."]];
+const OFFTOPIC = ["My father bought a new car.", "The goat ate my homework.", "It rained in Port Harcourt yesterday.", "The river is very wide.", "I do not like beans.", "The president lives in Abuja.",
+  "My uncle is a pilot.", "The shop opens at eight.", "Lions live in the forest.", "Water boils when it is hot."];
+const friendGaps = () => FRIENDS.flatMap((F, fi) => [0, 1, 2, 3, 4, 5].map((k) => ({ fi, k, s: F[1 + k * 3], a: F[2 + k * 3], w: F[3 + k * 3] })));
+
+YEARS[2] = { title: "Primary 2", terms: [
+  { nm: "Term 1", sub: "Vowels, pictures and describing words", topics: [
+    { id: "p2-vowels", nm: "Short & long vowels", icon: "🐑", strand: "Sounds & speaking",
+      learn: [{ v: qpic("🚢🐑"), t: "Listen: ship, sheep. Ship has a short i sound. Sheep has a long ee sound. They sound different and mean different things!" },
+        { v: `<span class="qsent big">cat · cart</span>`, t: "Cat has a short a. Cart has a long ar. Say them slowly: cat, cart." },
+        { v: `<span class="qsent big">kit → kite</span>`, t: "Magic e makes the vowel say its name. Kit becomes kite. Cap becomes cape." },
+        { v: qpic("📻"), t: "English superpower! News readers on the radio say every vowel clearly, so listeners in every state understand them.", wow: true }],
+      gens: [() => { const p = pick(VPAIRS), lg = Math.random() < .5, w = lg ? p[1] : p[0], o = pick(VPAIRS.filter((x) => x !== p));
+          return SQ(`hv-${w}`, "Listen. Which word do you hear?", w, [lg ? p[0] : p[1], lg ? o[1] : o[0]], { seq: [{ t: "Listen." }, 300, { t: w }, 600, { t: w }], big: true }); },
+        () => { const p = pick(VPAIRS), o = pick(VPAIRS.filter((x) => x !== p)); return SQ(`lv-${p[1]}`, "Which word has a long vowel sound?", p[1], [p[0], o[0]], { say: `Which word has a long vowel sound? ${p[0]}, ${p[1]}, or ${o[0]}?` }); },
+        () => { const p = pick(VPAIRS), o = pick(VPAIRS.filter((x) => x !== p)); return SQ(`sv-${p[0]}`, "Which word has a short vowel sound?", p[0], [p[1], o[1]], { say: `Which word has a short vowel sound? ${p[0]}, ${p[1]}, or ${o[1]}?` }); },
+        () => { const t = pick(BLEND3), v = t.u[1], o = pickN(BLEND3.filter((x) => x.u[1] !== v), 2);           return SP(`mv-${t.w}`, `Which word has the “${v}” sound in the middle?`, { n: t.w, e: t.e }, o.map((x) => ({ n: x.w, e: x.e })), { seq: [{ t: "Which word has this sound in the middle?" }, A().snd[v], 250, A().snd[v]] }); }] },
+    { id: "p2-picread", nm: "Picture reading", icon: "🖼️", strand: "Reading",
+      learn: [{ v: qpic("👩‍🍳🍲🔥"), t: "Pictures tell stories too. Look carefully: who is in the picture, what are they doing, and where are they?" },
+        { v: qpic("🧒⚽🥅"), t: "Felix is playing football on the field. Who? Felix. What? Football. Where? On the field." },
+        { v: qpic("📸"), t: "English superpower! Newspaper editors choose pictures and write a sentence under each one, called a caption.", wow: true }],
+      gens: [() => { const s = pick(SCENES), [q, a, w] = pick(s.q); return SQ(`sc-${s.c}-${q}`, q, a, w, { pic: qpic(s.e), seq: [{ t: "Look at the picture." }, 300, { t: q }] }); },
+        () => { const p = pick(PICSENT), o = pickN(PICSENT.filter((x) => x !== p), 2).map((x) => x[1]); return SQ(`ps-${p[1]}`, "Which sentence tells about the picture?", p[1], o, { pic: qpic(p[0]) }); },
+        () => { const s = pick(SCENES), o = pickN(SCENES.filter((x) => x !== s), 2).map((x) => x.c); return SQ(`cap-${s.c}`, "Which caption fits the picture?", s.c, o, { pic: qpic(s.e) }); }] },
+    { id: "p2-this", nm: "this, that, these, those", icon: "👉", strand: "Grammar",
+      learn: [{ v: qpic("🫴🍎"), t: "Use this for one thing near you. This apple is mine." }, { v: qpic("🧍 ➖➖➖ 🍎"), t: "Use that for one thing far away. That apple is on the tree." },
+        { v: qpic("🫴🍎🍎🍎"), t: "Use these for many things near you, and those for many things far away. These apples, those apples." },
+        { v: qpic("🛍️"), t: "English superpower! Traders at the market point and say: I want these tomatoes, not those ones!", wow: true }],
+      gens: [() => { const [w, e] = pick(DEM), near = Math.random() < .5, many = Math.random() < .5, ans = near ? (many ? "These" : "This") : many ? "Those" : "That";
+          return SQ(`dm-${w}-${near}-${many}`, `___ ${many ? w + "s are" : w + " is"} ${near ? "here with me" : "over there"}.`, ans, ["This", "That", "These", "Those"].filter((x) => x !== ans), { pic: qpic(demPic(e, near, many)), say: `Blank ${many ? w + "s are" : w + " is"} ${near ? "here with me" : "over there"}.` }); },
+        () => { const [w, e] = pick(DEM), many = Math.random() < .5, d = many ? pick(["These", "Those"]) : pick(["This", "That"]);
+          return SQ(`da-${w}-${d}`, `Choose the right word: ${d} ___ are mine.`.replace("are", many ? "are" : "is"), many ? w + "s" : w, [many ? w : w + "s"], { pic: qpic(many ? e + e : e), big: false }); }] },
+    { id: "p2-present", nm: "Things we do every day", icon: "🔁", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">Felix <b>walks</b> to school every day.</span>`, t: "We use the simple present for things we do every day. Felix walks to school every day." },
+        { v: `<span class="qsent">I walk · he walks · they walk</span>`, t: "With he, she, it or one person's name, add s: she sings, he runs. With I, we, you and they, do not add s." },
+        { v: qpic("🗓️"), t: "English superpower! Bus drivers and doctors explain their routines: the bus leaves at seven every morning!", wow: true }],
+      gens: [() => { const a = pick(ACTS), who = P2NAMES(), end = pick(ACTEND); return SQ(`ps-${who}-${a[0]}`, `${who} ___ ${end}.`, a[1], [a[0], "are " + a[0]], { say: `${who}, blank, ${end}.` }); },
+        () => { const a = pick(ACTS), who = pick(["I", "We", "They", "You"]), end = pick(ACTEND); return SQ(`pb-${who}-${a[0]}`, `${who} ___ ${end}.`, a[0], [a[1], "is " + a[0]], { say: `${who}, blank, ${end}.` }); },
+        () => { const a = pick(ACTS), who = pick(["He", "She", "It"]); if (who === "It" && !["run", "swim", "sleep", "eat", "drink", "climb", "walk", "cry"].includes(a[0])) return null;
+          return SQ(`ph-${who}-${a[0]}`, `${who} ___ every day.`, a[1], [a[0], "is " + a[0]], { pic: qpic(a[2]) }); }] },
+    { id: "p2-adj", nm: "Describing words", icon: "🌈", strand: "Words",
+      learn: [{ v: qpic("🐘🐜"), t: "Describing words tell us more about naming words. A big elephant. A small ant." }, { v: `<span class="qsent">The <b>sweet</b> cake.</span>`, t: "Sweet tells us about the cake. Sweet is a describing word." },
+        { v: qpic("🎙️"), t: "English superpower! Advertisers on TV use describing words: fresh bread, cold drinks, sweet mangoes!", wow: true }],
+      gens: [() => { const a = pick(ADJ), o = pickN(ADJ.filter((x) => x[0] !== a[0] && x[2] !== a[2]), 2).map((x) => x[0]); return SQ(`ad-${a[0]}-${a[1]}`, `The ___ ${a[1]}.`, a[0], o, { pic: qpic(a[2]), say: `The, blank, ${a[1]}.` }); },
+        () => { const a = pick(ADJ); return SQ(`aw-${a[0]}`, "Which one is a describing word?", a[0], pickN(NOT_ADJ, 2)); },
+        () => { const a = pick(ADJ), who = pick(["I can see a", "Look at the", "There is a", "We have a"]); return ST(`at-${a[0]}-${who}`, "Tap the describing word.", `${who} ${a[0]} ${a[1]}.`, who.split(" ").length); }] },
+    { id: "p2-spell", nm: "Spelling, capitals & full stops", icon: "🔤", strand: "Writing",
+      learn: [{ v: `<span class="qsent big">c _ t</span>`, t: "Listen for every sound to spell a word. c, a, t: cat." }, { v: `<span class="qsent">We live in Abuja.</span>`, t: "A sentence starts with a capital letter and ends with a full stop." },
+        { v: `<span class="qsent"><b>G</b>race lives in <b>K</b>ano.</span>`, t: "Names of people and places always start with a capital letter: Grace, Kano, Nigeria." },
+        { v: qpic("✉️"), t: "English superpower! Office workers check spelling and capital letters before they send a letter, so it looks smart.", wow: true }],
+      gens: [() => { const w = pick(SHORTW), m = misspell(w); if (m.length < 2) return null; return SQ(`sw-${w}`, "Which word is spelled correctly?", w, m, { pic: qpic(WEM[w]), say: `Which word spells ${w}?` }); },
+        () => { const w = pick(SHORTW), vs = [...w].map((c, i) => "aeiou".includes(c) ? i : -1).filter((i) => i >= 0); if (!vs.length) return null; const i = vs[0], c = w[i];
+          return SQ(`ml-${w}`, `Which letter is missing? ${w.slice(0, i)}_${w.slice(i + 1)}`, c, pickN("aeiou".replace(c, "").split(""), 2), { pic: qpic(WEM[w]), say: `Which letter is missing in ${w}?`, big: true }); },
+        () => { const s = pick(P2SENT); return SQ(`cs-${s}`, "Which sentence is written correctly?", s, breakSentence(s)); },
+        () => { const [s, k] = pick(NAMESENT); return ST(`nc-${s}`, "The first word needs a capital letter. Tap the other word that needs one.", s, k, { say: "The first word needs a capital letter. Tap the other word that needs a capital letter." }); }] },
+  ] },
+  { nm: "Term 2", sub: "Sounds, tenses and owning things", topics: [
+    { id: "p2-digraphs", nm: "sh, ch and th", icon: "🐚", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent big">sh · ch · th</span>`, t: "Two letters can make one sound. s and h make sh, like ship. c and h make ch, like chair. t and h make th, like thumb." },
+        { v: qpic("🐟🪥"), t: "These sounds can be at the end too: fish, brush, watch, bath." },
+        { v: qpic("🗣️"), t: "English superpower! Actors and debaters practise sh, ch and th, so every word sounds clear on stage.", wow: true }],
+      gens: [() => { const d = pick(Object.keys(DIG)), t = pick(DIG[d]), o = Object.keys(DIG).filter((x) => x !== d).map((x) => pick(DIG[x]));
+          return SP(`ds-${t[0]}`, `Which word starts with “${d}”?`, { n: t[0], e: t[1] }, o.map((x) => ({ n: x[0], e: x[1] })), { seq: [{ t: "Which word starts with" }, A().snd[d], 250, A().snd[d]] }); },
+        () => { const d = pick(Object.keys(DIG)), t = pick(DIG[d]); return SQ(`dl-${t[0]}`, `Which letters are missing? __${t[0].slice(2)}`, d, Object.keys(DIG).filter((x) => x !== d), { pic: qpic(t[1]), say: `Which letters are missing in ${t[0]}?`, big: true }); },
+        () => { const d = pick(Object.keys(DIGEND)), t = pick(DIGEND[d]), cut = t[0].endsWith("tch") ? 3 : 2, end = cut === 3 ? "tch" : d;
+          return SQ(`de-${t[0]}`, `Which letters end this word? ${t[0].slice(0, -cut)}__`, end, ["sh", "ch", "th", "tch"].filter((x) => x !== end && !(end === "tch" && x === "ch")).slice(0, 2), { pic: qpic(t[1]), say: `How does ${t[0]} end?`, big: true }); },
+        () => { const pr = pick(DPAIRS), k = Math.random() < .5 ? 0 : 1, w = pr[k], o = pick(DPAIRS.filter((x) => x !== pr && !x.includes(w)))[k];
+          return SQ(`dp-${w}`, "Listen. Which word do you hear?", w, [pr[1 - k], o], { seq: [{ t: "Listen." }, 300, { t: w }, 600, { t: w }], big: true }); }] },
+    { id: "p2-fluency", nm: "Read along with Echo", icon: "🦜", strand: "Reading",
+      learn: [{ v: `<span class="qsent">The sun comes up in the morning.</span>`, t: "Good readers read smoothly, like talking. Listen to Echo, then read it yourself: The sun comes up in the morning." },
+        { v: qpic("👀"), t: "Read with your eyes a little ahead. Stop a little at every full stop." },
+        { v: qpic("⛪"), t: "English superpower! Readers in church and at assembly read aloud smoothly so everybody can follow.", wow: true }],
+      gens: [() => { const s = pick(FLUENT), w = s.slice(0, -1).split(" "), k = 1 + Math.floor(Math.random() * (w.length - 1)), ans = w[k].replace(/[.,]/g, ""); if (ans.length < 3) return null;
+          const others = uniq(FLUENT.filter((x) => x !== s).flatMap((x) => x.slice(0, -1).split(" ")).filter((x) => x.length >= 3 && x.toLowerCase() !== ans.toLowerCase()));
+          return SQ(`fg-${s}-${k}`, "Listen to Echo. Which word is missing?", ans, pickN(others, 2), { pic: `<span class="qsent">${esc(w.map((x, j) => (j === k ? "____" : x)).join(" "))}.</span>`, say: s }); },
+        () => { const s = pick(FLUENT), w = s.slice(0, -1).split(" "), k = Math.floor(Math.random() * w.length); if (w[k].length < 3 || w.filter((x) => x === w[k]).length > 1) return null;
+          return ST(`ft-${s}-${k}`, "Tap the word Echo says.", s, k, { say: `Tap the word, ${w[k]}.` }); },
+        () => { const s = pick(FLUENT), o = pickN(FLUENT.filter((x) => x !== s), 2); return SQ(`fl-${s}`, "Listen. Which sentence did Echo read?", s, o, { say: s }); }] },
+    { id: "p2-past", nm: "Yesterday words", icon: "⏪", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">play → played</span>`, t: "Many action words add e d for the past: play, played. Cook, cooked." },
+        { v: `<span class="qsent">go → went · eat → ate</span>`, t: "Some action words change in a special way: go becomes went, eat becomes ate, see becomes saw." },
+        { v: qpic("📰"), t: "English superpower! Reporters write the news in the past: The Super Eagles won the match yesterday!", wow: true }],
+      gens: [() => { const v = pick(IRREG); return SQ(`ir-${v[0]}`, v[2], v[1], [v[0], edWrong(v[0])], { say: v[2].replace("___", "blank") }); },
+        () => { const v = pick(IRREG); return SQ(`iq-${v[0]}`, `Today I ${v[0]}. Yesterday I ___.`, v[1], [edWrong(v[0]), s3(v[0])], { say: `Today I ${v[0]}. Yesterday I, blank.` }); },
+        () => { const v = pick(PAST); return SQ(`rg-${v[0]}`, v[2], v[1], [v[0], v[0] + "ing"], { say: v[2].replace("___", "blank") }); }] },
+    { id: "p2-ing", nm: "Happening now (-ing)", icon: "👀", strand: "Grammar",
+      learn: [{ v: qpic("💃"), t: "Look! Grace is dancing. We use is, am or are with an i n g word for things happening right now." },
+        { v: `<span class="qsent">run → running · dance → dancing</span>`, t: "Some words double the last letter: run, running. Some drop the e: dance, dancing." },
+        { v: qpic("📺"), t: "English superpower! Live TV reporters say what is happening now: the President is arriving, the crowd is cheering!", wow: true }],
+      gens: [() => { const v = pick(ING), who = P2NAMES(); return SQ(`ia-${who}-${v[0]}`, `Look! ${who} ___ now.`, `is ${v[1]}`, [s3(v[0]), `are ${v[1]}`], { pic: qpic(v[2]), say: `Look! ${who}, blank, now.` }); },
+        () => { const v = pick(ING), who = pick(["We", "They", "You"]); return SQ(`ib-${who}-${v[0]}`, `${who} ___ now.`, `are ${v[1]}`, [`is ${v[1]}`, s3(v[0])], { pic: qpic(v[2]), say: `${who}, blank, now.` }); },
+        () => { const v = pick(ING); return SQ(`is-${v[0]}`, `Which is spelled correctly? (${v[0]} + ing)`, v[1], ingWrong(v[0], v[1]), { pic: qpic(v[2]), say: `How do we spell ${v[1]}?` }); },
+        () => { const v = pick(ING), o = pickN(ING.filter((x) => x !== v), 2); return SQ(`iw-${v[0]}`, "What is the child doing?", `${v[1]}`, o.map((x) => x[1]), { pic: qpic(v[2]) }); }] },
+    { id: "p2-own", nm: "my, your, his, her, mine, yours", icon: "🎒", strand: "Words",
+      learn: [{ v: qpic("👦👜"), t: "Felix has a bag. It is his bag. Grace has a book. It is her book." }, { v: `<span class="qsent">my pen → the pen is mine</span>`, t: "This is my pen. The pen is mine. That is your cup. The cup is yours." },
+        { v: qpic("🧳"), t: "English superpower! At the airport, officers ask: Is this bag yours? Owning words help everyone get the right luggage.", wow: true }],
+      gens: [() => { const [w, e] = pick(OWN), who = P2NAMES(); return SQ(`hh-${who}-${w}`, `${who} has ${art(w)}. It is ___ ${w}.`, isBoy(who) ? "his" : "her", [isBoy(who) ? "her" : "his", "my"], { pic: qpic((isBoy(who) ? "👦" : "👧") + e) }); },
+        () => { const [w, e] = pick(OWN), p = pick([["I", "my", "mine"], ["You", "your", "yours"]]); return SQ(`my-${p[0]}-${w}`, `${p[0]} have ${art(w)}. It is ___ ${w}.`, p[1], [p[2], p[0] === "I" ? "your" : "my"], { pic: qpic(e) }); },
+        () => { const [w, e] = pick(OWN), p = pick([["my", "mine"], ["your", "yours"], ["his", "his"], ["her", "hers"]]); return SQ(`mn-${p[0]}-${w}`, `This is ${p[0]} ${w}. The ${w} is ___.`, p[1], uniq(["mine", "yours", "hers", "my", "your"]).filter((x) => x !== p[1]).slice(0, 2), { pic: qpic(e) }); }] },
+    { id: "p2-me", nm: "Sentences about me", icon: "🧒", strand: "Writing",
+      learn: [{ v: `<span class="qsent">My name is Felix. I am seven years old.</span>`, t: "We can write sentences about ourselves: our name, our age, our class and our school." },
+        { v: `<span class="qsent">I am · He is · We are</span>`, t: "Use am with I. Use is with one person or thing. Use are with we, you and they." },
+        { v: qpic("📝"), t: "English superpower! When you apply for a school, a scholarship or a job, you write good sentences about yourself!", wow: true }],
+      gens: [() => { const s = pick(ME); return SQ(`mo-${s}`, "Which sentence has the words in the right order?", s, scramble(s)); },
+        () => { const b = pick(BE); return SQ(`be-${b[0]}`, b[0], b[1], ["am", "is", "are"].filter((x) => x !== b[1]), { say: b[0].replace("___", "blank"), big: true }); },
+        () => { const s = pick(ME); return SQ(`mc-${s}`, "Which sentence is written correctly?", s, breakSentence(s)); },
+        () => { const s = pick(ME), o = pickN(OFFTOPIC, 2); return SQ(`ma-${s}`, "Which sentence is about me and my school?", s, o); }] },
+  ] },
+  { nm: "Term 3", sub: "Rhymes, stories and opposites", topics: [
+    { id: "p2-rhymes", nm: "Songs, rhymes & rhyming words", icon: "🎵", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent">The cat sat on the mat.</span>`, t: "Cat and mat rhyme. They end with the same sound: at." },
+        { v: qpic("🎶"), t: "Songs and poems use rhymes to make them fun to say and easy to remember." },
+        { v: qpic("🎤"), t: "English superpower! Nigerian musicians and poets use rhyming words in songs the whole world sings!", wow: true }],
+      gens: [() => { const c = pick(COUPLETS); return SQ(`cp-${c[0]}`, `Finish the rhyme: ${c[0]}`, c[1], c[2], { say: c[0].replace("___", "blank") }); },
+        () => { const set = pick(RHWORDS), [a, b] = pickN(set, 2), o = pickN(RHWORDS.filter((x) => x !== set), 2).map((x) => pick(x)); return SQ(`rw-${a}-${b}`, `Which word rhymes with “${a}”?`, b, o, { say: `Which word rhymes with ${a}?` }); },
+        () => { const set = pick(RHWORDS), three = pickN(set, 3), odd = pick(pick(RHWORDS.filter((x) => x !== set))); return SQ(`ro-${three.join("")}-${odd}`, "Which word does NOT rhyme with the others?", odd, three.slice(0, 3), { n: 4 }); }] },
+    { id: "p2-wh", nm: "Who, what, where, when", icon: "❓", strand: "Reading",
+      learn: [{ v: `<span class="qsent">Who · What · Where · When</span>`, t: "Question words help us understand stories. Who asks about a person. What asks about a thing. Where asks about a place. When asks about time." },
+        { v: qpic("⚽"), t: "Daniel played football on Saturday at the school field. Who? Daniel. When? On Saturday. Where? At the school field." },
+        { v: qpic("👮"), t: "English superpower! Police officers and journalists ask who, what, where and when to find out what happened.", wow: true }],
+      gens: [() => { const st = pick(STORIES2), [q, a, w] = pick(st.q); return SQ(`wq-${st.t}-${q}`, q, a, w, { story: st, seq: [{ t: st.s }, 200, { t: q }] }); },
+        () => { const q = pick(WHQ); return SQ(`ww-${q[0]}`, `Which question word fits? ${q[0]}`, q[1], ["Who", "What", "Where", "When"].filter((x) => x !== q[1]), { say: q[0].replace("___", "blank"), big: true }); },
+        () => { const p = pick(WHA), o = pickN(WHA.filter((x) => x !== p).map((x) => x[1]), 2); return SQ(`wa-${p[0]}`, `“${p[0]}” answers which question?`, p[1], o); }] },
+    { id: "p2-plurals", nm: "More than one", icon: "👣", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">box → boxes · bus → buses</span>`, t: "Words ending in s, x, sh or ch add e s: box, boxes. Bus, buses. Watch, watches." },
+        { v: `<span class="qsent">baby → babies</span>`, t: "Words ending in a consonant and y change y to i, then add e s: baby, babies." },
+        { v: qpic("🦶🦷"), t: "Some words change completely: one foot, two feet. One tooth, many teeth. One child, many children. One sheep, two sheep!" },
+        { v: qpic("📦"), t: "English superpower! Warehouse workers count stock correctly: forty boxes, ten knives, twelve watches.", wow: true }],
+      gens: [() => { const p = pick(PLUR); return SQ(`pp-${p[0]}`, `One ${p[0]}, two ___`, p[1], plWrong(p[0], p[1]), { pic: qpic(p[2] + p[2]), say: `One ${p[0]}, two, blank.` }); },
+        () => { const p = pick(PLUR); return SQ(`pq-${p[0]}`, `What is the plural of “${p[0]}”?`, p[1], plWrong(p[0], p[1])); },
+        () => { const p = pick(PLUR.filter((x) => x[0] !== x[1])), o = pick(PLUR.filter((x) => x !== p)); return SQ(`ps-${p[1]}`, `“${p[1]}” means many. What is one?`, p[0], [p[1], o[0]], { pic: qpic(p[2]) }); }] },
+    { id: "p2-will", nm: "'s and will", icon: "🔮", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">Grace<b>'s</b> bag</span>`, t: "To show that something belongs to someone, add apostrophe s. The bag belongs to Grace: it is Grace's bag." },
+        { v: `<span class="qsent">Tomorrow I <b>will</b> visit Grandma.</span>`, t: "We use will to talk about tomorrow and the future. Tomorrow I will visit Grandma." },
+        { v: qpic("🌦️"), t: "English superpower! Weather presenters use will: Tomorrow it will rain in Lagos!", wow: true }],
+      gens: [() => { const [w, e] = pick(BELONG), who = P2NAMES(); return SQ(`ap-${who}-${w}`, `This ${w} belongs to ${who}. It is ___ ${w}.`, `${who}'s`, [who + "s", who], { pic: qpic(e) }); },
+        () => { const [v, o, pa] = pick(WILL), who = pick(["I", "we", P2NAMES()]); return SQ(`wl-${who}-${v}`, `Tomorrow ${who} ___ ${o}.`, `will ${v}`, [pa === v ? "reads" : pa, `will ${v}s`], { say: `Tomorrow ${who}, blank, ${o}.` }); },
+        () => { const [v, o, pa, ing] = pick(WILL); return SQ(`wt-${v}`, "Which sentence tells about tomorrow?", `I will ${v} ${o}.`, [`Yesterday I ${pa} ${o}.`, `I am ${ing} ${o} now.`]); }] },
+    { id: "p2-opp", nm: "Opposites, male & female", icon: "⚖️", strand: "Words",
+      learn: [{ v: `<span class="qsent">hot ↔ cold · big ↔ small</span>`, t: "Opposites are words that mean the reverse: hot and cold, big and small, day and night." },
+        { v: `<span class="qsent">king → queen · father → mother</span>`, t: "Some words tell us male or female: king and queen, father and mother, cock and hen." },
+        { v: qpic("🧑‍⚖️"), t: "English superpower! Lawyers and judges compare: guilty or not guilty, true or false, right or wrong!", wow: true }],
+      gens: [() => { const p = pick(OPP), r = Math.random() < .5, a = r ? p[1] : p[0], b = r ? p[0] : p[1], o = pickN(OPP.filter((x) => x !== p).flat(), 2); return SQ(`op-${a}`, `What is the opposite of “${a}”?`, b, o); },
+        () => { const p = pick(GEND), o = pickN(GEND.filter((x) => x !== p).map((x) => x[0]), 2); return SQ(`gf-${p[0]}`, `${p[0]} is male. What is the female?`, p[1], o, { say: `${p[0]} is male. What is the female word?` }); },
+        () => { const p = pick(GEND), o = pickN(GEND.filter((x) => x !== p).map((x) => x[1]), 2); return SQ(`gm-${p[1]}`, `${p[1]} is female. What is the male?`, p[0], o, { say: `${p[1]} is female. What is the male word?` }); }] },
+    { id: "p2-friend", nm: "My best friend (composition)", icon: "🤝", strand: "Writing",
+      learn: [{ v: `<span class="qsent">My best friend is Joy.</span>`, t: "A composition starts by telling us what it is about. My best friend is Joy." },
+        { v: `<span class="qsent">She is kind. She likes rice.</span>`, t: "Then we write more about our friend: what they look like, what they like, and what we do together." },
+        { v: `<span class="qsent">I love my best friend.</span>`, t: "We end with a closing sentence. Every sentence must be about the topic!" },
+        { v: qpic("✍️"), t: "English superpower! Writers like Chinua Achebe built whole books from good sentences, one paragraph at a time. You are starting the same way!", wow: true }],
+      gens: [() => { const g = pick(friendGaps()); return SQ(`fg-${g.fi}-${g.k}`, `Fill the gap: ${g.s}`, g.a, g.w, { say: g.s.replace("___", "blank") }); },
+        () => { const off = pick(OFFTOPIC), F = pick(FRIENDS), ok = [F[0], F[19]]; return SQ(`fn-${off}`, "Which sentence does NOT belong in a composition about my best friend?", off, ok); },
+        () => { const F = pick(FRIENDS), g = pick([1, 4, 7, 10, 13, 16]), body = F[g].replace("___", F[g + 1]); return SQ(`fs-${F[0]}`, "Which is the best FIRST sentence?", F[0], [body, F[19]]); },
+        () => { const F = pick(FRIENDS), g = pick([1, 4, 7, 10, 13, 16]), body = F[g].replace("___", F[g + 1]); return SQ(`fc-${body}`, "Which sentence is written correctly?", body, breakSentence(body)); }] },
+  ] },
+] };
+
+/* =====================================================================
    MOTOR PARK: the home screen. Three buses wait in their bays; Echo the conductor calls each route.
    ===================================================================== */
 let VIEW = "park", ROUTE = 0;  // ROUTE starts on the rider's own bus (set just before the first draw)
