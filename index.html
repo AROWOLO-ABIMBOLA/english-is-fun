@@ -3107,6 +3107,369 @@ YEARS[3] = { title: "Primary 3", terms: [
 ] };
 
 /* =====================================================================
+   SCHOOL ENGLISH · PRIMARY 4 (NERDC revised 2025 curriculum: aural discrimination, modals, intonation,
+   question tags, idioms, simile, comparatives…). 18 topics, same shape as Primary 1–3.
+   ===================================================================== */
+const P4N = () => pick([...BOYS, ...GIRLS]);
+const pron = (n) => (BOYS.includes(n) ? "he" : "she");
+/* --- term 1 --- */
+const AURAL = [["fan", "van"], ["pin", "bin"], ["cap", "cab"], ["pat", "bat"], ["light", "right"], ["lice", "rice"], ["fine", "vine"], ["sip", "zip"], ["chin", "shin"], ["tree", "three"], ["fast", "vast"],
+  ["coat", "goat"], ["cold", "gold"], ["dog", "dock"], ["bag", "back"], ["pig", "pick"], ["wet", "vet"], ["berry", "very"], ["sink", "think"], ["mouse", "mouth"], ["sue", "zoo"], ["sheep", "cheap"], ["ship", "sheep"], ["leave", "live"],
+  ["pool", "pull"], ["full", "fool"], ["day", "they"], ["sing", "thing"], ["fat", "vat"], ["few", "view"]];
+const MSTORY = [
+  { t: "Tortoise at the Feast", s: "Tortoise went to a feast in the sky with the birds. He told them his name was All of You. When food came, he said, “This is for All of You!” and ate it all. The angry birds took back their feathers, and Tortoise fell and cracked his shell.",
+    m: "Greed and trickery bring trouble.", mw: ["Always eat quickly.", "Birds are better than tortoises."], q: [["What name did Tortoise give himself?", "All of You", ["King of the Sky", "Mr Feathers"]], ["Why were the birds angry?", "Tortoise ate all the food.", ["It rained.", "The feast was late."]], ["What happened to Tortoise's shell?", "It cracked.", ["It turned gold.", "It flew away."]]] },
+  { t: "The Ant and the Grasshopper", s: "All through the dry season, the ant carried food to her home. The grasshopper sang and laughed at her. When the rains came and food was hard to find, the grasshopper was hungry, but the ant had plenty to eat.",
+    m: "Work hard and plan for the future.", mw: ["Singing is a waste of time.", "Never help your friends."], q: [["What did the ant do in the dry season?", "She carried food home.", ["She sang songs.", "She slept."]], ["What did the grasshopper do?", "He sang and laughed.", ["He built a house.", "He planted maize."]], ["Who was hungry in the rainy season?", "the grasshopper", ["the ant", "both of them"]]] },
+  { t: "The Boy Who Cried Wolf", s: "A shepherd boy was bored. He shouted, “Wolf! Wolf!” and the villagers ran to help him, but there was no wolf. He did it again and laughed. One day a real wolf came. He shouted, but nobody came, because nobody believed him.",
+    m: "If you tell lies, people will not believe you even when you tell the truth.", mw: ["Wolves are dangerous.", "Shepherds should not shout."], q: [["Why did the boy shout the first time?", "He was bored.", ["He saw a wolf.", "He was hurt."]], ["What did the villagers do the first time?", "They ran to help.", ["They laughed.", "They slept."]], ["Why did nobody come at the end?", "Nobody believed him.", ["They were far away.", "They were scared of wolves."]]] },
+  { t: "The Hare and the Tortoise", s: "Hare laughed at Tortoise for being slow, so Tortoise challenged him to a race. Hare ran far ahead and lay down to sleep. Tortoise kept walking, slowly and steadily. When Hare woke up, Tortoise was already at the finish line.",
+    m: "Slow and steady wins the race.", mw: ["Hares are lazy.", "Never run in a race."], q: [["Why did Tortoise challenge Hare?", "Hare laughed at him for being slow.", ["Hare stole his food.", "Hare was his brother."]], ["What did Hare do during the race?", "He slept.", ["He ate.", "He helped Tortoise."]], ["Who won the race?", "Tortoise", ["Hare", "nobody"]]] },
+  { t: "The Honest Woodcutter", s: "A poor woodcutter dropped his axe into a river. A spirit of the river brought up a golden axe. “That is not mine,” said the woodcutter. Then it brought a silver axe. “Not mine,” he said again. At last it brought his old iron axe, and he smiled. The spirit gave him all three axes for his honesty.",
+    m: "Honesty is the best policy.", mw: ["Rivers are dangerous.", "Gold is better than iron."], q: [["Where did the axe fall?", "into a river", ["into a hole", "on a road"]], ["What did the woodcutter say about the golden axe?", "That is not mine.", ["Thank you, it is mine.", "Give me two."]], ["What did the spirit give him at the end?", "all three axes", ["nothing", "a bag of money"]]] },
+  { t: "The Proud Cockerel", s: "A cockerel told the other animals that the sun rose only because he crowed. One morning he overslept. When he woke up, the sun was already high in the sky. The other animals laughed, and the cockerel learnt to be humble.",
+    m: "Do not be proud; be humble.", mw: ["Always wake up early.", "The sun is very hot."], q: [["What did the cockerel think?", "The sun rose because he crowed.", ["He could fly to the moon.", "He was a lion."]], ["What happened one morning?", "He overslept.", ["He lost his voice.", "It rained."]], ["What did the cockerel learn?", "to be humble", ["to crow louder", "to sleep more"]]] },
+  { t: "The Bundle of Sticks", s: "An old farmer had five sons who always quarrelled. He gave them a bundle of sticks tied together and asked each son to break it. Nobody could. Then he untied the sticks, and each son broke one stick easily. “Together you are strong,” he said.",
+    m: "Unity is strength.", mw: ["Sticks are useful for fire.", "Fathers are strong."], q: [["How many sons did the farmer have?", "five", ["two", "ten"]], ["Could the sons break the bundle?", "No, nobody could.", ["Yes, easily.", "Only the youngest."]], ["What did the farmer teach them?", "Together you are strong.", ["Sticks are weak.", "Farming is hard."]]] },
+  { t: "The Lazy Farmer", s: "Two farmers got the same land. Ayo cleared his farm and planted early. Bayo said, “There is time,” and slept under a tree. When the rains came, Ayo's maize grew tall. Bayo had nothing to harvest.",
+    m: "Do not put off till tomorrow what you can do today.", mw: ["Trees give good shade.", "Maize is tall."], q: [["What did Ayo do?", "He cleared his farm and planted early.", ["He slept.", "He sold his land."]], ["What did Bayo say?", "There is time.", ["Help me!", "I am hungry."]], ["What did Bayo harvest?", "nothing", ["a lot of maize", "yams"]]] },
+];
+MSTORY.push(
+  { t: "The Greedy Dog", s: "A dog found a big piece of meat and ran home with it in his mouth. On the bridge he looked into the river and saw another dog with a bigger piece of meat. He barked to grab it, and his own meat fell into the water. The other dog was only his reflection.",
+    m: "Be happy with what you have; greed can make you lose everything.", mw: ["Rivers are deep.", "Dogs should not cross bridges."], q: [["What did the dog find?", "a piece of meat", ["a bone", "a ball"]], ["What did he see in the river?", "his reflection", ["a fish", "a crocodile"]], ["What happened to his meat?", "It fell into the water.", ["He ate it.", "He hid it."]]] },
+  { t: "The Lion and the Mouse", s: "A lion caught a little mouse and was about to eat it. “Please let me go, and one day I will help you,” said the mouse. The lion laughed and let it go. Later the lion was trapped in a hunter's net. The mouse came and chewed the ropes until the lion was free.",
+    m: "No one is too small to help others.", mw: ["Lions are lazy.", "Never trust a mouse."], q: [["What did the mouse promise?", "to help the lion one day", ["to bring food", "to run away"]], ["What trapped the lion?", "a hunter's net", ["a big hole", "a river"]], ["How did the mouse free the lion?", "It chewed the ropes.", ["It called the hunter.", "It sang a song."]]] });
+const MORALSIT = [["Ngozi returned the extra change the trader gave her by mistake.", "honesty"], ["The whole street worked together to clear the blocked gutter.", "unity"], ["Bola practised her reading every evening until she became the best reader.", "hard work"],
+  ["Uche visited his sick classmate and brought her some fruit.", "kindness"], ["Ahmed sat quietly in the long queue at the hospital without complaining.", "patience"], ["Halima told her mother that she had eaten the last piece of meat.", "honesty"],["Kemi found a wallet and returned it to the owner.", "honesty"], ["The class cleaned the whole school in one hour by working together.", "unity"], ["Musa studied every day and passed his exams.", "hard work"],
+  ["Joy shared her lunch with a new pupil who had none.", "kindness"], ["Felix waited calmly for his turn on the swing.", "patience"], ["Grace said sorry after she broke her sister's cup.", "honesty"],
+  ["Tobi helped an old woman carry her load.", "kindness"], ["The team passed the ball to each other and scored.", "unity"], ["Esther saved a little money every week and bought a bicycle.", "hard work"],
+  ["David waited quietly for his turn at the tap.", "patience"], ["Amina told the teacher the truth about the broken window.", "honesty"], ["Samuel gave his old shoes to a boy who had none.", "kindness"]];
+const MODAL4 = [["You ___ wear a seat belt in a car.", "must", "obligation"], ["Pupils ___ wear their uniform to school.", "must", "obligation"], ["We ___ obey traffic rules.", "must", "obligation"], ["You ___ not cheat in an exam.", "must", "obligation"],
+  ["___ I help you with your bag?", "Shall", "offer"], ["___ we start the game now?", "Shall", "offer"], ["___ I close the window?", "Shall", "offer"], ["___ we sing together?", "Shall", "offer"],
+  ["My grandmother ___ speak three languages.", "can", "ability"], ["Felix ___ swim very well.", "can", "ability"], ["A cheetah ___ run very fast.", "can", "ability"],
+  ["___ I use your phone, please?", "May", "permission"], ["You ___ leave the room now.", "may", "permission"], ["___ I sit here?", "May", "permission"],
+  ["Our school ___ celebrate its anniversary next year.", "will", "future"], ["Drivers ___ stop at a red light.", "must", "obligation"], ["Everybody ___ pay tax.", "must", "obligation"], ["___ I carry that for you, Grandma?", "Shall", "offer"],
+  ["___ we go to the park after lunch?", "Shall", "offer"], ["Some parrots ___ copy human words.", "can", "ability"], ["Our dog ___ open the gate with its nose.", "can", "ability"], ["___ we come in, Ma?", "May", "permission"], ["My aunt ___ arrive from London on Friday.", "will", "future"], ["The match ___ start at four o'clock tomorrow.", "will", "future"], ["I ___ call you when I get home.", "will", "future"]];
+const MODCAP = (m, w) => (m[0] === m[0].toUpperCase() ? w[0].toUpperCase() + w.slice(1) : w);
+const TENSE = [["play", "played", "plays"], ["cook", "cooked", "cooks"], ["go", "went", "goes"], ["eat", "ate", "eats"], ["write", "wrote", "writes"], ["read", "read", "reads"], ["sing", "sang", "sings"], ["swim", "swam", "swims"],
+  ["sweep", "swept", "sweeps"], ["visit", "visited", "visits"], ["buy", "bought", "buys"], ["drink", "drank", "drinks"], ["watch", "watched", "watches"], ["wash", "washed", "washes"], ["plant", "planted", "plants"], ["teach", "taught", "teaches"]];
+const TOBJ = { play: "football", cook: "jollof rice", go: "to the market", eat: "beans", write: "a story", read: "the newspaper", sing: "in the choir", swim: "in the river", sweep: "the compound", visit: "Grandma",
+  buy: "bread", drink: "zobo", watch: "the news", wash: "the car", plant: "maize", teach: "the class" };
+const ABCW = ["apple", "ant", "arm", "baby", "ball", "bread", "cake", "car", "chair", "clock", "dance", "desk", "dog", "drum", "egg", "elephant", "fan", "farm", "fish", "flag", "garden", "goat", "grass", "hand", "hat",
+  "house", "ink", "island", "jar", "juice", "kettle", "key", "lamp", "lion", "map", "market", "mango", "nest", "night", "orange", "owl", "pen", "pepper", "queen", "rain", "rice", "school", "shoe", "snake", "table", "tiger",
+  "umbrella", "van", "water", "window", "yam", "zebra"];
+const LETPART = ["the writer's address", "the date", "the greeting", "the body", "the closing", "the writer's name"];
+const LETWHERE = [["Where do you write your address in a letter?", "at the top right", ["at the bottom left", "in the middle of the body"]], ["Where does the date go?", "under the address", ["after your name", "in the greeting"]],
+  ["Where does the greeting (Dear Tunde,) go?", "on the left, before the body", ["at the very end", "on top of the address"]], ["Where do you write your name?", "at the end, under the closing", ["at the top left", "in the date"]],
+  ["What is the body of a letter?", "the main message", ["the address", "the stamp"]], ["What comes at the very start of the body?", "a friendly opening, like How are you?", ["Yours faithfully", "your address again"]]];
+const FRIENDLY = ["How are you and your family?", "I hope you are fine.", "Greet your parents for me.", "I miss you so much!", "Please write back soon.", "Guess what happened at school!", "I can't wait to see you in the holidays.",
+  "Thank you for the birthday card.", "My little sister says hello.", "I hope your team won the match.", "We had so much fun at the party.", "Tell me all your news.", "How is your new school?", "I have a funny story for you.", "Take care of yourself."];
+const FORMAL = ["I write to apply for the post of class captain.", "I wish to complain about the broken taps.", "I am writing to request permission to be absent.", "Kindly find attached my report.", "I look forward to your favourable reply.",
+  "I write on behalf of the Primary 4 pupils.", "Please accept my sincere apologies."];
+/* --- term 2 --- */
+const TUNE4 = [["Are you coming to the party?", "up"], ["Is this your book?", "up"], ["Have you finished your homework?", "up"], ["Can I help you?", "up"], ["Did you see the match?", "up"], ["Will it rain today?", "up"],
+  ["Does your mother cook well?", "up"], ["Is Abuja the capital of Nigeria?", "up"], ["Where do you live?", "down"], ["What is your name?", "down"], ["Why are you crying?", "down"], ["How did you get here?", "down"],
+  ["When does school close?", "down"], ["Who is your class teacher?", "down"], ["I live in Kaduna.", "down"], ["We won the match.", "down"], ["Please sit down.", "down"], ["Open the window.", "down"], ["Which bus goes to Ikeja?", "down"], ["Is it far?", "up"], ["Has the bus left?", "up"], ["Are you sure?", "up"], ["Do you want some water?", "up"], ["Can she sing?", "up"], ["Were you at home?", "up"],
+  ["What are you cooking?", "down"], ["Whose bag is this?", "down"], ["How much is this?", "down"], ["The bus has left.", "down"], ["Come here, please.", "down"]];
+const YNWH = [["Do you like football?", "a yes/no question"], ["Is it raining?", "a yes/no question"], ["Can you swim?", "a yes/no question"], ["Have you eaten?", "a yes/no question"], ["Will you come?", "a yes/no question"], ["Are they ready?", "a yes/no question"],
+  ["Where is the library?", "a wh- question"], ["What time is it?", "a wh- question"], ["Who wrote this?", "a wh- question"], ["When is the test?", "a wh- question"], ["Why is he late?", "a wh- question"], ["Which one is yours?", "a wh- question"], ["How old is your sister?", "a wh- question"], ["Is your father at home?", "a yes/no question"], ["Did you finish?", "a yes/no question"], ["Can we go now?", "a yes/no question"],
+  ["Whose pen is this?", "a wh- question"], ["How many goats do you have?", "a wh- question"], ["Where are my shoes?", "a wh- question"]];
+const SIMILE = [["as busy as a ___", "bee"], ["as brave as a ___", "lion"], ["as white as ___", "snow"], ["as slow as a ___", "snail"], ["as proud as a ___", "peacock"], ["as cold as ___", "ice"], ["as strong as an ___", "ox"],
+  ["as tall as a ___", "giraffe"], ["as sweet as ___", "honey"], ["as light as a ___", "feather"], ["as hard as ___", "rock"], ["as gentle as a ___", "lamb"], ["as wise as an ___", "owl"], ["as quiet as a ___", "mouse"],
+  ["as black as ___", "coal"], ["as quick as ___", "lightning"], ["as hungry as a ___", "wolf"], ["as playful as a ___", "kitten"], ["as round as a ___", "ball"], ["as red as a ___", "tomato"]];
+const NOTSIM = ["The bus is yellow.", "My mother is a nurse.", "We ate rice and stew.", "The rain fell all night.", "Felix kicked the ball.", "The market was busy.", "Grace has a new bag.", "The children sang loudly."];
+const POEMS4 = [
+  { t: "Harmattan", s: "The harmattan wind is dusty and dry, / It hides the sun and greys the sky, / My lips are cracked, my skin feels tight, / The mornings are cold, as cold as ice.", th: "the harmattan season", w: ["a birthday party", "a football match"], sim: "as cold as ice" },
+  { t: "My Teacher", s: "My teacher is as patient as the sea, / She smiles and helps both you and me, / She teaches sums and stories too, / She makes the hardest work seem new.", th: "a kind, patient teacher", w: ["a stormy sea", "a lazy pupil"], sim: "as patient as the sea" },
+  { t: "The Market Woman", s: "Up with the sun, she sets her stall, / Tomatoes, peppers, onions, all, / She sings and calls, as busy as a bee, / “Come and buy, my prices are fair, you see!”", th: "a busy market woman", w: ["a sleeping baby", "a quiet library"], sim: "as busy as a bee" },
+  { t: "Football", s: "The ball rolls out, the whistle blows, / Across the field the striker goes, / As quick as lightning, past them all, / Goal! The crowd begins to call!", th: "an exciting football match", w: ["a rainy morning", "a cooking lesson"], sim: "as quick as lightning" },
+  { t: "Night", s: "The night is as black as coal, / The moon peeps out from a cloudy hole, / The crickets sing, the owls reply, / And stars like diamonds fill the sky.", th: "the beauty of the night", w: ["a busy afternoon", "a school sports day"], sim: "as black as coal" },
+  { t: "Grandfather", s: "My grandfather is as wise as an owl, / He never shouts, he never scowls, / He tells us tales of long ago, / Of kings and drums and rivers' flow.", th: "a wise grandfather who tells stories", w: ["a noisy owl", "a new bicycle"], sim: "as wise as an owl" }];
+const COLL = [["herd", "cattle"], ["flock", "sheep"], ["swarm", "bees"], ["school", "fish"], ["pride", "lions"], ["bunch", "bananas"], ["team", "players"], ["crowd", "people"], ["choir", "singers"], ["fleet", "ships"],
+  ["pack", "wolves"], ["class", "pupils"], ["bundle", "sticks"], ["troop", "monkeys"], ["band", "musicians"], ["bouquet", "flowers"], ["gang", "thieves"], ["army", "soldiers"], ["bunch", "keys"], ["litter", "puppies"]];
+const PROPERN = ["Lagos", "Mr Bello", "River Niger", "Monday", "Nigeria", "Grace", "Christmas", "Zuma Rock", "Kano", "December", "Lake Chad", "Mrs Okon"];
+const COMMONN = ["city", "teacher", "river", "day", "country", "girl", "festival", "rock", "town", "month", "lake", "woman", "chair", "dog", "school"];
+const UNCOUNT = ["rice", "water", "sugar", "sand", "milk", "salt", "oil", "flour", "air", "money", "bread", "information"];
+const COUNT = ["oranges", "books", "chairs", "eggs", "pupils", "cars", "pencils", "goats", "bananas", "cups", "shoes", "mangoes"];
+const ADV = [["quick", "quickly"], ["slow", "slowly"], ["careful", "carefully"], ["loud", "loudly"], ["quiet", "quietly"], ["happy", "happily"], ["easy", "easily"], ["neat", "neatly"], ["bad", "badly"], ["good", "well"],
+  ["sad", "sadly"], ["soft", "softly"], ["polite", "politely"], ["brave", "bravely"], ["kind", "kindly"], ["angry", "angrily"], ["beautiful", "beautifully"], ["proud", "proudly"], ["gentle", "gently"], ["noisy", "noisily"]];
+const ADVF = [["runs", "quick"], ["walks", "slow"], ["writes", "neat"], ["sings", "beautiful"], ["speaks", "polite"], ["laughs", "happy"], ["shouts", "angry"], ["talks", "quiet"], ["drives", "careful"], ["plays", "good"],
+  ["cries", "sad"], ["fights", "brave"], ["smiles", "kind"], ["knocks", "soft"], ["holds the baby", "gentle"], ["eats", "noisy"]];
+const IDIOM = [["a piece of cake", "very easy"], ["under the weather", "feeling sick"], ["raining cats and dogs", "raining very heavily"], ["once in a blue moon", "very rarely"], ["hit the books", "study hard"],
+  ["cost an arm and a leg", "very expensive"], ["on cloud nine", "very happy"], ["keep an eye on", "watch carefully"], ["give a hand", "help"], ["call it a day", "stop working for the day"], ["in hot water", "in trouble"],
+  ["spill the beans", "tell a secret"], ["get cold feet", "become too nervous to do something"], ["all ears", "listening carefully"], ["over the moon", "extremely happy"], ["pull someone's leg", "joke with someone"],
+  ["see eye to eye", "agree"], ["hold your horses", "wait, be patient"], ["learn by heart", "memorise"], ["break the ice", "start a friendly conversation"], ["let the cat out of the bag", "tell a secret by mistake"], ["the apple of my eye", "someone very dear to me"], ["feel blue", "feel sad"], ["a big fish", "an important person"], ["face the music", "accept the punishment for something you did"]];
+const EXPR = [["Your friend is going on a long trip.", "Safe journey!"], ["It is your classmate's birthday.", "Happy birthday!"], ["Your aunt is sick in hospital.", "Get well soon."], ["Your friend passed the exam.", "Congratulations!"],
+  ["Your neighbour's grandfather has died.", "Sorry for your loss."], ["Your cousin comes back from abroad.", "Welcome back!"], ["Your friend is about to write an exam.", "Good luck!"], ["Someone gives you a gift.", "Thank you so much."],
+  ["You bump into someone by mistake.", "I'm sorry."], ["Your mother cooked a delicious meal.", "The food was delicious, thank you."], ["It is the first day of January.", "Happy New Year!"], ["A visitor is leaving your house.", "Goodbye, and come again!"], ["Your friends are getting married.", "Congratulations on your wedding!"], ["Your father comes home from work.", "Welcome home, Daddy!"],
+  ["It is Christmas Day.", "Merry Christmas!"], ["Someone sneezes near you.", "Bless you!"], ["You want someone to repeat what they said.", "Pardon?"], ["You need to pass between two people.", "Excuse me, please."]];
+const SEQ4 = [
+  { t: "The Lost Phone", e: ["Mummy could not find her phone.", "We searched the sitting room.", "Then we looked in the kitchen.", "Suddenly the phone rang inside the fridge!", "Everybody laughed, and Mummy promised to be more careful."] },
+  { t: "Sports Day", e: ["On Friday our school held its sports day.", "First, we marched past the head teacher.", "Next, the races began.", "Tobi won the 100 metres race.", "Finally, the Red House was declared the winner."] },
+  { t: "Making Pap", e: ["Grandma soaked the maize in water.", "After three days, she ground it into a paste.", "She sieved the paste with a cloth.", "Then she cooked it in hot water.", "At last we ate the pap with akara."] },
+  { t: "The Flood", e: ["Heavy rain fell all night.", "In the morning our street was flooded.", "Daddy put our things on the table.", "The emergency workers came with a boat.", "By evening the water had gone down."] },
+  { t: "A Visit to the Zoo", e: ["Our class took a bus to the zoo.", "We saw the lions first.", "Then the keeper fed the monkeys.", "After lunch we visited the snake house.", "We came back to school tired but happy."] },
+  { t: "The Kite", e: ["Felix gathered paper, sticks and string.", "He tied the sticks into a cross.", "He glued the paper onto the sticks.", "He tied the string to the kite.", "At last the kite flew high above the field."] }];
+const LINK = [["___, I woke up early. Then I brushed my teeth.", "First", ["Finally", "Because"]], ["I brushed my teeth. ___, I had my bath.", "Then", ["Because", "But"]], ["We were playing happily. ___, it started to rain heavily!", "Suddenly", ["Because", "First"]],
+  ["After a long journey, we ___ reached home.", "finally", ["first", "because"]], ["___ the bell rang, we ran to the field.", "When", ["But", "So"]], ["I was tired, ___ I went to bed early.", "so", ["but", "because of"]],
+  ["We waited for the bus, ___ it did not come.", "but", ["so", "because"]], ["We stayed indoors ___ it was raining.", "because", ["but", "so"]]];
+/* --- term 3 --- */
+const STRESS4 = [["banana", "ba-NA-na", ["BA-na-na", "ba-na-NA"]], ["computer", "com-PU-ter", ["COM-pu-ter", "com-pu-TER"]], ["telephone", "TE-le-phone", ["te-LE-phone", "te-le-PHONE"]], ["bicycle", "BI-cy-cle", ["bi-CY-cle", "bi-cy-CLE"]],
+  ["potato", "po-TA-to", ["PO-ta-to", "po-ta-TO"]], ["tomato", "to-MA-to", ["TO-ma-to", "to-ma-TO"]], ["hospital", "HOS-pi-tal", ["hos-PI-tal", "hos-pi-TAL"]], ["elephant", "E-le-phant", ["e-LE-phant", "e-le-PHANT"]],
+  ["umbrella", "um-BREL-la", ["UM-brel-la", "um-brel-LA"]], ["animal", "A-ni-mal", ["a-NI-mal", "a-ni-MAL"]], ["family", "FA-mi-ly", ["fa-MI-ly", "fa-mi-LY"]], ["important", "im-POR-tant", ["IM-por-tant", "im-por-TANT"]],
+  ["holiday", "HO-li-day", ["ho-LI-day", "ho-li-DAY"]], ["tomorrow", "to-MOR-row", ["TO-mor-row", "to-mor-ROW"]], ["September", "Sep-TEM-ber", ["SEP-tem-ber", "Sep-tem-BER"]], ["engineer", "en-gi-NEER", ["EN-gi-neer", "en-GI-neer"]],
+  ["beautiful", "BEAU-ti-ful", ["beau-TI-ful", "beau-ti-FUL"]], ["remember", "re-MEM-ber", ["RE-mem-ber", "re-mem-BER"]], ["together", "to-GE-ther", ["TO-ge-ther", "to-ge-THER"]], ["yesterday", "YES-ter-day", ["yes-TER-day", "yes-ter-DAY"]],
+  ["Nigeria", "Ni-GE-ri-a", ["NI-ge-ri-a", "Ni-ge-RI-a"]], ["chocolate", "CHO-co-late", ["cho-CO-late", "cho-co-LATE"]], ["afternoon", "af-ter-NOON", ["AF-ter-noon", "af-TER-noon"]]];
+const STRESSN = [["present", "I got a present for my birthday.", "PRE-sent", "pre-SENT"], ["present", "Grace will present the prize.", "pre-SENT", "PRE-sent"], ["record", "Felix broke the school record.", "RE-cord", "re-CORD"],
+  ["record", "We will record a song.", "re-CORD", "RE-cord"], ["object", "This object is heavy.", "OB-ject", "ob-JECT"], ["object", "I object to that rule.", "ob-JECT", "OB-ject"], ["export", "Cocoa is a Nigerian export.", "EX-port", "ex-PORT"],
+  ["export", "Nigeria will export more cocoa.", "ex-PORT", "EX-port"], ["permit", "Show me your permit.", "PER-mit", "per-MIT"], ["permit", "They do not permit phones in class.", "per-MIT", "PER-mit"], ["desert", "The Sahara is a desert.", "DE-sert", "de-SERT"],
+  ["desert", "A good friend will not desert you.", "de-SERT", "DE-sert"], ["contest", "Joy won the spelling contest.", "CON-test", "con-TEST"], ["contest", "Two people will contest the election.", "con-TEST", "CON-test"],
+  ["progress", "You are making good progress.", "PRO-gress", "pro-GRESS"], ["insult", "That was an insult.", "IN-sult", "in-SULT"]];
+const PLAY2 = { t: "The Lost Book (a short play)", s: "Characters: Mrs Ade (a teacher), Ruth, Felix. Scene 1: A classroom. MRS ADE: (looking worried) Has anyone seen my red book? RUTH: (raising her hand) I saw it in the library, Ma. FELIX: (jumping up) I will get it! MRS ADE: (smiling) Thank you, Felix. Walk, do not run!",
+  q: [["Who is the teacher?", "Mrs Ade", ["Ruth", "Felix"]], ["What has Mrs Ade lost?", "her red book", ["her bag", "her phone"]], ["Where did Ruth see it?", "in the library", ["on the bus", "in the kitchen"]], ["What is (jumping up)?", "a stage direction", ["dialogue", "a character"]],
+    ["What does Mrs Ade tell Felix to do?", "walk, not run", ["sit down", "go home"]], ["Where does Scene 1 take place?", "a classroom", ["a market", "a farm"]]] };
+const DIRS = ["(smiling)", "(walking slowly)", "(laughing loudly)", "(looking worried)", "(raising her hand)", "(sitting down)", "(whispering)", "(opening the door)", "(crying softly)", "(pointing at the sky)"];
+const DLINES = ["Good morning, Ma.", "How much are the oranges?", "Has anyone seen my book?", "I will get it!", "Thank you, my son.", "Fresh tomatoes!", "Where are you going?", "Come back here!"];
+const FOLK = [
+  { t: "Why Hens Scratch the Ground", s: "Long ago, Hen borrowed a shiny razor from Hawk to shave her chicks. She promised to return it the next day. But she put it down in the yard and could not find it. Hawk was angry. Since that day, hens scratch the ground looking for the razor, and Hawk swoops down to take a chick whenever he can.",
+    q: [["What did Hen borrow?", "a razor", ["a pot", "a drum"]], ["Who lent it to her?", "Hawk", ["Goat", "Tortoise"]], ["Why was Hawk angry?", "Hen lost the razor.", ["Hen sang too loudly.", "Hen ate his food."]], ["Why do hens scratch the ground?", "They are looking for the razor.", ["They are dancing.", "They are cold."]], ["What lesson does the story teach?", "Take care of what you borrow.", ["Hawks are kind.", "Never shave."]]] },
+  { t: "Why the Sky Is Far Away", s: "Long ago the sky was so close that people could reach up and cut pieces of it to eat. The sky warned them not to waste it. But people became greedy and threw away what they did not eat. The angry sky rose high, far away, and from then on people had to farm for their food.",
+    q: [["What did people eat long ago?", "pieces of the sky", ["only fish", "stones"]], ["What did the sky warn them about?", "wasting it", ["singing", "sleeping"]], ["Why did the sky rise far away?", "People wasted it.", ["It was too hot.", "A bird pushed it."]], ["What do people do for food now?", "They farm.", ["They cut the sky.", "They wait for rain."]], ["What is the lesson?", "Do not waste what you are given.", ["The sky is blue.", "Farming is easy."]]] },
+  { t: "Why the Sun and Moon Live in the Sky", s: "Long ago, Sun and his wife Moon lived on earth and were friends with Water. Sun invited Water to visit. Water came with fish and all the sea animals, and the water rose higher and higher. Sun and Moon climbed onto the roof, and then up into the sky, where they still live today.",
+    q: [["Who were Sun and Moon friends with?", "Water", ["Fire", "Wind"]], ["Who came with Water?", "fish and the sea animals", ["the birds", "the farmers"]], ["Where did Sun and Moon climb first?", "onto the roof", ["into a tree", "into a boat"]], ["Where do they live now?", "in the sky", ["under the sea", "in a cave"]], ["What kind of story is this?", "a folk tale that explains something in nature", ["a news report", "a recipe"]]] },
+  { t: "Tortoise and the Pot of Wisdom", s: "Tortoise wanted all the wisdom in the world for himself. He put it in a pot and tried to climb a tall tree to hide it. The pot was tied to his front, so he kept slipping. His little son said, “Father, tie it on your back.” Tortoise realised that he did not have all the wisdom after all, and he broke the pot so wisdom spread everywhere.",
+    q: [["What did Tortoise want?", "all the wisdom in the world", ["all the food", "a new shell"]], ["Where did he try to hide the pot?", "up a tall tree", ["in a river", "under his bed"]], ["Who gave him good advice?", "his little son", ["the king", "a bird"]], ["What did Tortoise do with the pot at the end?", "He broke it.", ["He sold it.", "He hid it."]], ["What is the lesson?", "Nobody has all the wisdom.", ["Trees are tall.", "Pots are heavy."]]] },
+  { t: "The Tug of War", s: "Tortoise told Elephant, “I am stronger than you,” and gave him one end of a long rope. Then he gave the other end to Hippo in the river and told him the same thing. Elephant and Hippo pulled all day without seeing each other. When they found out the trick, they were very angry with Tortoise.",
+    q: [["Who held the ends of the rope?", "Elephant and Hippo", ["Tortoise and Elephant", "Lion and Hippo"]], ["What did Tortoise say to each of them?", "I am stronger than you.", ["Let us be friends.", "Help me."]], ["Where was Hippo?", "in the river", ["in a tree", "at the market"]], ["How long did they pull?", "all day", ["one minute", "a week"]], ["How did they feel at the end?", "very angry", ["very happy", "sleepy"]]] }];
+const DRAMA = [["The people in a play are called the ___.", "characters"], ["The words the characters say to each other are called ___.", "dialogue"], ["Instructions in brackets that tell actors what to do are ___.", "stage directions"],
+  ["A part of a play that happens in one place and time is a ___.", "scene"], ["The list of characters at the start of a play is the ___.", "cast"], ["The person who tells the story to the audience is the ___.", "narrator"],
+  ["The people who watch a play are the ___.", "audience"], ["The place where a play is acted is the ___.", "stage"], ["The person who writes a play is the ___.", "playwright"], ["A long speech by one character alone is a ___.", "monologue"],
+  ["The clothes actors wear are their ___.", "costumes"], ["The things actors use on stage, like a cup or a broom, are called ___.", "props"]];
+const PLAY = { t: "At the Market (a short play)", s: "Characters: Mama Nkechi (a trader), Tobi (a boy). Scene 1: Mama Nkechi's stall. MAMA NKECHI: (calling loudly) Fresh tomatoes! Sweet oranges! TOBI: (walking up) Good morning, Ma. How much are the oranges? MAMA NKECHI: (smiling) Five for two hundred naira, my son. TOBI: (counting his money) I will take five, please.",
+  q: [["How many characters are in this play?", "two", ["one", "five"]], ["Where does Scene 1 take place?", "at Mama Nkechi's stall", ["at school", "in a hospital"]], ["What is (smiling)?", "a stage direction", ["dialogue", "the title"]],
+    ["Who says, Fresh tomatoes!?", "Mama Nkechi", ["Tobi", "the narrator"]], ["How much are five oranges?", "two hundred naira", ["five naira", "one thousand naira"]], ["What is Mama Nkechi's job?", "a trader", ["a teacher", "a driver"]]] };
+const TAGB = [["is", "isn't"], ["are", "aren't"], ["was", "wasn't"], ["can", "can't"], ["will", "won't"], ["has", "hasn't"]];
+const TAGP = { is: ["hungry", "at school", "very tall", "your cousin", "in Primary Four"], are: ["ready", "late again", "good friends", "at home"], was: ["at the party", "very tired", "sick yesterday"],
+  can: ["swim", "speak Yoruba", "ride a bicycle", "sing well"], will: ["come tomorrow", "help us", "win the match"], has: ["finished", "eaten", "gone home"] };
+const TAGS_DO = [["You like rice", "don't you?"], ["They play football", "don't they?"], ["Felix lives in Jos", "doesn't he?"], ["Grace speaks Hausa", "doesn't she?"], ["We went to church", "didn't we?"], ["You don't like beans", "do you?"],
+  ["She didn't come", "did she?"], ["It isn't cold", "is it?"], ["They aren't here", "are they?"], ["He can't swim", "can he?"], ["You won't forget", "will you?"], ["Joy wasn't late", "was she?"]];
+const CMP = [["big", "bigger", "biggest"], ["tall", "taller", "tallest"], ["small", "smaller", "smallest"], ["fast", "faster", "fastest"], ["long", "longer", "longest"], ["strong", "stronger", "strongest"], ["hot", "hotter", "hottest"],
+  ["happy", "happier", "happiest"], ["heavy", "heavier", "heaviest"], ["good", "better", "best"], ["bad", "worse", "worst"], ["beautiful", "more beautiful", "most beautiful"], ["careful", "more careful", "most careful"],
+  ["expensive", "more expensive", "most expensive"], ["old", "older", "oldest"], ["young", "younger", "youngest"], ["clean", "cleaner", "cleanest"], ["thin", "thinner", "thinnest"], ["easy", "easier", "easiest"], ["far", "farther", "farthest"]];
+const CMPF = { big: ["The elephant is ___ than the goat.", "The elephant is the ___ animal in the zoo."], tall: ["Felix is ___ than Tobi.", "Felix is the ___ boy in the class."],
+  small: ["The ant is ___ than the dog.", "The ant is the ___ animal here."], fast: ["A car is ___ than a bicycle.", "The cheetah is the ___ animal on land."], long: ["A python is ___ than a lizard.", "The Niger is the ___ river in Nigeria."],
+  strong: ["An ox is ___ than a goat.", "Musa is the ___ boy in our team."], hot: ["Pepper soup is ___ than ice cream.", "This is the ___ soup I have ever tasted."], happy: ["Joy is ___ today than yesterday.", "Joy is the ___ girl at the party."],
+  heavy: ["A bag of rice is ___ than a book.", "This is the ___ box in the store."], good: ["Grace's handwriting is ___ than mine.", "Grace is the ___ reader in our class."], bad: ["The traffic today is ___ than yesterday.", "This is the ___ storm we have ever had."],
+  beautiful: ["This dress is ___ than that one.", "Obudu is the ___ place I have visited."], careful: ["Daddy drives ___ than Uncle Musa.", "Ruth is the ___ pupil in our class."], expensive: ["A car is ___ than a bicycle.", "That is the ___ phone in the shop."],
+  old: ["Grandpa is ___ than Daddy.", "Grandpa is the ___ person in our family."], young: ["The baby is ___ than Tobi.", "The baby is the ___ person in our family."], clean: ["Our classroom is ___ than it was yesterday.", "Our class is the ___ class in the school."],
+  thin: ["A pencil is ___ than a tree.", "This is the ___ book on the shelf."], easy: ["Addition is ___ than division.", "This is the ___ question in the test."], far: ["Kano is ___ from Lagos than Ibadan is.", "Maiduguri is the ___ city we have visited."] };
+const CMPWRONG = (b, c) => uniq([b + "er", "more " + b, c.replace(/er$/, "est"), b, "more " + c].filter((x) => x !== c && !(x === "more " + b && c.startsWith("more")))).slice(0, 2);
+const SUPWRONG = (b, s, c) => uniq([b + "est", "most " + b, c, b, "most " + s].filter((x) => x !== s && !(x === "most " + b && s.startsWith("most")))).slice(0, 2);
+const IFW = [["If it rains, we ___ stay indoors.", "will", ["would", "are"]], ["If you heat ice, it ___.", "melts", ["melted", "melting"]], ["If you study hard, you ___ pass.", "will", ["was", "did"]],
+  ["When the bell rings, we ___ go home.", "will", ["was", "were"]], ["If you mix red and yellow, you ___ orange.", "get", ["got", "getting"]], ["If Felix wakes up late, he ___ miss the bus.", "will", ["did", "was"]],
+  ["When water boils, it ___ steam.", "makes", ["made", "making"]], ["If we plant the seeds, they ___ grow.", "will", ["were", "did"]], ["When I finish my homework, I ___ watch TV.", "will", ["was", "did"]], ["If you drop the glass, it ___ break.", "will", ["did", "was"]]];
+const SYN = [["big", "large"], ["small", "little"], ["happy", "glad"], ["begin", "start"], ["end", "finish"], ["quick", "fast"], ["shut", "close"], ["gift", "present"], ["buy", "purchase"], ["angry", "cross"], ["rich", "wealthy"],
+  ["ill", "sick"], ["clever", "smart"], ["brave", "courageous"], ["scared", "afraid"], ["talk", "speak"], ["shout", "yell"], ["tired", "weary"], ["sad", "unhappy"], ["correct", "right"], ["mistake", "error"], ["hard", "difficult"],
+  ["choose", "pick"], ["friend", "pal"], ["hurry", "rush"], ["look", "glance"], ["ancient", "very old"], ["huge", "enormous"]];
+const ANT4 = [["ancient", "modern"], ["accept", "refuse"], ["arrive", "depart"], ["maximum", "minimum"], ["generous", "stingy"], ["victory", "defeat"], ["noisy", "silent"], ["borrow", "lend"], ["increase", "decrease"],
+  ["entrance", "exit"], ["friend", "enemy"], ["praise", "blame"], ["remember", "forget"], ["success", "failure"], ["polite", "rude"], ["brave", "cowardly"], ["truth", "lie"], ["wide", "narrow"], ["question", "answer"], ["sunrise", "sunset"]];
+const SENSE = [["The bread smells fresh.", "smell"], ["The drums sound loud.", "hearing"], ["The mango tastes sweet.", "taste"], ["The pillow feels soft.", "touch"], ["The sky looks grey.", "sight"], ["The pepper soup tastes hot.", "taste"],
+  ["The baby's skin feels smooth.", "touch"], ["The market is noisy.", "hearing"], ["The flowers smell lovely.", "smell"], ["The sunset looks orange and pink.", "sight"], ["The ice feels cold.", "touch"], ["The birds sing sweetly.", "hearing"],
+  ["The soup smells of spices.", "smell"], ["The lemon tastes sour.", "taste"], ["The beach looks beautiful.", "sight"], ["The bark of the tree feels rough.", "touch"]];
+const DESC = [
+  ["Our school is very big and ___.", "beautiful", ["sadly", "slept"], "The classrooms are painted ___ and white.", "blue", ["quickly", "ran"], "Tall mango trees give ___ shade.", "cool", ["loudly", "ate"],
+    "In the morning we hear birds ___.", "singing", ["sing", "sang"], "The field is ___ and green.", "wide", ["slowly", "went"], "I love my school ___ much.", "very", ["more", "most"]],
+  ["The market is a ___ place.", "busy", ["busily", "buses"], "Traders shout ___ to call buyers.", "loudly", ["loud", "louder"], "The air smells of fried ___.", "akara", ["shoes", "stones"],
+    "The tomatoes are ___ and juicy.", "red", ["redly", "reds"], "There are ___ colourful clothes.", "many", ["much", "a"], "I always enjoy the ___ of the market.", "sights and sounds", ["sight and sounded", "seeing sounds"]],
+  ["My best friend is tall and ___.", "slim", ["slimly", "slimmed"], "She has big, ___ eyes.", "bright", ["brightly", "brighter than"], "She speaks ___ to everyone.", "politely", ["polite", "politeness"],
+    "Her laugh is as sweet as ___.", "honey", ["salt", "stones"], "She is the ___ girl in our class.", "kindest", ["kinder", "most kind of"], "I am ___ to have her as a friend.", "lucky", ["luckily", "luck"]]];
+const DSENSE = [["bright", "sight"], ["colourful", "sight"], ["shiny", "sight"], ["sparkling", "sight"], ["loud", "hearing"], ["quiet", "hearing"], ["noisy", "hearing"], ["squeaky", "hearing"], ["musical", "hearing"],
+  ["fragrant", "smell"], ["smoky", "smell"], ["stinky", "smell"], ["perfumed", "smell"], ["sweet", "taste"], ["sour", "taste"], ["salty", "taste"], ["bitter", "taste"], ["peppery", "taste"], ["soft", "touch"], ["rough", "touch"],
+  ["smooth", "touch"], ["sticky", "touch"], ["prickly", "touch"], ["slippery", "touch"]];
+const SENSEQ = { sight: "how something LOOKS", hearing: "how something SOUNDS", smell: "how something SMELLS", taste: "how something TASTES", touch: "how something FEELS when you touch it" };
+const FORMQ = [["You are writing to the Chairman of your Local Government. Which greeting is best?", "Dear Sir,", ["Hi Chairman!", "My dear friend,"]], ["Which address goes on the LEFT in a formal letter?", "the receiver's address", ["your own address", "no address"]],
+  ["What does the heading of a formal letter tell?", "what the letter is about", ["the writer's age", "the weather"]], ["Which is a good heading?", "REQUEST FOR NEW DESKS", ["hello sir", "my letter"]],
+  ["How should a formal letter sound?", "polite and serious", ["full of jokes", "rude"]], ["What do you write under Yours faithfully?", "your signature and full name", ["your best friend's name", "the date"]],["You are writing to your head teacher. Which greeting is best?", "Dear Sir,", ["Hi Sir!", "Hello my dear,"]], ["You begin with Dear Sir. How do you end?", "Yours faithfully,", ["Your friend,", "Love,"]],
+  ["You begin with Dear Mrs Okon. How do you end?", "Yours sincerely,", ["Your friend,", "Cheers,"]], ["Which letter is a formal letter?", "a letter to the Chairman of the Local Government", ["a letter to your cousin", "a letter to your best friend"]],
+  ["Which letter is informal?", "a letter to your best friend", ["a letter to the Principal", "a letter to a company"]], ["How many addresses does a formal letter have?", "two: yours and the receiver's", ["none", "only the receiver's"]],
+  ["What should a formal letter have under the greeting?", "a heading (the title of the letter)", ["a joke", "a drawing"]], ["Which sentence is right for a formal letter?", "I write to request a new set of desks.", ["Hey, give us new desks!", "Guess what, the desks are bad!"]]];
+const P4T = (who, rest) => `${who} ${rest}`;
+const descGaps = () => DESC.flatMap((F, fi) => [0, 1, 2, 3, 4, 5].map((k) => ({ fi, k, s: F[k * 3], a: F[k * 3 + 1], w: F[k * 3 + 2] })));
+
+YEARS[4] = { title: "Primary 4", terms: [
+  { nm: "Term 1", sub: "Listening, morals, modals and letters", topics: [
+    { id: "p4-aural", nm: "Hearing the difference", icon: "👂", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent big">fan · van</span>`, t: "Some words differ by just one sound. Fan starts with f. Van starts with v: your top teeth touch your lip and your voice buzzes." },
+        { v: `<span class="qsent big">tree · three</span>`, t: "Tree starts with t. Three starts with th: put your tongue between your teeth." },
+        { v: `<span class="qsent big">ship · sheep</span>`, t: "Ship has a short i. Sheep has a long ee. Listening carefully helps you understand and spell." },
+        { v: qpic("🎧"), t: "English superpower! Interpreters at the United Nations listen for the smallest sound differences, so nothing is lost.", wow: true }],
+      gens: [() => { const pr = pick(AURAL), k = Math.random() < .5 ? 0 : 1, w = pr[k], o = pick(AURAL.filter((x) => x !== pr && !x.includes(w)))[k];
+          return SQ(`al-${w}-${pr[1 - k]}`, "Listen. Which word do you hear?", w, [pr[1 - k], o], { seq: [{ t: "Listen." }, 300, { t: w }, 600, { t: w }], big: true }); },
+        () => { const pr = pick(AURAL), same = Math.random() < .4, a = pr[0], b = same ? pr[0] : pr[1];
+          return SQ(`sd-${a}-${b}`, "Listen to the two words. Are they the same or different?", same ? "the same" : "different", [same ? "different" : "the same"], { seq: [{ t: "Listen." }, 300, { t: a }, 700, { t: b }] }); }] },
+    { id: "p4-morals", nm: "Stories with good morals", icon: "🐢", strand: "Reading",
+      learn: [{ v: qpic("🐢"), t: "Many stories teach a lesson called a moral. The Tortoise stories we hear at home often end with a lesson." },
+        { v: `<span class="qsent">Slow and steady wins the race.</span>`, t: "A moral is usually one short sentence. Ask: what did the character learn? What should I learn?" },
+        { v: qpic("👵🏾"), t: "English superpower! Grandparents, pastors and imams use stories with morals to teach wisdom that lasts a lifetime.", wow: true }],
+      gens: [() => { const s = pick(MSTORY); return SQ(`mm-${s.t}`, "What is the moral of this story?", s.m, s.mw, { story: s, seq: [{ t: s.s }, 200, { t: "What is the moral of this story?" }] }); },
+        () => { const s = pick(MSTORY), [q, a, w] = pick(s.q); return SQ(`mq-${s.t}-${q}`, q, a, w, { story: s, seq: [{ t: s.s }, 200, { t: q }] }); },
+        () => { const m = pick(MORALSIT); return SQ(`ms-${m[0]}`, `${m[0]} Which value does this show?`, m[1], pickN(["honesty", "unity", "hard work", "kindness", "patience"].filter((x) => x !== m[1]), 2)); },
+        () => { const s = pick(MSTORY), o = pickN(MSTORY.filter((x) => x !== s).map((x) => x.m), 2); return SQ(`mt-${s.t}`, `Which moral goes with “${s.t}”?`, s.m, o); }] },
+    { id: "p4-modals", nm: "can, may, must, shall, will", icon: "🚦", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">You <b>must</b> wear a seat belt.</span>`, t: "Must shows something you have to do: an obligation or a rule." },
+        { v: `<span class="qsent"><b>Shall</b> I help you?</span>`, t: "Shall I, or shall we, makes an offer or a suggestion." },
+        { v: `<span class="qsent">can · may · will</span>`, t: "Can shows ability. May asks or gives permission. Will tells about the future." },
+        { v: qpic("⚖️"), t: "English superpower! Laws are written with must and shall, so everybody knows exactly what to do.", wow: true }],
+      gens: [() => { const m = pick(MODAL4), cue = { obligation: "a rule", offer: "an offer", ability: "ability", permission: "asking permission", future: "the future" }[m[2]];
+          return SQ(`mf-${m[0]}`, `${m[0]} (${cue})`, m[1], pickN(["can", "may", "must", "shall", "will"].filter((x) => x !== m[1].toLowerCase()), 2).map((x) => MODCAP(m[1], x)), { say: m[0].replace("___", "blank"), big: true }); },
+        () => { const m = pick(MODAL4); return SQ(`mm-${m[0]}`, `“${m[0].replace("___", m[1])}” What does ${m[1].toLowerCase()} show?`, m[2], pickN(["ability", "permission", "obligation", "offer", "future"].filter((x) => x !== m[2]), 2)); },
+        () => { const kind = pick(["obligation", "offer", "ability", "permission", "future"]), a = pick(MODAL4.filter((x) => x[2] === kind)), o = pickN(MODAL4.filter((x) => x[2] !== kind), 2);
+          return SQ(`mk-${a[0]}`, `Which sentence shows ${kind === "offer" ? "an offer" : kind === "obligation" ? "an obligation (a must)" : kind}?`, a[0].replace("___", a[1]), o.map((x) => x[0].replace("___", x[1]))); }] },
+    { id: "p4-tenses", nm: "Past, present & future", icon: "🕰️", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">Yesterday I <b>played</b>. Every day I <b>play</b>. Tomorrow I <b>will play</b>.</span>`, t: "The tense of a verb tells us when something happens: past, present or future." },
+        { v: `<span class="qsent">yesterday · every day · tomorrow</span>`, t: "Time words are clues. Yesterday and last week mean past. Every day means present. Tomorrow and next week mean future." },
+        { v: qpic("🗞️"), t: "English superpower! Journalists use the right tense so readers know if something happened, is happening, or will happen.", wow: true }],
+      gens: [() => { const [b, p, s] = pick(TENSE), who = P4N(), when = pick(["Yesterday", "Every day", "Tomorrow"]), ans = when === "Yesterday" ? p : when === "Every day" ? s : `will ${b}`;
+          return SQ(`tn-${who}-${b}-${when}`, `${when}, ${who} ___ ${TOBJ[b]}.`, ans, [p, s, `will ${b}`].filter((x) => x !== ans), { say: `${when}, ${who}, blank, ${TOBJ[b]}.` }); },
+        () => { const [b, p, s] = pick(TENSE), who = P4N(), k = Math.floor(Math.random() * 3), sent = [`${who} ${p} ${TOBJ[b]}.`, `${who} ${s} ${TOBJ[b]}.`, `${who} will ${b} ${TOBJ[b]}.`][k];
+          if (b === "read" && k === 0) return null; return SQ(`tw-${sent}`, `Which tense is this? “${sent}”`, ["past", "present", "future"][k], ["past", "present", "future"].filter((_, j) => j !== k)); }] },
+    { id: "p4-abc", nm: "Alphabetical order & the dictionary", icon: "📕", strand: "Words",
+      learn: [{ v: `<span class="qsent">ant · ball · cake</span>`, t: "Words in a dictionary are in alphabetical order, a to z. Ant comes before ball, because a comes before b." },
+        { v: `<span class="qsent">ba<b>b</b>y · ba<b>l</b>l</span>`, t: "If the first letters are the same, look at the second letter, then the third. Baby comes before ball, because b comes before l." },
+        { v: `<span class="qsent">cake … dog</span>`, t: "Guide words at the top of a dictionary page show the first and last word on that page." },
+        { v: qpic("📚"), t: "English superpower! Librarians and editors use alphabetical order to find any word or book in seconds.", wow: true }],
+      gens: [() => { const ws = pickN(ABCW, 3); if (uniq(ws.map((w) => w[0])).length < 3) return null; const a = [...ws].sort()[0]; return SQ(`af-${ws.sort().join("")}`, "Which word comes FIRST in a dictionary?", a, ws.filter((x) => x !== a)); },
+        () => { const L = pick("abcdfghmprst".split("")), g = ABCW.filter((w) => w[0] === L); if (g.length < 2) return null; const ws = pickN(g, 2), o = pick(ABCW.filter((w) => w[0] > L)), all = [...ws, o].sort();
+          return SQ(`a2-${all.join("")}`, "Which word comes FIRST? (look at the second letter)", all[0], all.slice(1)); },
+        () => { const ws = pickN(ABCW, 3); if (uniq(ws.map((w) => w[0])).length < 3) return null; const z = [...ws].sort()[2]; return SQ(`al-${ws.sort().join("")}`, "Which word comes LAST in a dictionary?", z, ws.filter((x) => x !== z)); },
+        () => { const s = [...ABCW].sort(), i = 1 + Math.floor(Math.random() * (s.length - 6)), lo = s[i], hi = s[i + 4], mid = s[i + 2], o = pickN(s.filter((w) => w < lo || w > hi), 2);
+          return SQ(`ag-${lo}-${hi}`, `The guide words are “${lo}” and “${hi}”. Which word is on that page?`, mid, o); }] },
+    { id: "p4-letter", nm: "A letter to a friend", icon: "✉️", strand: "Writing",
+      learn: [{ v: `<span class="qsent">12 Ahmadu Bello Way, Kaduna · 7th October, 2026</span>`, t: "An informal letter to a friend has your address at the top right, then the date under it." },
+        { v: `<span class="qsent">Dear Tunde,</span>`, t: "Next comes the greeting on the left: Dear, then your friend's name, then a comma." },
+        { v: `<span class="qsent">How are you and your family?</span>`, t: "The body is your message. Start in a friendly way, then share your news." },
+        { v: `<span class="qsent">Your friend, Grace</span>`, t: "End with a closing such as Your friend, and your name under it." },
+        { v: qpic("📬"), t: "English superpower! Before phones, letters joined families across Nigeria. Today, good emails follow the same plan!", wow: true }],
+      gens: [() => { const n = P4N(); return SQ(`lg-${n}`, `Which greeting would you use in a letter to your friend ${n}?`, `Dear ${n},`, ["Dear Sir,", "To whom it may concern,"]); },
+        () => { const n = P4N(); return SQ(`lc-${n}`, `Which is the best closing for a letter to your friend ${n}?`, "Your friend,", ["Yours faithfully,", "Yours sincerely,"]); },
+        () => { const n = P4N(); return SQ(`lp-${n}`, "Which greeting is written correctly?", `Dear ${n},`, [`dear ${n},`, `Dear ${n}`]); },
+        () => { const k = Math.floor(Math.random() * 5); return SQ(`lo-${k}`, `In a letter, what comes right after ${LETPART[k]}?`, LETPART[k + 1], pickN(LETPART.filter((_, j) => j !== k + 1 && j !== k), 2)); },
+        () => { const w = pick(LETWHERE); return SQ(`lw-${w[0]}`, w[0], w[1], w[2]); },
+        () => { const f = pick(FRIENDLY), o = pickN(FORMAL, 2); return SQ(`lf-${f}`, "Which sentence fits a letter to a friend?", f, o); }] },
+  ] },
+  { nm: "Term 2", sub: "Intonation, poems, nouns and idioms", topics: [
+    { id: "p4-inton", nm: "Statements & questions", icon: "🎶", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent">Is it far? ↗</span>`, t: "In a yes or no question, your voice goes up at the end: Is it far?" },
+        { v: `<span class="qsent">Where do you live? ↘</span>`, t: "In a wh- question, with who, what, where, when, why or how, your voice goes down at the end." },
+        { v: `<span class="qsent">I live in Kaduna. ↘</span>`, t: "In statements and commands, your voice also goes down." },
+        { v: qpic("📞"), t: "English superpower! Customer-care staff on the phone use the right tune so callers know when they are being asked a question.", wow: true }],
+      gens: [() => { const t = pick(TUNE4); return SQ(`tu-${t[0]}`, `Does your voice go up or down at the end? “${t[0]}”`, t[1] === "up" ? "up ↗" : "down ↘", [t[1] === "up" ? "down ↘" : "up ↗"], { say: t[0], big: true }); },
+        () => { const q = pick(YNWH); return SQ(`yn-${q[0]}`, `“${q[0]}” is…`, q[1], [q[1] === "a yes/no question" ? "a wh- question" : "a yes/no question", "a statement"], { say: q[0] }); },
+        () => { const up = pick(TUNE4.filter((x) => x[1] === "up")), o = pickN(TUNE4.filter((x) => x[1] === "down"), 2).map((x) => x[0]); return SQ(`tq-${up[0]}`, "In which sentence does your voice go UP at the end?", up[0], o); },
+        () => { const d = pick(TUNE4.filter((x) => x[1] === "down" && x[0].endsWith("?"))), o = pickN(TUNE4.filter((x) => x[1] === "up"), 2).map((x) => x[0]); return SQ(`td-${d[0]}`, "Which QUESTION ends with the voice going DOWN?", d[0], o); }] },
+    { id: "p4-poems", nm: "Poems & similes", icon: "📜", strand: "Reading",
+      learn: [{ v: `<span class="qsent">as busy as a bee</span>`, t: "A simile compares two things using as or like: as busy as a bee, eyes like stars." },
+        { v: qpic("🌬️"), t: "The theme of a poem is the big idea it is about, like friendship, the harmattan, or a hardworking mother." },
+        { v: qpic("🎤"), t: "English superpower! Poets like Niyi Osundare and singers use similes to paint pictures with words.", wow: true }],
+      gens: [() => { const s = pick(SIMILE), o = pickN(SIMILE.filter((x) => x !== s).map((x) => x[1]), 2); return SQ(`sc-${s[0]}`, `Complete the simile: ${s[0]}`, s[1], o, { say: s[0].replace("___", "blank") }); },
+        () => { const s = pick(SIMILE), n = pickN(NOTSIM, 2), who = pick(["Felix is", "Grandma is", "The pupils are", "Our dog is", "The soldier is"]);
+          return SQ(`ss-${s[0]}-${who}`, "Which sentence has a simile?", `${who} ${s[0].replace("___", s[1])}.`, n); },
+        () => { const p = pick(POEMS4); return SQ(`pt-${p.t}`, "What is the theme of this poem?", p.th, p.w, { story: p, seq: [{ t: p.s.replace(/ \/ /g, ". ") }, 200, { t: "What is the theme of this poem?" }] }); },
+        () => { const p = pick(POEMS4), o = pickN(POEMS4.filter((x) => x !== p).map((x) => x.sim), 2); return SQ(`ps-${p.t}`, "Which simile is in this poem?", p.sim, o, { story: p, seq: [{ t: p.s.replace(/ \/ /g, ". ") }] }); }] },
+    { id: "p4-nouns", nm: "Kinds of nouns", icon: "🏷️", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">Lagos · Mr Bello · Monday</span>`, t: "Proper nouns are special names. They start with a capital letter: Lagos, Mr Bello, Monday. Common nouns are general: city, teacher, day." },
+        { v: `<span class="qsent">a herd of cattle · a swarm of bees</span>`, t: "Collective nouns name a group: a herd of cattle, a flock of sheep, a swarm of bees, a team of players." },
+        { v: `<span class="qsent">many oranges · much rice</span>`, t: "Countable nouns can be counted: oranges. Uncountable nouns cannot: rice, water, sugar. Use many with countable nouns and much with uncountable ones." },
+        { v: qpic("🐄"), t: "English superpower! Fulani herders, fishermen and bee-keepers use collective nouns every day: a herd, a school, a swarm!", wow: true }],
+      gens: [() => { const c = pick(COLL), o = pickN(uniq(COLL.map((x) => x[0])).filter((x) => x !== c[0]), 2); return SQ(`cn-${c[0]}-${c[1]}`, `a ___ of ${c[1]}`, c[0], o, { say: `a, blank, of ${c[1]}`, big: true }); },
+        () => { const p = pick(PROPERN), o = pickN(COMMONN, 2); return SQ(`pn-${p}`, "Which one is a proper noun?", p, o); },
+        () => { const c = pick(COMMONN), o = pickN(PROPERN, 2); return SQ(`cm-${c}`, "Which one is a common noun?", c, o); },
+        () => { const u = pick(UNCOUNT), o = pickN(COUNT, 2); return SQ(`un-${u}`, "Which noun is uncountable?", u, o); },
+        () => { const m = Math.random() < .5, w = m ? pick(COUNT) : pick(UNCOUNT); return SQ(`mm-${w}`, `How ___ ${w} do we need?`, m ? "many" : "much", [m ? "much" : "many"], { big: true }); }] },
+    { id: "p4-adv", nm: "Adjectives & adverbs", icon: "🏃", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">a <b>quick</b> runner · she runs <b>quickly</b></span>`, t: "Adjectives describe nouns: a quick runner. Adverbs describe verbs, telling how something is done: she runs quickly." },
+        { v: `<span class="qsent">happy → happily · good → well</span>`, t: "Many adverbs add l y. Happy becomes happily: y changes to i. Good becomes well." },
+        { v: qpic("🎙️"), t: "English superpower! Sports commentators use adverbs: he shoots powerfully, she runs gracefully!", wow: true }],
+      gens: [() => { const [v, a] = pick(ADVF), adv = ADV.find((x) => x[0] === a)[1], who = P4N(); return SQ(`av-${who}-${v}`, `${who} ${v} ___.`, adv, [a, a === "good" ? "goodly" : a + "ness"], { say: `${who} ${v}, blank.` }); },
+        () => { const [a, adv] = pick(ADV), o = uniq([a + "ly", a.replace(/y$/, "ly"), a + "lly", a.replace(/e$/, "ly")]).filter((x) => x !== adv).slice(0, 2); if (o.length < 2) return null; return SQ(`as-${a}`, `What is the adverb from “${a}”?`, adv, o); },
+        () => { const [v, a] = pick(ADVF), adv = ADV.find((x) => x[0] === a)[1], who = P4N(); return ST(`at-${who}-${v}`, "Tap the adverb.", `${who} ${v} ${adv}.`, 1 + v.split(" ").length); },
+        () => { const [a] = pick(ADV.filter((x) => !["good", "fast"].includes(x[0]))), n = pick(["girl", "boy", "teacher", "driver", "singer", "player"]); return SQ(`aj-${a}-${n}`, `Which is correct? “She is a ___ ${n}.”`, a, [ADV.find((x) => x[0] === a)[1], a + "er than"]); }] },
+    { id: "p4-idioms", nm: "Idioms & everyday expressions", icon: "💬", strand: "Words",
+      learn: [{ v: `<span class="qsent">It's a piece of cake!</span>`, t: "An idiom is a saying that means something different from its words. A piece of cake means very easy." },
+        { v: qpic("🌧️🐈🐕"), t: "It is raining cats and dogs means it is raining very heavily. No animals are falling!" },
+        { v: `<span class="qsent">Congratulations! · Get well soon.</span>`, t: "Everyday expressions are the right words for special moments." },
+        { v: qpic("🎬"), t: "English superpower! Nollywood scriptwriters use idioms to make characters sound real and funny.", wow: true }],
+      gens: [() => { const i = pick(IDIOM), o = pickN(IDIOM.filter((x) => x !== i).map((x) => x[1]), 2); return SQ(`im-${i[0]}`, `What does “${i[0]}” mean?`, i[1], o); },
+        () => { const i = pick(IDIOM), o = pickN(IDIOM.filter((x) => x !== i && x[1] !== i[1]).map((x) => x[0]), 2); return SQ(`iw-${i[1]}-${i[0]}`, `Which idiom means “${i[1]}”?`, i[0], o); },
+        () => { const e = pick(EXPR), o = pickN(EXPR.filter((x) => x !== e).map((x) => x[1]), 2); return SQ(`ex-${e[0]}`, `${e[0]} What do you say?`, e[1], o); }] },
+    { id: "p4-sequence", nm: "Events in order (narrative)", icon: "🔢", strand: "Writing",
+      learn: [{ v: `<span class="qsent">First · Next · Then · Suddenly · Finally</span>`, t: "A narrative tells a story in the order it happened. Linking words help the reader follow." },
+        { v: qpic("🪁"), t: "Felix gathered paper and sticks. Then he made the frame. Finally, the kite flew! Beginning, middle and end." },
+        { v: qpic("📖"), t: "English superpower! Authors like Chimamanda Ngozi Adichie plan the order of events before they write a single chapter.", wow: true }],
+      gens: [() => { const s = pick(SEQ4), k = Math.floor(Math.random() * 4); return SQ(`sn-${s.t}-${k}`, `${s.t}: what happened next? “${s.e[k]}”`, s.e[k + 1], pickN(s.e.filter((_, j) => j !== k + 1 && j !== k), 2)); },
+        () => { const s = pick(SEQ4), [a, b] = pickN([0, 1, 2, 3, 4], 2); return SQ(`sf-${s.t}-${Math.min(a, b)}-${Math.max(a, b)}`, `${s.t}: which happened first?`, s.e[Math.min(a, b)], [s.e[Math.max(a, b)]]); },
+        () => { const s = pick(SEQ4), o = pickN(SEQ4.filter((x) => x !== s).map((x) => x.e[4]), 2); return SQ(`se-${s.t}`, `${s.t}: “${s.e[0]}” Which is the best ending?`, s.e[4], o); },
+        () => { const l = pick(LINK); return SQ(`lk-${l[0]}`, l[0], l[1], l[2], { say: l[0].replace("___", "blank") }); }] },
+  ] },
+  { nm: "Term 3", sub: "Stress, folk tales, tags and comparisons", topics: [
+    { id: "p4-stress", nm: "Word stress", icon: "🥁", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent big">ba-NA-na</span>`, t: "Long words have one strong part. We say ba-NA-na and HOS-pi-tal." },
+        { v: `<span class="qsent">a PRE-sent · to pre-SENT</span>`, t: "Some words change meaning when the stress moves. A PRE-sent is a gift. To pre-SENT is to give." },
+        { v: qpic("📺"), t: "English superpower! TV presenters put stress in the right place, so every viewer understands them.", wow: true }],
+      gens: [() => { const f = pick(STRESS4.filter((x) => /^[A-Z]{2}/.test(x[1]))), o = pickN(STRESS4.filter((x) => !/^[A-Z]{2}/.test(x[1])), 2); return SQ(`sf-${f[0]}`, "Which word is said strongly at the START?", f[0], o.map((x) => x[0]), { say: [f[0], ...o.map((x) => x[0])].join(", ") }); },
+        () => { const s = pick(STRESS4); return SQ(`ws-${s[0]}`, `How do we say “${s[0]}”? (capitals = stronger)`, s[1], s[2], { say: s[0], big: true }); },
+        () => { const s = pick(STRESSN); return SQ(`wn-${s[1]}`, `How do we say “${s[0]}” here? “${s[1]}”`, s[2], [s[3]], { say: s[1], big: true }); },
+        () => { const s = pick(STRESSN.filter((x) => x[0] !== "progress" && x[0] !== "insult")), noun = /^[A-Z]/.test(s[2]);
+          return SQ(`wk-${s[1]}`, `In “${s[1]}”, is “${s[0]}” a thing (noun) or an action (verb)?`, noun ? "a thing (noun)" : "an action (verb)", [noun ? "an action (verb)" : "a thing (noun)"], { say: s[1] }); }] },
+    { id: "p4-folk", nm: "Folk tales & drama", icon: "🎭", strand: "Reading",
+      learn: [{ v: qpic("🐢🌙"), t: "Folk tales are old stories passed down by word of mouth. Many explain nature, like why the sky is far away." },
+        { v: `<span class="qsent">TOBI: (smiling) Good morning, Ma.</span>`, t: "A play is a story acted on a stage. Characters speak dialogue. Words in brackets are stage directions." },
+        { v: qpic("🎭"), t: "English superpower! Playwrights like Wole Soyinka, Nigeria's Nobel Prize winner, write plays performed all over the world.", wow: true }],
+      gens: [() => { const f = pick(FOLK), [q, a, w] = pick(f.q); return SQ(`fq-${f.t}-${q}`, q, a, w, { story: f, seq: [{ t: f.s }, 200, { t: q }] }); },
+        () => { const d = pick(DRAMA), o = pickN(DRAMA.filter((x) => x !== d).map((x) => x[1]), 2); return SQ(`dr-${d[1]}`, d[0], d[1], o, { say: d[0].replace("___", "blank") }); },
+        () => { const [q, a, w] = pick(PLAY.q); return SQ(`pl-${q}`, q, a, w, { story: PLAY }); },
+        () => { const [q, a, w] = pick(PLAY2.q); return SQ(`p2-${q}`, q, a, w, { story: PLAY2 }); },
+        () => { const d = pick(DIRS), o = pickN(DLINES, 2); return SQ(`sd-${d}`, "Which one is a stage direction?", d, o); },
+        () => { const f = pick(FOLK), o = pickN(FOLK.filter((x) => x !== f).map((x) => x.t), 2); return SQ(`ft-${f.t}`, "What is the title of this folk tale?", f.t, o, { story: { t: "Read this", s: f.s } }); }] },
+    { id: "p4-tags", nm: "Question tags", icon: "🏷️", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">It is hot, <b>isn't it?</b></span>`, t: "A question tag is a short question at the end of a sentence. If the sentence is positive, the tag is negative: It is hot, isn't it?" },
+        { v: `<span class="qsent">You can't swim, <b>can you?</b></span>`, t: "If the sentence is negative, the tag is positive: You can't swim, can you?" },
+        { v: `<span class="qsent">You like rice, <b>don't you?</b></span>`, t: "With other verbs, use do, does or did: You like rice, don't you? He went home, didn't he?" },
+        { v: qpic("🤝"), t: "English superpower! Tags keep a conversation friendly. Salespeople and hosts use them: Lovely day, isn't it?", wow: true }],
+      gens: [() => { const [aux, neg] = pick(TAGB), who = pick([...BOYS, ...GIRLS, "you", "they", "we"]), plural = ["you", "they", "we"].includes(who);
+          if (plural && !["are", "can", "will"].includes(aux) || !plural && aux === "are") return null; const p = pick(TAGP[aux]), sub = plural ? who : pron(who), W = plural ? who[0].toUpperCase() + who.slice(1) : who;
+          return SQ(`tg-${who}-${aux}-${p}`, `${W} ${aux} ${p}, ___`, `${neg} ${sub}?`, [`${aux} ${sub}?`, `${neg} ${plural ? (sub === "you" ? "they" : "you") : sub === "he" ? "she" : "he"}?`], { say: `${W} ${aux} ${p}, blank?` }); },
+        () => { const t = pick(TAGS_DO), o = uniq([t[1].replace(/n't /, " ").replace(/^(\w+)n't/, "$1"), t[1].includes("n't") ? t[1].replace("n't", "") : t[1].replace(/^(\w+) /, "$1n't "), t[1].includes(" it") ? "aren't they?" : "isn't it?"]).filter((x) => x !== t[1]).slice(0, 2);
+          return SQ(`td-${t[0]}`, `${t[0]}, ___`, t[1], o, { say: `${t[0]}, blank?` }); }] },
+    { id: "p4-compare", nm: "Comparing; if & when", icon: "📏", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">tall · taller · tallest</span>`, t: "Use er to compare two things: Felix is taller than Tobi. Use est for the most of all: Felix is the tallest in the class." },
+        { v: `<span class="qsent">good → better → best · beautiful → more beautiful</span>`, t: "Some words change: good, better, best. Long words use more and most: more beautiful, most beautiful." },
+        { v: `<span class="qsent">If it rains, we will stay indoors.</span>`, t: "If and when tell us what happens in a certain situation: If it rains, we will stay indoors." },
+        { v: qpic("🛒"), t: "English superpower! Smart shoppers compare: this one is cheaper, that one is the best quality!", wow: true }],
+      gens: [() => { const [b, c, s] = pick(CMP), f = CMPF[b][0]; return SQ(`cc-${b}`, `${f} (${b})`, c, CMPWRONG(b, c), { say: f.replace("___", "blank") }); },
+        () => { const [b, c, s] = pick(CMP), f = CMPF[b][1]; return SQ(`cs-${b}`, `${f} (${b})`, s, SUPWRONG(b, s, c), { say: f.replace("___", "blank") }); },
+        () => { const [b, c, s] = pick(CMP), k = Math.random() < .5; return SQ(`cf-${b}-${k}`, `${b} → ${k ? "? (comparing two)" : "? (the most of all)"}`, k ? c : s, k ? [s, CMPWRONG(b, c)[0]] : [c, SUPWRONG(b, s, c)[0]], { big: true }); },
+        () => { const i = pick(IFW); return SQ(`if-${i[0]}`, i[0], i[1], i[2], { say: i[0].replace("___", "blank"), big: true }); }] },
+    { id: "p4-synant", nm: "Synonyms & antonyms", icon: "🔁", strand: "Words",
+      learn: [{ v: `<span class="qsent">big = large</span>`, t: "Synonyms are words with the same or nearly the same meaning: big and large, begin and start." },
+        { v: `<span class="qsent">arrive ↔ depart</span>`, t: "Antonyms are words with opposite meanings: arrive and depart, generous and stingy." },
+        { v: qpic("✍️"), t: "English superpower! Writers use synonyms so they do not repeat the same word, and antonyms to show contrast.", wow: true }],
+      gens: [() => { const p = pick(SYN), r = Math.random() < .5, a = r ? p[0] : p[1], b = r ? p[1] : p[0], o = pickN(SYN.filter((x) => x !== p).flat(), 2); return SQ(`sy-${a}`, `Which word means the SAME as “${a}”?`, b, o); },
+        () => { const p = pick([...ANT4, ...OPP]), r = Math.random() < .5, a = r ? p[0] : p[1], b = r ? p[1] : p[0], o = pickN(SYN.flat().filter((x) => x !== a && x !== b), 2); return SQ(`an-${a}`, `Which word is the OPPOSITE of “${a}”?`, b, o); },
+        () => { const s = Math.random() < .5, p = s ? pick(SYN) : pick(ANT4); return SQ(`so-${p[0]}-${p[1]}`, `“${p[0]}” and “${p[1]}” are…`, s ? "synonyms" : "antonyms", [s ? "antonyms" : "synonyms", "rhymes"]); }] },
+    { id: "p4-describe", nm: "Describing & formal letters", icon: "🖋️", strand: "Writing",
+      learn: [{ v: qpic("👀👂👃👅✋"), t: "A descriptive composition paints a picture with words. Use your five senses: what you see, hear, smell, taste and touch." },
+        { v: `<span class="qsent">The tall mango trees give cool shade.</span>`, t: "Use describing words and similes to bring your writing alive." },
+        { v: `<span class="qsent">Dear Sir, … Yours faithfully,</span>`, t: "A formal letter is to someone in authority, like a head teacher. It has two addresses, a heading, and ends Yours faithfully after Dear Sir." },
+        { v: qpic("🏛️"), t: "English superpower! Lawyers, civil servants and business people write formal letters every day.", wow: true }],
+      gens: [() => { const g = pick(descGaps()); return SQ(`dg-${g.fi}-${g.k}`, `Fill the gap: ${g.s}`, g.a, g.w, { say: g.s.replace("___", "blank") }); },
+        () => { const s = pick(SENSE); return SQ(`se-${s[0]}`, `“${s[0]}” Which sense is this?`, s[1], pickN(["sight", "hearing", "smell", "taste", "touch"].filter((x) => x !== s[1]), 2)); },
+        () => { const f = pick(FORMQ); return SQ(`fq-${f[0]}`, f[0], f[1], f[2]); },
+        () => { const d = pick(DSENSE), o = pickN(DSENSE.filter((x) => x[1] !== d[1]), 2).map((x) => x[0]); return SQ(`ds-${d[0]}`, `Which word describes ${SENSEQ[d[1]]}?`, d[0], o); }] },
+  ] },
+] };
+
+/* =====================================================================
    MOTOR PARK: the home screen. Three buses wait in their bays; Echo the conductor calls each route.
    ===================================================================== */
 let VIEW = "park", ROUTE = 0;  // ROUTE starts on the rider's own bus (set just before the first draw)
