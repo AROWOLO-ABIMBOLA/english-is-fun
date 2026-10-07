@@ -490,6 +490,15 @@ svg.i { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor;
 .story { max-width: min(96cqw, 640px); background: var(--paper); border: 3px solid var(--ink); border-radius: 16px; padding: .5em .8em; font-family: var(--read); font-size: clamp(13px, min(2.6cqh, 3.8cqw), 18px); line-height: 1.35; color: var(--ink); }
 .story b { font-family: var(--ui); display: block; color: var(--sign); }
 .wcard.mid { font-size: min(5cqh, 7cqw, 40px); }
+.ttab { border-collapse: collapse; background: var(--paper); color: var(--ink); font-weight: 700; font-size: clamp(12px, min(2.6cqh, 3.6cqw), 17px); border: 3px solid var(--ink); border-radius: 10px; overflow: hidden; }
+.ttab caption { font-family: var(--sign-font); color: var(--sign); padding-bottom: 2px; font-size: 1.1em; }
+.ttab td, .ttab th { border: 1.5px solid var(--line2); padding: .15em .6em; text-align: left; }
+.ttab.cal td, .ttab.cal th { text-align: center; padding: .05em .35em; } .ttab.cal th { background: var(--danfo); color: #1E1F24; }
+.shp { width: min(16cqh, 22cqw, 110px); height: min(16cqh, 22cqw, 110px); }
+.pic .shp { width: 72%; height: 72%; }
+.prep { display: inline-flex; align-items: center; justify-content: center; font-size: min(10cqh, 14cqw, 72px); line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.prep.row { gap: .15em; } .prep.col { flex-direction: column; } .prep.col.tight { gap: 0; } .prep.col.tight > :first-child { margin-bottom: -.12em; } .prep.col.gap { gap: .5em; }
+.prep.in { position: relative; } .prep.in .sm { position: absolute; font-size: .42em; top: 52%; left: 50%; transform: translate(-50%, -50%); }
 .qwrap { display: grid; justify-items: center; align-content: center; gap: 2cqh; max-width: 100%; transform-origin: 50% 50%; }
 .wtiles.words { flex-wrap: wrap; justify-content: center; gap: 8px; }
 .wtiles.words .tile { font-size: min(5cqh, 7cqw, 36px); min-width: 0; padding: .1em .35em; min-height: 1.6em; }
@@ -2724,6 +2733,376 @@ YEARS[2] = { title: "Primary 2", terms: [
         () => { const off = pick(OFFTOPIC), F = pick(FRIENDS), ok = [F[0], F[19]]; return SQ(`fn-${off}`, "Which sentence does NOT belong in a composition about my best friend?", off, ok); },
         () => { const F = pick(FRIENDS), g = pick([1, 4, 7, 10, 13, 16]), body = F[g].replace("___", F[g + 1]); return SQ(`fs-${F[0]}`, "Which is the best FIRST sentence?", F[0], [body, F[19]]); },
         () => { const F = pick(FRIENDS), g = pick([1, 4, 7, 10, 13, 16]), body = F[g].replace("___", F[g + 1]); return SQ(`fc-${body}`, "Which sentence is written correctly?", body, breakSentence(body)); }] },
+  ] },
+] };
+
+/* =====================================================================
+   SCHOOL ENGLISH · PRIMARY 3 (NERDC English Studies: clusters, timetables, helping verbs, tenses, heroes…)
+   18 topics, 6 per term, same shape as Primary 1 and 2.
+   ===================================================================== */
+const P3N = () => pick([...BOYS, ...GIRLS]);
+const midS = (w) => (["He", "She", "We", "They", "You", "It", "The baby", "The children"].includes(w) ? w[0].toLowerCase() + w.slice(1) : w);
+/* --- term 1 --- */
+const CL3 = { pl: [["plate", "🍽️"], ["plane", "✈️"], ["plant", "🪴"], ["plum", "🫐"]], br: [["bread", "🍞"], ["bridge", "🌉"], ["broom", "🧹"], ["brush", "🪥"]], fr: [["frog", "🐸"], ["fries", "🍟"], ["fruit", "🍓"], ["friend", "🧑‍🤝‍🧑"]],
+  str: [["straw", "🥤"], ["street", "🛣️"], ["string", "🧵"], ["strong", "💪"]], tr: [["tree", "🌳"], ["train", "🚆"], ["truck", "🚚"], ["trumpet", "🎺"]], sk: [["skirt", "👗"], ["skate", "⛸️"], ["skull", "💀"], ["sky", "🌌"]],
+  sn: [["snake", "🐍"], ["snail", "🐌"], ["snow", "❄️"], ["sneeze", "🤧"]], gr: [["grapes", "🍇"], ["grass", "🌱"], ["grandma", "👵"], ["green", "💚"]], spr: [["spring", "🌸"], ["spray", "🧴"], ["sprout", "🫘"], ["sprint", "🏃"]],
+  cl: [["clock", "⏰"], ["cloud", "☁️"], ["clap", "👏"], ["clown", "🤡"]] };
+const ENDCL = [["hand", "nd", "✋"], ["tent", "nt", "⛺"], ["desk", "sk", "🪑"], ["milk", "lk", "🥛"], ["lamp", "mp", "💡"], ["nest", "st", "🪺"], ["belt", "lt", "🥋"], ["sink", "nk", "🚰"], ["gift", "ft", "🎁"], ["jump", "mp", "🦘"], ["pink", "nk", "🩷"], ["fist", "st", "✊"], ["band", "nd", "🎺"], ["ant", "nt", "🐜"], ["mask", "sk", "🎭"], ["raft", "ft", "🛶"]];
+// school timetables: [time, subject] per day
+const TT = { Monday: [["8:00", "English"], ["9:00", "Maths"], ["10:00", "Break"], ["10:30", "Basic Science"], ["11:30", "Music"], ["12:30", "Home time"]],
+  Tuesday: [["8:00", "Maths"], ["9:00", "Social Studies"], ["10:00", "Break"], ["10:30", "English"], ["11:30", "Art"], ["12:30", "Home time"]],
+  Wednesday: [["8:00", "Basic Science"], ["9:00", "English"], ["10:00", "Break"], ["10:30", "Maths"], ["11:30", "P.E."], ["12:30", "Home time"]],
+  Thursday: [["8:00", "English"], ["9:00", "Computer"], ["10:00", "Break"], ["10:30", "Maths"], ["11:30", "Hausa"], ["12:30", "Home time"]],
+  Friday: [["8:00", "Maths"], ["9:00", "English"], ["10:00", "Break"], ["10:30", "Religious Studies"], ["11:30", "Library"], ["12:30", "Home time"]] };
+const ttHTML = (d) => `<table class="ttab"><caption>${d}</caption>${TT[d].map(([a, b]) => `<tr><td>${a}</td><td>${b}</td></tr>`).join("")}</table>`;
+const MONTHS = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+const MDAYS = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
+const HOLS = [["Independence Day", "October"], ["Christmas Day", "December"], ["New Year's Day", "January"], ["Children's Day", "May"], ["Workers' Day", "May"], ["Democracy Day", "June"]];
+const calHTML = (m, startDow) => { const cells = Array.from({ length: startDow }, () => "<td></td>").concat(Array.from({ length: MDAYS[m] }, (_, i) => `<td>${i + 1}</td>`));
+  const rows = []; for (let i = 0; i < cells.length; i += 7) rows.push(`<tr>${cells.slice(i, i + 7).join("")}</tr>`);
+  return `<table class="ttab cal"><caption>${MONTHS[m]}</caption><tr>${["Mo", "Tu", "We", "Th", "Fr", "Sa", "Su"].map((x) => `<th>${x}</th>`).join("")}</tr>${rows.join("")}</table>`; };
+const HELP = [["Felix ___ reading a book.", "is", ["are", "am"]], ["The children ___ playing outside.", "are", ["is", "am"]], ["I ___ eating my lunch.", "am", ["is", "are"]], ["We ___ going to church.", "are", ["is", "am"]],
+  ["The baby ___ sleeping.", "is", ["are", "am"]], ["My friends ___ singing.", "are", ["is", "am"]], ["Mummy ___ cooking soup.", "is", ["are", "am"]], ["They ___ washing the car.", "are", ["is", "am"]],
+  ["You ___ my best friend.", "are", ["is", "am"]], ["The dog ___ barking.", "is", ["are", "am"]], ["I ___ a good dancer.", "am", ["are", "is"]], ["The goats ___ eating grass.", "are", ["is", "am"]]];
+const MODAL = [["Birds ___ fly.", "can", "ability"], ["A fish ___ swim.", "can", "ability"], ["Grace ___ read very fast.", "can", "ability"], ["My little brother ___ count to ten.", "can", "ability"],
+  ["___ I go to the toilet, please?", "May", "permission"], ["___ I borrow your pencil?", "May", "permission"], ["You ___ go out to play now.", "may", "permission"], ["___ I come in, sir?", "May", "permission"],
+  ["Tomorrow we ___ visit the zoo.", "will", "future"], ["Next year I ___ be in Primary Four.", "will", "future"], ["The bus ___ leave at seven tomorrow.", "will", "future"], ["Daddy ___ come home next week.", "will", "future"],
+  ["Felix ___ ride a bicycle.", "can", "ability"], ["___ we watch TV after homework?", "May", "permission"], ["It ___ rain later today.", "will", "future"]];
+const PL3 = [["sheep", "sheep", "🐑"], ["fish", "fish", "🐟"], ["deer", "deer", "🦌"], ["ox", "oxen", "🐂"], ["calf", "calves", "🐄"], ["half", "halves", "🌗"], ["loaf", "loaves", "🍞"], ["shelf", "shelves", "🗄️"],
+  ["hero", "heroes", "🦸"], ["mango", "mangoes", "🥭"], ["tomato", "tomatoes", "🍅"], ["radio", "radios", "📻"], ["piano", "pianos", "🎹"], ["photo", "photos", "🖼️"], ["roof", "roofs", "🏠"], ["chief", "chiefs", "👑"],
+  ["leaf", "leaves", "🍃"], ["knife", "knives", "🔪"], ["wife", "wives", "👰"], ["thief", "thieves", "🦹"], ["child", "children", "🧒"], ["tooth", "teeth", "🦷"], ["goose", "geese", "🪿"], ["mouse", "mice", "🐭"], ["man", "men", "👨"], ["foot", "feet", "🦶"]];
+const pl3Wrong = (s, p) => uniq([s + "s", s + "es", s.replace(/f$/, "ves").replace(/fe$/, "ves"), p + "s", s === p ? s + "s" : s].filter((x) => x !== p)).slice(0, 2);
+const SHP = { circle: '<circle cx="50" cy="50" r="40"/>', square: '<rect x="12" y="12" width="76" height="76"/>', triangle: '<path d="M50 10 L90 88 L10 88 Z"/>', rectangle: '<rect x="6" y="26" width="88" height="48"/>',
+  oval: '<ellipse cx="50" cy="50" rx="44" ry="28"/>', star: '<path d="M50 6 L61 38 L95 38 L67 58 L78 92 L50 71 L22 92 L33 58 L5 38 L39 38 Z"/>', diamond: '<path d="M50 6 L88 50 L50 94 L12 50 Z"/>', heart: '<path d="M50 88 C10 60 6 34 26 22 C38 15 48 22 50 30 C52 22 62 15 74 22 C94 34 90 60 50 88 Z"/>' };
+const SHC = ["#E53935", "#1E88E5", "#43A047", "#FB8C00", "#8E24AA", "#FDD835"];
+const shpHTML = (k, c) => `<svg class="shp" viewBox="0 0 100 100" aria-hidden="true" style="fill:${c};stroke:#1E1F24;stroke-width:4">${SHP[k]}</svg>`;
+const SIDES = { triangle: "3", square: "4", rectangle: "4", circle: "0" };
+const TENS = ["", "", "twenty", "thirty", "forty", "fifty", "sixty", "seventy", "eighty", "ninety"];
+const numWord = (n) => (n === 100 ? "one hundred" : n < 20 ? NUMW[n - 1] : TENS[Math.floor(n / 10)] + (n % 10 ? "-" + NUMW[n % 10 - 1] : ""));
+const ORD = ["first", "second", "third", "fourth", "fifth", "sixth", "seventh", "eighth", "ninth", "tenth"];
+const sizeHTML = (e, s) => `<span style="font-size:${s}em;line-height:1">${e}</span>`;
+const STATE3 = ["Where do you live", "What is your name", "Can you swim", "Is it raining", "Who is your teacher", "Are you hungry", "When is your birthday", "Do you like rice", "How old are you", "Why are you late"];
+const STATE3S = ["I live in Ilorin", "My name is Esther", "We can swim", "It is raining", "Our teacher is Mr Bello", "The children are hungry", "My birthday is in May", "I like rice", "Tobi is eight years old", "The bus was late"];
+const LISTS = [["I bought rice, beans and yam.", ["I bought rice beans and yam.", "I bought, rice beans, and yam."]], ["We need pens, pencils and books.", ["We need pens pencils and books.", "We, need pens pencils and books."]],
+  ["Grace, Joy and Amina are friends.", ["Grace Joy and Amina are friends.", "Grace, Joy, and, Amina are friends."]], ["The flag is green, white and green.", ["The flag is green white and green.", "The flag, is green white and green."]],
+  ["I can see a cow, a goat and a hen.", ["I can see a cow a goat and a hen.", "I can, see a cow a goat, and a hen."]], ["Mummy cooked rice, stew and plantain.", ["Mummy cooked rice stew and plantain.", "Mummy, cooked rice stew and plantain."]],
+  ["We visited Lagos, Ibadan and Abuja.", ["We visited Lagos Ibadan and Abuja.", "We visited, Lagos Ibadan, and Abuja."]], ["Felix likes football, music and art.", ["Felix likes football music and art.", "Felix, likes football music and art."]]];
+/* --- term 2 --- */
+const DIPH = { ai: [["day", "☀️"], ["rain", "🌧️"], ["cake", "🎂"], ["play", "⚽"], ["gate", "🚪"]], oi: [["boy", "👦"], ["toy", "🧸"], ["coin", "🪙"], ["oil", "🛢️"], ["noise", "📢"]],
+  ou: [["cow", "🐄"], ["house", "🏠"], ["mouth", "👄"], ["owl", "🦉"], ["crown", "👑"]], ie: [["kite", "🪁"], ["night", "🌙"], ["fly", "🪰"], ["pie", "🥧"], ["five", "5️⃣"]],
+  oa: [["boat", "⛵"], ["snow", "❄️"], ["nose", "👃"], ["bone", "🦴"], ["road", "🛣️"]] };
+const MP3 = [["pull", "pool"], ["full", "fool"], ["look", "Luke"], ["pen", "pain"], ["let", "late"], ["wet", "wait"], ["fell", "fail"], ["get", "gate"], ["cot", "coat"], ["not", "note"], ["hop", "hope"], ["men", "main"],
+  ["toy", "tie"], ["now", "no"], ["cow", "car"], ["boy", "bay"], ["hair", "here"], ["chair", "cheer"]];
+const PASS3 = [
+  { t: "Keeping Clean", s: "We must keep our bodies clean. We bathe every day and brush our teeth in the morning and at night. We wash our hands before we eat and after we use the toilet. A clean body keeps germs away.",
+    m: "We must keep our bodies clean.", mw: ["We should eat more rice.", "Toilets are big."], q: [["When should we brush our teeth?", "in the morning and at night", ["only on Sunday", "after school only"]], ["What does a clean body keep away?", "germs", ["friends", "food"]]] },
+  { t: "The Market", s: "The market is a busy place. Traders sell food, clothes and shoes. Buyers walk from shop to shop looking for good prices. Some traders shout to call buyers. The market helps people get what they need.",
+    m: "The market is a busy place where people buy and sell.", mw: ["Shoes are expensive.", "Traders like to sleep."], q: [["What do traders sell?", "food, clothes and shoes", ["only cars", "nothing"]], ["Why do some traders shout?", "to call buyers", ["because they are angry", "to sing songs"]]] },
+  { t: "Trees Are Our Friends", s: "Trees are very useful. They give us fruit to eat and wood for building. Their leaves give shade on hot days. Trees also give us clean air. We should plant more trees and not cut them down carelessly.",
+    m: "Trees are very useful to us.", mw: ["Leaves are green.", "Wood is heavy."], q: [["What do trees give us to eat?", "fruit", ["meat", "bread"]], ["What should we do?", "plant more trees", ["cut all trees", "burn the leaves"]]] },
+  { t: "Our Teacher", s: "Mrs Okon is our class teacher. She comes to school early every day. She teaches us English and Maths. When we do not understand, she explains again with a smile. We all love Mrs Okon.",
+    m: "Mrs Okon is a kind and hardworking teacher.", mw: ["Maths is difficult.", "School starts early."], q: [["What does Mrs Okon teach?", "English and Maths", ["Music only", "Cooking"]], ["What does she do when we do not understand?", "She explains again with a smile.", ["She shouts.", "She goes home."]]] },
+  { t: "The Rainy Season", s: "In the rainy season, it rains almost every day. Farmers are happy because their crops grow well. The rivers fill up with water. Children carry umbrellas and wear raincoats to school.",
+    m: "The rainy season brings a lot of rain.", mw: ["Umbrellas are colourful.", "Rivers are long."], q: [["Why are farmers happy?", "Their crops grow well.", ["They go on holiday.", "The sun is hot."]], ["What do children carry to school?", "umbrellas", ["drums", "fans"]]] },
+  { t: "Water Is Life", s: "Every living thing needs water. We drink water, cook with water and wash with water. Plants need water to grow. Animals need water too. We must not waste water, because it is precious.",
+    m: "Water is important for all living things.", mw: ["Plants are green.", "Cooking is fun."], q: [["Who needs water?", "every living thing", ["only fish", "only people"]], ["Why must we not waste water?", "because it is precious", ["because it is cold", "because it is blue"]]] },
+  { t: "Our School Library", s: "Our school has a small library. It has storybooks, picture books and books about animals. We visit the library every Friday. We must be quiet there and return books on time.",
+    m: "Our school library is a place to read and borrow books.", mw: ["Friday is the best day.", "Animals are wild."], q: [["When do pupils visit the library?", "every Friday", ["every Monday", "never"]], ["How must we behave in the library?", "We must be quiet.", ["We must shout.", "We must run."]]] },
+  { t: "Helping at Home", s: "Children can help at home. They can sweep the floor, wash the plates and tidy their rooms. Helping at home makes work easier for everyone. It also teaches us to be responsible.",
+    m: "Children can help with work at home.", mw: ["Plates are made of glass.", "Rooms are big."], q: [["Name one way children can help.", "sweep the floor", ["drive the car", "build a house"]], ["What does helping teach us?", "to be responsible", ["to be lazy", "to sleep"]]] },
+  { t: "The Durbar", s: "The durbar is a big festival in Northern Nigeria. Horsemen in colourful clothes ride past the Emir. Drummers play and people cheer. Many visitors come to watch the durbar during the Sallah celebrations.",
+    m: "The durbar is a colourful festival with horses and music.", mw: ["Horses eat grass.", "Drummers are tall."], q: [["Who rides past the Emir?", "horsemen", ["footballers", "pilots"]], ["When do many visitors come?", "during the Sallah celebrations", ["at midnight", "in school hours"]]] },
+  { t: "Good Food", s: "We need good food to grow strong. Beans and fish help us grow. Rice and yam give us energy. Fruits and vegetables keep us healthy. We should eat different kinds of food every day.",
+    m: "We need different kinds of good food to grow and stay healthy.", mw: ["Fish live in water.", "Yam is white."], q: [["What gives us energy?", "rice and yam", ["stones", "water only"]], ["What keeps us healthy?", "fruits and vegetables", ["sweets only", "soft drinks"]]] },
+];
+const POEMS3 = [
+  { t: "The Drum", s: "Boom, boom, the talking drum, / Calling all the people, come! / Dance and clap and sing along, / The drum is singing a happy song.", a: "a talking drum calling people to dance", w: ["a lost goat", "a rainy night"], r: ["drum", "come"] },
+  { t: "Rain", s: "Pitter, patter, on the roof, / The rain comes down, here is the proof: / Puddles here and puddles there, / Rain is falling everywhere.", a: "rain falling everywhere", w: ["a hot sunny day", "a football match"], r: ["there", "everywhere"] },
+  { t: "My Mother", s: "Who wakes me up with a gentle smile? / Who walks with me mile after mile? / Who cooks my food and holds my hand? / My mother is the best in the land.", a: "a loving mother", w: ["a busy market", "a big lion"], r: ["hand", "land"] },
+  { t: "The Moon", s: "Silver moon up in the sky, / Shining bright and riding high, / You light the path for me at night, / Thank you, moon, for your soft light.", a: "the moon shining at night", w: ["the sun at noon", "a red car"], r: ["sky", "high"] },
+  { t: "School Bell", s: "Ring, ring, the school bell rings, / Time to learn so many things, / Reading, writing, counting too, / There is so much for me to do!", a: "going to school to learn", w: ["sleeping at home", "a birthday cake"], r: ["rings", "things"] },
+  { t: "The Farmer", s: "The farmer wakes before the sun, / His work on the farm has just begun, / He plants the yam and cassava too, / So there is food for me and you.", a: "a farmer growing food", w: ["a pilot flying a plane", "a swimming fish"], r: ["sun", "begun"] }];
+const PCONT = [["read", "reading"], ["sleep", "sleeping"], ["cook", "cooking"], ["play", "playing"], ["watch", "watching"], ["write", "writing"], ["eat", "eating"], ["sing", "singing"], ["run", "running"], ["swim", "swimming"], ["dance", "dancing"], ["sweep", "sweeping"], ["bathe", "bathing"], ["study", "studying"]];
+const PCWHEN = ["At six o'clock last night,", "When the rain started,", "Yesterday at noon,", "When Daddy came home,", "At break time yesterday,", "When the light went off,"];
+const NEG = [["I will go to the party.", "I won't go to the party.", ["I willn't go to the party.", "I will go not to the party."]], ["She is happy.", "She isn't happy.", ["She not is happy.", "She doesn't happy."]],
+  ["They are at home.", "They aren't at home.", ["They isn't at home.", "They not are at home."]], ["We can swim.", "We can't swim.", ["We don't can swim.", "We can swim not."]], ["I like beans.", "I don't like beans.", ["I doesn't like beans.", "I not like beans."]],
+  ["He plays football.", "He doesn't play football.", ["He don't play football.", "He doesn't plays football."]], ["Felix went to school.", "Felix didn't go to school.", ["Felix didn't went to school.", "Felix not went to school."]],
+  ["It was cold.", "It wasn't cold.", ["It weren't cold.", "It not was cold."]], ["The children were noisy.", "The children weren't noisy.", ["The children wasn't noisy.", "The children not were noisy."]],
+  ["Joy has a bicycle.", "Joy doesn't have a bicycle.", ["Joy don't have a bicycle.", "Joy hasn't got not a bicycle."]], ["You must shout.", "You mustn't shout.", ["You don't must shout.", "You must shout not."]], ["Musa will be late.", "Musa won't be late.", ["Musa willn't be late.", "Musa won't is late."]]];
+const CONTR = [["won't", "will not"], ["can't", "cannot"], ["isn't", "is not"], ["aren't", "are not"], ["don't", "do not"], ["doesn't", "does not"], ["didn't", "did not"], ["wasn't", "was not"], ["weren't", "were not"], ["mustn't", "must not"], ["haven't", "have not"], ["hasn't", "has not"]];
+const QFORM = [["You are hungry.", "Are you hungry?", ["You are hungry?", "Hungry are you."]], ["Felix is at home.", "Is Felix at home?", ["Felix is at home?", "At home is Felix."]], ["They can dance.", "Can they dance?", ["They can dance?", "Dance can they?"]],
+  ["She will come tomorrow.", "Will she come tomorrow?", ["She will come tomorrow?", "Come she will tomorrow?"]], ["It is raining.", "Is it raining?", ["It is raining?", "Raining it is?"]], ["We may go out.", "May we go out?", ["We may go out?", "Go out we may?"]],
+  ["The bus is late.", "Is the bus late?", ["The bus is late?", "Late is the bus?"]], ["You can see the board.", "Can you see the board?", ["You can see the board?", "See the board can you?"]]];
+const FEEL = [["happy", "😀"], ["sad", "😢"], ["angry", "😠"], ["scared", "😨"], ["surprised", "😲"], ["tired", "😴"], ["excited", "🤩"], ["worried", "😟"], ["proud", "😌"], ["sick", "🤒"], ["shy", "😳"], ["bored", "🥱"]];
+const FGRP = { happy: 1, excited: 1, proud: 1, tired: 2, bored: 2, scared: 3, worried: 3, surprised: 3, sad: 4, sick: 4 };
+const FACE = FEEL.filter((f) => f[0] !== "proud"), faceWrong = (f) => pickN(FACE.filter((x) => x !== f && (!FGRP[x[0]] || FGRP[x[0]] !== FGRP[f[0]])), 2);
+const FEELSIT = [["Joy got a new bicycle for her birthday.", "happy", ["angry", "sick"]], ["Felix's goldfish died.", "sad", ["excited", "proud"]], ["Someone broke Musa's new toy on purpose.", "angry", ["happy", "bored"]],
+  ["Grace heard a loud noise in the dark.", "scared", ["proud", "bored"]], ["Tobi walked five kilometres and needs to sleep.", "tired", ["excited", "surprised"]], ["Ruth won first prize in the spelling bee.", "proud", ["sad", "scared"]],
+  ["Daniel has a fever and a headache.", "sick", ["excited", "proud"]], ["Amina is waiting for exam results.", "worried", ["bored", "angry"]], ["Tomorrow the class is going to the zoo!", "excited", ["sad", "sick"]],
+  ["Esther opened the door and all her friends shouted, Surprise!", "surprised", ["bored", "sick"]], ["Samuel has nothing to do on a long, rainy afternoon.", "bored", ["proud", "scared"]], ["David has to speak in front of the whole school for the first time.", "shy", ["angry", "bored"]]];
+const TRAIT = [["Someone who always tells the truth is ___.", "honest"], ["Someone who is not afraid of danger is ___.", "brave"], ["Someone who shares what they have is ___.", "generous"], ["Someone who says please and thank you is ___.", "polite"],
+  ["Someone who does not like to work is ___.", "lazy"], ["Someone who helps others is ___.", "kind"], ["Someone who works very hard is ___.", "hardworking"], ["Someone who waits calmly is ___.", "patient"],
+  ["Someone who makes people laugh is ___.", "funny"], ["Someone who knows a lot is ___.", "clever"]];
+const DAY = ["I woke up at six o'clock.", "I brushed my teeth in the bathroom.", "I ate bread and tea for breakfast.", "I walked to school with my brother.", "I learnt English and Maths at school.", "I played football at break time.",
+  "I came home at two o'clock.", "I did my homework.", "I ate rice and stew for dinner.", "I went to bed at eight o'clock."];
+const SEQW = [["___, I woke up and said my prayers.", "First"], ["___ of all, I said good morning to my parents.", "First"], ["___ that, I ate my breakfast.", "After"], ["___ breakfast, I went to school.", "After"],
+  ["___ school, I played with my friends.", "After"], ["___, after a long day, I fell asleep.", "Finally"], ["___, I went to bed.", "Finally"], ["At the end of the day, I ___ to bed.", "went"], ["Yesterday I ___ up at six.", "woke"]];
+/* --- term 3 --- */
+const STYPE = [["Close the door.", "a command"], ["Sit down, please.", "a command"], ["Bring your book.", "a command"], ["Do not run in the class.", "a command"], ["Wash your hands.", "a command"],
+  ["Are you coming?", "a question"], ["Where is my bag?", "a question"], ["Can you help me?", "a question"], ["What time is it?", "a question"], ["Is it raining?", "a question"],
+  ["I like rice.", "a statement"], ["The sky is blue.", "a statement"], ["We go to school on Monday.", "a statement"], ["My father is a doctor.", "a statement"], ["The cat is asleep.", "a statement"],
+  ["What a beautiful dress!", "an exclamation"], ["Wow, we won!", "an exclamation"], ["How tall you are!", "an exclamation"]];
+const TUNE = [["Are you coming?", "up"], ["Is it raining?", "up"], ["Can you swim?", "up"], ["Do you like rice?", "up"], ["Is this your pen?", "up"], ["Where is my bag?", "down"], ["What is your name?", "down"],
+  ["Close the door.", "down"], ["I like rice.", "down"], ["We are going home.", "down"], ["Who is your teacher?", "down"], ["Sit down.", "down"],
+  ["Have you eaten?", "up"], ["Will you help me?", "up"], ["Is Daddy home?", "up"], ["Why are you late?", "down"], ["How old are you?", "down"], ["Open your books.", "down"], ["My name is Ruth.", "down"], ["Are they ready?", "up"]];
+const STRESS = [["table", "TA-ble", "ta-BLE"], ["pencil", "PEN-cil", "pen-CIL"], ["mother", "MO-ther", "mo-THER"], ["water", "WA-ter", "wa-TER"], ["monkey", "MON-key", "mon-KEY"], ["teacher", "TEA-cher", "tea-CHER"],
+  ["doctor", "DOC-tor", "doc-TOR"], ["basket", "BAS-ket", "bas-KET"], ["happy", "HAP-py", "hap-PY"], ["garden", "GAR-den", "gar-DEN"], ["begin", "be-GIN", "BE-gin"], ["today", "to-DAY", "TO-day"],
+  ["about", "a-BOUT", "A-bout"], ["because", "be-CAUSE", "BE-cause"], ["away", "a-WAY", "A-way"], ["police", "po-LICE", "PO-lice"], ["balloon", "bal-LOON", "BAL-loon"], ["hotel", "ho-TEL", "HO-tel"], ["guitar", "gui-TAR", "GUI-tar"], ["again", "a-GAIN", "A-gain"]];
+const COMP3 = [
+  { t: "Crossing the Road", s: "Before you cross the road, stop at the side. In Nigeria, cars drive on the right side of the road, so look left, then right, then left again. If a car is coming, wait. Cross at a zebra crossing or use a pedestrian bridge where there is one. Never play on the road.",
+    q: [["What should you do first?", "stop at the side of the road", ["run across quickly", "close your eyes"]], ["Which way do you look first?", "left", ["up", "behind you"]], ["Where is the best place to cross?", "at a zebra crossing or a pedestrian bridge", ["between parked cars", "on a bend"]],
+      ["What should you do if a car is coming?", "wait", ["run", "wave at the driver"]], ["What must you never do?", "play on the road", ["walk on the pavement", "hold a grown-up's hand"]]] },
+  { t: "Belts and Helmets", s: "The Federal Road Safety Corps, FRSC, keeps our roads safe. Everyone in a car must wear a seat belt. Small children should sit at the back. People riding motorcycles must wear helmets. These rules save lives.",
+    q: [["What does FRSC stand for?", "Federal Road Safety Corps", ["Free Road Service Car", "First Race School Club"]], ["Who must wear a seat belt?", "everyone in a car", ["only the driver", "nobody"]], ["Where should small children sit?", "at the back", ["on the driver's lap", "on the roof"]],
+      ["What must motorcycle riders wear?", "helmets", ["sunglasses", "slippers"]], ["Why are these rules important?", "They save lives.", ["They make cars faster.", "They are fun."]]] },
+  { t: "Traffic Lights", s: "Traffic lights help drivers and people on foot. Red means stop. Amber means get ready. Green means go. People on foot should cross only when the cars have stopped. A traffic warden may also direct the traffic.",
+    q: [["What does red mean?", "stop", ["go", "get ready"]], ["What does amber mean?", "get ready", ["stop", "go fast"]], ["When should people on foot cross?", "when the cars have stopped", ["when the light is green for cars", "at any time"]],
+      ["Who may also direct the traffic?", "a traffic warden", ["a farmer", "a baker"]], ["Who do traffic lights help?", "drivers and people on foot", ["only birds", "only buses"]]] },
+  { t: "Dr Nnamdi Azikiwe", s: "Dr Nnamdi Azikiwe, called Zik, was born in Zungeru in 1904. He studied in America and came home to start newspapers that called for Nigeria's freedom. When Nigeria became a republic in 1963, he became its first President. He also started the University of Nigeria, Nsukka.",
+    q: [["What was Azikiwe's nickname?", "Zik", ["Baba", "Chief"]], ["Where was he born?", "Zungeru", ["London", "Kano"]], ["What did his newspapers call for?", "Nigeria's freedom", ["more football", "higher prices"]],
+      ["What did he become in 1963?", "the first President of Nigeria", ["a farmer", "a football coach"]], ["Which university did he start?", "the University of Nigeria, Nsukka", ["the University of Lagos", "Harvard University"]]] },
+  { t: "Funmilayo Ransome-Kuti", s: "Funmilayo Ransome-Kuti was born in Abeokuta in 1900. She was a teacher. She led the Abeokuta Women's Union and fought against unfair taxes on market women. She worked hard so that women could have a say in how Nigeria was run.",
+    q: [["Where was she born?", "Abeokuta", ["Jos", "Calabar"]], ["What was her work?", "She was a teacher.", ["She was a pilot.", "She was a footballer."]], ["Which group did she lead?", "the Abeokuta Women's Union", ["the Super Eagles", "a church choir"]],
+      ["What did she fight against?", "unfair taxes on market women", ["school holidays", "rain"]], ["What did she want for women?", "a say in how Nigeria was run", ["more cooking", "fewer friends"]]] },
+  { t: "Chief Obafemi Awolowo", s: "Chief Obafemi Awolowo was born in Ikenne in 1909. He was a lawyer and the Premier of the Western Region. In 1955 his government started free primary education, so many poor children could go to school for the first time.",
+    q: [["Where was Awolowo born?", "Ikenne", ["Kaduna", "Port Harcourt"]], ["What was his job before politics?", "lawyer", ["trader", "drummer"]], ["What did his government start in 1955?", "free primary education", ["free cars", "a football league"]],
+      ["Who could now go to school?", "many poor children", ["only rich children", "only adults"]], ["Which region was he Premier of?", "the Western Region", ["the Northern Region", "the Eastern Region"]]] },
+  { t: "Sir Ahmadu Bello", s: "Sir Ahmadu Bello, the Sardauna of Sokoto, was born in Rabah in 1910. He was a teacher before he became a leader. He was the first Premier of the Northern Region. He built many schools and worked to unite the people of the North.",
+    q: [["What was his title?", "the Sardauna of Sokoto", ["the Oba of Lagos", "the Emir of Kano"]], ["Where was he born?", "Rabah", ["Enugu", "Lagos"]], ["What was he before he became a leader?", "a teacher", ["a soldier", "a pilot"]],
+      ["What was he the first Premier of?", "the Northern Region", ["the Western Region", "Ghana"]], ["What did he build?", "many schools", ["many ships", "a zoo"]]] },
+  { t: "Sir Abubakar Tafawa Balewa", s: "Sir Abubakar Tafawa Balewa was a teacher from Bauchi. He was known for his calm and beautiful speeches. When Nigeria became independent on 1 October 1960, he was the country's first Prime Minister.",
+    q: [["Where was Tafawa Balewa from?", "Bauchi", ["Ibadan", "Owerri"]], ["What was he known for?", "calm and beautiful speeches", ["fast running", "loud singing"]], ["When did Nigeria become independent?", "1 October 1960", ["25 December 1960", "1 January 1900"]],
+      ["What was he the first of?", "Prime Minister of Nigeria", ["President of Ghana", "captain of the Super Eagles"]], ["What was his first job?", "teacher", ["driver", "nurse"]]] },
+  { t: "Margaret Ekpo", s: "Margaret Ekpo fought for the rights of women in Aba and Calabar. She helped market women to speak up and to vote. She became a member of the Eastern House of Assembly. Today the airport in Calabar is named after her.",
+    q: [["Who did Margaret Ekpo fight for?", "women", ["only soldiers", "only children"]], ["Which cities are in the story?", "Aba and Calabar", ["Kano and Sokoto", "London and Paris"]], ["What did she help market women to do?", "speak up and vote", ["sell more pepper", "close their shops"]],
+      ["What is named after her today?", "the airport in Calabar", ["a river", "a football"]], ["What did she become a member of?", "the Eastern House of Assembly", ["a football team", "a choir"]]] },
+];
+const HEROF = [["Who was the first President of Nigeria?", "Nnamdi Azikiwe"], ["Who was the first Prime Minister of Nigeria?", "Abubakar Tafawa Balewa"], ["Who started free primary education in the Western Region?", "Obafemi Awolowo"],
+  ["Who was called the Sardauna of Sokoto?", "Ahmadu Bello"], ["Who led the Abeokuta Women's Union?", "Funmilayo Ransome-Kuti"], ["Which hero has the Calabar airport named after her?", "Margaret Ekpo"],
+  ["Who started the University of Nigeria, Nsukka?", "Nnamdi Azikiwe"], ["Who was the first Premier of the Northern Region?", "Ahmadu Bello"]];
+const SAFE = [["You see a broken electric wire on the ground.", "Keep away and tell a grown-up.", ["Pick it up.", "Jump over it."]], ["You are crossing and a car is coming fast.", "Wait until it passes.", ["Run in front of it.", "Stand still in the middle."]],
+  ["You are walking to school with friends.", "Walk on the pavement, not on the road.", ["Race on the road.", "Push each other into the road."]], ["You are getting out of a car on a busy road.", "Get out on the side away from the traffic.", ["Open the door into the traffic.", "Jump out while it moves."]],["You want to cross a busy road.", "Use the zebra crossing or the pedestrian bridge.", ["Run between the cars.", "Cross with your eyes closed."]], ["You are in Daddy's car.", "Wear your seat belt.", ["Stand up on the seat.", "Put your head out of the window."]],
+  ["Your ball rolls onto the road.", "Ask a grown-up to get it.", ["Run after it quickly.", "Lie down on the road."]], ["You are riding on an okada with Mummy.", "Wear a helmet.", ["Stand on the seat.", "Ride with no hands."]],
+  ["The traffic light for cars is green.", "Wait at the side of the road.", ["Cross the road now.", "Dance on the road."]], ["You are walking on a road with no pavement at night.", "Wear bright clothes and walk facing the traffic.", ["Wear black and walk in the middle.", "Play hide and seek."]],
+  ["You want to play football.", "Play in the field, not on the road.", ["Play on the highway.", "Play behind a parked car."]], ["A stranger offers you a ride home.", "Say no and tell a trusted grown-up.", ["Get in the car.", "Go with him to his house."]]];
+const PPT = [["eat", "eaten"], ["write", "written"], ["go", "gone"], ["see", "seen"], ["take", "taken"], ["give", "given"], ["break", "broken"], ["speak", "spoken"], ["drive", "driven"], ["do", "done"], ["wash", "washed"],
+  ["finish", "finished"], ["clean", "cleaned"], ["cook", "cooked"], ["visit", "visited"], ["sweep", "swept"], ["buy", "bought"], ["find", "found"], ["sleep", "slept"], ["drink", "drunk"], ["sing", "sung"], ["swim", "swum"], ["forget", "forgotten"], ["choose", "chosen"]];
+const PPOBJ = { eat: "the food", write: "a letter", go: "to the market", see: "that film", take: "the medicine", give: "her the book", break: "the cup", speak: "to the head teacher", drive: "the new bus", do: "the homework",
+  wash: "the plates", finish: "the work", clean: "the board", cook: "the beans", visit: "the zoo", sweep: "the classroom", buy: "a new bag", find: "the lost pencil", sleep: "for two hours", drink: "all the water", sing: "the school song",
+  swim: "across the pool", forget: "the password", choose: "a story book" };
+const PASTF = { eat: "ate", write: "wrote", go: "went", see: "saw", take: "took", give: "gave", break: "broke", speak: "spoke", drive: "drove", do: "did", wash: "washed", finish: "finished", clean: "cleaned", cook: "cooked",
+  visit: "visited", sweep: "swept", buy: "bought", find: "found", sleep: "slept", drink: "drank", sing: "sang", swim: "swam", forget: "forgot", choose: "chose" };
+const SINCE = ["Monday", "2019", "January", "this morning", "last week", "my birthday", "eight o'clock", "Christmas", "last year", "breakfast", "June", "2020"];
+const FOR = ["two days", "ten minutes", "a long time", "three weeks", "an hour", "five years", "a month", "six months", "half an hour", "two hours", "a week", "many years"];
+const SFFRAME = ["Musa has lived in Jos ___ X.", "We have been in class ___ X.", "I have known Grace ___ X.", "It has rained ___ X.", "Daddy has worked here ___ X.", "The baby has slept ___ X."];
+const PREP = ["in", "on", "under", "beside", "between", "above"];
+const prepHTML = (p, a, b) => p === "between" ? `<span class="prep row">${b}${a}${b}</span>` : p === "beside" ? `<span class="prep row">${b}${a}</span>` : p === "on" ? `<span class="prep col tight">${a}${b}</span>`
+  : p === "above" ? `<span class="prep col gap">${a}${b}</span>` : p === "under" ? `<span class="prep col">${b}${a}</span>` : `<span class="prep in">${b}<span class="sm">${a}</span></span>`;
+const POBJ = [["ball", "⚽"], ["cat", "🐱"], ["book", "📖"], ["apple", "🍎"], ["mouse", "🐭"], ["egg", "🥚"]], PTHING = [["box", "📦"], ["basket", "🧺"]];
+const PREPS = [["Fish live ___ water.", "in"], ["We hang the clock ___ the wall.", "on"], ["The cat is hiding ___ the bed.", "under"], ["The plane is flying ___ the clouds.", "above"], ["I sit ___ Grace in class.", "beside"],
+  ["Lagos is ___ Nigeria.", "in"], ["Put the plates ___ the table.", "on"], ["The ball rolled ___ the chair.", "under"], ["The letter B comes ___ A and C.", "between"], ["Joy stands ___ her brother in the photo.", "beside"],
+  ["The moon is ___ the sky.", "in"], ["The picture hangs ___ the bed.", "above"], ["My shoes are ___ the bed.", "under"], ["The sweet is ___ my mouth.", "in"]];
+const HOL = [
+  ["During the last holiday, I went to my grandmother's village.", "We ___ there by bus.", "travelled", ["travel", "travelling"], "The journey ___ five hours.", "took", ["takes", "taking"], "Grandma ___ very happy to see us.", "was", ["is", "were"],
+    "Every morning we ___ water from the stream.", "fetched", ["fetch", "fetches"], "In the evening she told us ___.", "stories", ["storys", "story"], "We came back home ___ two weeks.", "after", ["before", "under"], "It was the best holiday ever."],
+  ["Last Christmas, my family visited Obudu Mountain Resort.", "It is in Cross River ___.", "State", ["River", "City"], "We rode in a cable ___ up the mountain.", "car", ["bed", "cup"], "The air was cool and ___.", "fresh", ["dirty", "hot"],
+    "We ___ beautiful waterfalls.", "saw", ["see", "seen"], "My sister and I ___ many photos.", "took", ["take", "taked"], "I will never ___ that trip.", "forget", ["forgot", "forgetting"], "It was a holiday to remember."],
+  ["During the long vacation, I stayed with my aunt in Lagos.", "She lives near the ___.", "beach", ["moon", "desert"], "On Saturdays we ___ at Lekki beach.", "played", ["play", "playing"], "I ate suya and ___ coconut water.", "drank", ["drink", "drunk"],
+    "My cousin taught me how to ___.", "swim", ["swam", "swimming"], "We ___ to church on Sundays.", "went", ["go", "gone"], "I was sad when the holiday ___.", "ended", ["end", "ending"], "I hope to visit Lagos again soon."],
+  ["Last Easter, we went to Yankari Game Reserve in Bauchi.", "We stayed for three ___.", "days", ["dogs", "doors"], "We saw elephants, monkeys and ___.", "baboons", ["penguins", "polar bears"], "We swam in the warm ___.", "spring", ["oven", "sand"],
+    "Daddy ___ a big hat because of the sun.", "wore", ["wear", "weared"], "At night we ___ the stars.", "watched", ["watch", "watching"], "I wrote about the trip in my ___.", "diary", ["shoe", "plate"], "Yankari was wonderful."]];
+const HOLOFF = ["My best friend likes pizza.", "Maths is my best subject.", "Cows give us milk.", "The President lives in Abuja.", "I will be nine next year.", "Our classroom has twenty desks."];
+const holGaps = () => HOL.flatMap((F, fi) => [0, 1, 2, 3, 4, 5].map((k) => ({ fi, k, s: F[1 + k * 3], a: F[2 + k * 3], w: F[3 + k * 3] })));
+
+YEARS[3] = { title: "Primary 3", terms: [
+  { nm: "Term 1", sub: "Clusters, timetables and helping verbs", topics: [
+    { id: "p3-clusters", nm: "Consonant clusters", icon: "🧱", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent big">pl · br · fr · str</span>`, t: "A cluster is two or three consonant sounds said quickly together. Plate starts with p, l. Street starts with s, t, r!" },
+        { v: `<span class="qsent big">ha<b>nd</b> · te<b>nt</b> · de<b>sk</b></span>`, t: "Clusters can come at the end of a word too: hand, tent, desk. Say every sound, do not drop the last one!" },
+        { v: qpic("📻"), t: "English superpower! Radio presenters say every sound in strong, street and spring, so listeners hear every word clearly.", wow: true }],
+      gens: [() => { const c = pick(Object.keys(CL3)), t = pick(CL3[c]), o = pickN(Object.keys(CL3).filter((x) => x !== c && !c.startsWith(x) && !x.startsWith(c)), 2).map((x) => pick(CL3[x]));
+          return SP(`cs-${t[0]}`, `Which word starts with “${c}”?`, { n: t[0], e: t[1] }, o.map((x) => ({ n: x[0], e: x[1] })), { say: `Which word starts with ${c.split("").join(", ")}?` }); },
+        () => { const c = pick(Object.keys(CL3)), t = pick(CL3[c]), o = pickN(Object.keys(CL3).filter((x) => x !== c && !c.startsWith(x) && !x.startsWith(c)), 2);
+          return SQ(`cw-${t[0]}`, `Which cluster does “${t[0]}” start with?`, c, o, { pic: qpic(t[1]), say: `Which cluster does ${t[0]} start with?`, big: true }); },
+        () => { const [w, e, em] = pick(ENDCL), o = pickN(uniq(ENDCL.map((x) => x[1])).filter((x) => x !== e), 2); return SQ(`ce-${w}`, `Which cluster ends this word? ${w.slice(0, -2)}__`, e, o, { pic: qpic(em), say: `How does ${w} end?`, big: true }); }] },
+    { id: "p3-charts", nm: "Timetables & calendars", icon: "🗓️", strand: "Reading",
+      learn: [{ v: ttHTML("Monday"), t: "A timetable tells us what happens and when. On Monday, English is at eight o'clock and break is at ten." },
+        { v: calHTML(9, 2), t: "A calendar shows the days of a month. October has thirty-one days. Nigeria's Independence Day is on the first of October." },
+        { v: qpic("🛫"), t: "English superpower! Pilots, bus drivers and nurses read timetables every day so nobody is late.", wow: true }],
+      gens: [() => { const d = pick(Object.keys(TT)), [tm, sb] = pick(TT[d].filter((x) => x[1] !== "Home time")), o = pickN(uniq(Object.values(TT).flat().map((x) => x[1])).filter((x) => x !== sb && x !== "Home time"), 2);
+          return SQ(`tt-${d}-${tm}`, `On ${d}, what lesson is at ${tm}?`, sb, o, { pic: ttHTML(d) }); },
+        () => { const d = pick(Object.keys(TT)), [tm, sb] = pick(TT[d].filter((x) => !["Break", "Home time"].includes(x[1]))), o = pickN(TT[d].map((x) => x[0]).filter((x) => x !== tm), 2);
+          return SQ(`tm-${d}-${sb}`, `On ${d}, what time is ${sb}?`, tm, o, { pic: ttHTML(d), big: true }); },
+        () => { const m = Math.floor(Math.random() * 12), o = pickN(["28", "29", "30", "31"].filter((x) => x !== String(MDAYS[m])), 2); return SQ(`md-${m}`, `How many days are in ${MONTHS[m]}? (not a leap year)`, String(MDAYS[m]), o, { pic: calHTML(m, Math.floor(Math.random() * 7)), big: true }); },
+        () => { const m = Math.floor(Math.random() * 11), o = pickN(MONTHS.filter((_, j) => j !== m + 1 && j !== m), 2); return SQ(`mn-${m}`, `Which month comes after ${MONTHS[m]}?`, MONTHS[m + 1], o); },
+        () => { const h = pick(HOLS), o = pickN(MONTHS.filter((x) => x !== h[1]), 2); return SQ(`hl-${h[0]}`, `In which month is ${h[0]}?`, h[1], o, { pic: qpic("🎉") }); },
+        () => { const m = Math.floor(Math.random() * 12), s = Math.floor(Math.random() * 7), dd = 1 + Math.floor(Math.random() * MDAYS[m]), dow = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"][(s + dd - 1) % 7];
+          return SQ(`cd-${m}-${s}-${dd}`, `Look at the calendar. What day of the week is ${MONTHS[m]} ${dd}?`, dow, pickN(DAYS.filter((x) => x !== dow), 2), { pic: calHTML(m, s) }); }] },
+    { id: "p3-helping", nm: "Helping verbs", icon: "🤝", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">Felix <b>is</b> reading.</span>`, t: "Helping verbs help the main verb. Is, am and are help us say what is happening now: Felix is reading. They are playing." },
+        { v: `<span class="qsent">I <b>can</b> swim. <b>May</b> I go? We <b>will</b> travel.</span>`, t: "Can shows ability. May asks for permission. Will talks about the future." },
+        { v: qpic("✈️"), t: "English superpower! Flight attendants say: May I see your ticket? The plane will land soon. You can unfasten your seat belt.", wow: true }],
+      gens: [() => { const h = pick(HELP); return SQ(`hv-${h[0]}`, h[0], h[1], h[2], { say: h[0].replace("___", "blank"), big: true }); },
+        () => { const who = pick(["I", "He", "She", "They", "We", "Felix", "The girls", "My mother", "You", "The dogs"]), [v, i] = pick(PCONT), h = who === "I" ? "am" : ["They", "We", "The girls", "You", "The dogs"].includes(who) ? "are" : "is";
+          return SQ(`hs-${who}-${v}`, `${who} ___ ${i} now.`, h, ["am", "is", "are"].filter((x) => x !== h), { say: `${who}, blank, ${i} now.`, big: true }); },
+        () => { const m = pick(MODAL); return SQ(`md-${m[0]}`, m[0], m[1], ["can", "may", "will"].map((x) => (m[1][0] === "M" ? x[0].toUpperCase() + x.slice(1) : x)).filter((x) => x !== m[1]), { say: m[0].replace("___", "blank"), big: true }); },
+        () => { const m = pick(MODAL); return SQ(`mm-${m[0]}`, `“${m[0].replace("___", m[1])}” What does ${m[1].toLowerCase()} show here?`, m[2], ["ability", "permission", "future"].filter((x) => x !== m[2])); }] },
+    { id: "p3-plurals", nm: "Plurals: sheep, fish & more", icon: "🐑", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">one sheep → two sheep</span>`, t: "Some words do not change at all: one sheep, ten sheep. One fish, many fish. One deer, two deer." },
+        { v: `<span class="qsent">leaf → leaves · knife → knives</span>`, t: "Many words ending in f or fe change to v e s: leaf, leaves. Knife, knives. Loaf, loaves. But roof becomes roofs and chief becomes chiefs." },
+        { v: `<span class="qsent">mango → mangoes · radio → radios</span>`, t: "Some words ending in o add e s: mango, mangoes; hero, heroes. Others just add s: radio, radios; photo, photos." },
+        { v: qpic("🧑‍🌾"), t: "English superpower! Farmers in Kebbi and Benue write reports like: we sold forty sheep, twenty oxen and a hundred mangoes.", wow: true }],
+      gens: [() => { const p = pick(PL3); return SQ(`pp-${p[0]}`, `One ${p[0]}, many ___`, p[1], pl3Wrong(p[0], p[1]), { pic: qpic(p[2] + p[2]), say: `One ${p[0]}, many, blank.` }); },
+        () => { const p = pick(PL3); return SQ(`pq-${p[0]}`, `What is the plural of “${p[0]}”?`, p[1], pl3Wrong(p[0], p[1])); },
+        () => { const p = pick(PL3.filter((x) => x[0] === x[1] || ["ox", "child", "tooth", "foot", "goose", "mouse", "man"].includes(x[0]))), n = pick(["Five", "Ten", "Many", "Three"]);
+          return SQ(`ps-${p[0]}-${n}`, "Which sentence is correct?", `${n} ${p[1]} are in the picture.`, [`${n} ${p[0] + "s"} are in the picture.`, `${n} ${p[1]} is in the picture.`]); }] },
+    { id: "p3-shapes", nm: "Shapes, sizes & number words", icon: "🔺", strand: "Words",
+      learn: [{ v: `${shpHTML("circle", SHC[0])}${shpHTML("square", SHC[1])}${shpHTML("triangle", SHC[2])}`, t: "A circle is round. A square has four equal sides. A triangle has three sides." },
+        { v: `${sizeHTML("🐘", 1.4)}${sizeHTML("🐕", 1)}${sizeHTML("🐜", .6)}`, t: "Size words: big, medium and small. The elephant is the biggest. The ant is the smallest." },
+        { v: `<span class="qsent">45 → forty-five · 3rd → third</span>`, t: "We can write numbers in words: twenty-one, forty-five, one hundred. Order words tell position: first, second, third." },
+        { v: qpic("🏗️"), t: "English superpower! Architects and builders use shape words: a rectangle window, a triangle roof, a circle tank.", wow: true }],
+      gens: [() => { const k = pick(Object.keys(SHP)), o = pickN(Object.keys(SHP).filter((x) => x !== k), 2); return SQ(`sn-${k}`, "What shape is this?", k, o, { pic: shpHTML(k, pick(SHC)) }); },
+        () => { const k = pick(Object.keys(SHP)), o = pickN(Object.keys(SHP).filter((x) => x !== k), 2); return SP(`sp-${k}`, `Tap the ${k}.`, { n: k, e: shpHTML(k, pick(SHC)) }, o.map((x) => ({ n: x, e: shpHTML(x, pick(SHC)) }))); },
+        () => { const k = pick(Object.keys(SIDES)); return SQ(`sd-${k}`, `How many sides does a ${k} have?`, SIDES[k], ["0", "3", "4", "5"].filter((x) => x !== SIDES[k]).slice(0, 2), { pic: shpHTML(k, pick(SHC)), big: true }); },
+        () => { const n = 21 + Math.floor(Math.random() * 80), o = uniq([numWord(n % 10 ? n - 1 : n + 1), numWord((n + 10) % 100 || 100), numWord(n > 30 ? n - 10 : n + 20)]).filter((x) => x !== numWord(n)).slice(0, 2);
+          return SQ(`nw-${n}`, `How do we write ${n} in words?`, numWord(n), o, { pic: `<span class="qsent big">${n}</span>` }); },
+        () => { const k = Math.floor(Math.random() * 10), o = pickN(ORD.filter((_, j) => j !== k), 2); return SQ(`or-${k}`, `Felix is number ${k + 1} in the line. He is ___.`, ORD[k], o, { pic: qpic("🧍".repeat(Math.min(k + 1, 5))) }); },
+        () => { const set = pick([["🐘", "🐕", "🐜", "elephant", "dog", "ant"], ["🍉", "🍊", "🍇", "watermelon", "orange", "grape"], ["🚌", "🚗", "🛵", "bus", "car", "motorcycle"]]), big = Math.random() < .5;
+          return SP(`sz-${set[3]}-${big}`, `Tap the ${big ? "biggest" : "smallest"}.`, { n: big ? set[3] : set[5], e: sizeHTML(big ? set[0] : set[2], big ? 1.3 : .6) }, [{ n: set[4], e: sizeHTML(set[1], .9) }, { n: big ? set[5] : set[3], e: sizeHTML(big ? set[2] : set[0], big ? .6 : 1.3) }]); }] },
+    { id: "p3-punct", nm: "Capitals, commas & question marks", icon: "❔", strand: "Writing",
+      learn: [{ v: `<span class="qsent">Where do you live?</span>`, t: "A question ends with a question mark. Where do you live?" }, { v: `<span class="qsent">I live in Ilorin.</span>`, t: "A statement ends with a full stop. I live in Ilorin." },
+        { v: `<span class="qsent">I bought rice, beans and yam.</span>`, t: "Use commas between things in a list. Put and before the last one." },
+        { v: qpic("📱"), t: "English superpower! Good writers punctuate text messages and emails, so readers understand at once.", wow: true }],
+      gens: [() => { const k = Math.floor(Math.random() * STATE3.length), q = Math.random() < .5, s = q ? STATE3[k] : STATE3S[k]; return SQ(`em-${s}`, `Which mark goes at the end? “${s}__”`, q ? "?" : ".", [q ? "." : "?", ","], { big: true }); },
+        () => { const k = Math.floor(Math.random() * STATE3.length); return SQ(`qq-${k}`, "Which sentence is written correctly?", STATE3[k] + "?", [STATE3[k] + ".", STATE3[k][0].toLowerCase() + STATE3[k].slice(1) + "?"]); },
+        () => { const l = pick(LISTS); return SQ(`cl-${l[0]}`, "Where are the commas correct?", l[0], l[1]); },
+        () => { const [s, k] = pick(NAMESENT); return ST(`nc-${s}`, "The first word needs a capital letter. Tap the other word that needs one.", s, k, { say: "Tap the other word that needs a capital letter." }); },
+        () => { const d = pick([...DAYS, ...MONTHS]); return SQ(`dc-${d}`, "Which is written correctly?", d, [d.toLowerCase(), d.toUpperCase()[0] + d.slice(1).toUpperCase()]); },
+        () => { const k = Math.floor(Math.random() * STATE3S.length); return SQ(`st-${k}`, "Which sentence is written correctly?", STATE3S[k] + ".", [STATE3S[k] + "?", STATE3S[k][0].toLowerCase() + STATE3S[k].slice(1) + "."]); }] },
+  ] },
+  { nm: "Term 2", sub: "Vowel sounds, main ideas and tenses", topics: [
+    { id: "p3-diph", nm: "Vowels & diphthongs", icon: "🔊", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent big">pull · pool</span>`, t: "Pull has a short oo. Pool has a long oo. Listen: pull, pool." },
+        { v: `<span class="qsent big">b<b>oy</b> · c<b>ow</b> · d<b>ay</b></span>`, t: "A diphthong is a sound that glides from one vowel to another: boy, cow, day, kite, boat." },
+        { v: qpic("🎙️"), t: "English superpower! Newscasters on NTA practise vowel sounds so that pen and pain never get mixed up.", wow: true }],
+      gens: [() => { const pr = pick(MP3), k = Math.random() < .5 ? 0 : 1, w = pr[k], o = pick(MP3.filter((x) => x !== pr && !x.includes(w)))[k];
+          return SQ(`mp-${w}`, "Listen. Which word do you hear?", w, [pr[1 - k], o], { seq: [{ t: "Listen." }, 300, { t: w }, 600, { t: w }], big: true }); },
+        () => { const d = pick(Object.keys(DIPH)), [a, b] = pickN(DIPH[d], 2), o = Object.keys(DIPH).filter((x) => x !== d), w = pickN(o, 2).map((x) => pick(DIPH[x]));
+          return SP(`ds-${a[0]}-${b[0]}`, `Which word has the same vowel sound as “${a[0]}”?`, { n: b[0], e: b[1] }, w.map((x) => ({ n: x[0], e: x[1] })), { say: `Which word has the same vowel sound as ${a[0]}?`, pic: qpic(a[1]) }); },
+        () => { const d = pick(Object.keys(DIPH)), t = pick(DIPH[d]), o = pickN(Object.keys(DIPH).filter((x) => x !== d), 2).map((x) => pick(DIPH[x]));
+          return SP(`dc-${t[0]}`, "Which word has this sound?", { n: t[0], e: t[1] }, o.map((x) => ({ n: x[0], e: x[1] })), { seq: [{ t: "Which word has this sound?" }, A().snd[d], 250, A().snd[d]] }); }] },
+    { id: "p3-mainidea", nm: "Main idea of a passage or poem", icon: "💡", strand: "Reading",
+      learn: [{ v: qpic("💡"), t: "The main idea is what the whole passage is mostly about. It is often in the first sentence." },
+        { v: `<span class="qsent">Trees are very useful.</span>`, t: "Then the other sentences give details: trees give fruit, wood, shade and clean air." },
+        { v: qpic("🎶"), t: "A poem has a main idea too. Read the whole poem, then ask: what is it about?" },
+        { v: qpic("🧑‍💼"), t: "English superpower! Managers and lawyers read long reports and find the main idea quickly. You are learning that now!", wow: true }],
+      gens: [() => { const p = pick(PASS3); return SQ(`mi-${p.t}`, "What is the main idea of this passage?", p.m, p.mw, { story: { t: "Read this", s: p.s }, seq: [{ t: p.s }, 200, { t: "What is the main idea?" }] }); },
+        () => { const p = pick(PASS3), o = pickN(PASS3.filter((x) => x !== p), 2).map((x) => x.t); return SQ(`pt-${p.t}`, "What is the best title?", p.t, o, { story: { t: "Read this", s: p.s }, seq: [{ t: p.s }, 200, { t: "What is the best title?" }] }); },
+        () => { const p = pick(PASS3), [q, a, w] = pick(p.q); return SQ(`pd-${p.t}-${q}`, q, a, w, { story: p, seq: [{ t: p.s }, 200, { t: q }] }); },
+        () => { const p = pick(PASS3), ss = p.s.split(/(?<=\.) /).slice(1), s = pick(ss), o = pickN(PASS3.filter((x) => x !== p).flatMap((x) => x.s.split(/(?<=\.) /).slice(1)), 2);
+          return SQ(`ps-${s}`, "Which sentence is in this passage?", s, o, { story: p, seq: [{ t: p.s }, 200, { t: "Which sentence is in this passage?" }] }); },
+        () => { const p = pick(POEMS3); return SQ(`po-${p.t}`, "What is this poem about?", p.a, p.w, { story: p, seq: [{ t: p.s.replace(/ \/ /g, ". ") }, 200, { t: "What is this poem about?" }] }); },
+        () => { const p = pick(POEMS3), o = pickN(POEMS3.filter((x) => x !== p).flatMap((x) => x.r), 2); return SQ(`pr-${p.t}`, `Which word rhymes with “${p.r[0]}” in the poem?`, p.r[1], o, { story: p, seq: [{ t: p.s.replace(/ \/ /g, ". ") }] }); }] },
+    { id: "p3-pastcont", nm: "Was / were + -ing", icon: "⏮️", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">I <b>was reading</b> when the light went off.</span>`, t: "The past continuous tells what was going on at a time in the past: I was reading when the light went off." },
+        { v: `<span class="qsent">I/he/she/it <b>was</b> · we/you/they <b>were</b></span>`, t: "Use was with I, he, she, it and one person. Use were with we, you and they." },
+        { v: qpic("🕵️"), t: "English superpower! Detectives ask: What were you doing at six o'clock? Witnesses answer: I was cooking!", wow: true }],
+      gens: [() => { const [v, i] = pick(PCONT), who = pick(["I", "Felix", "Grace", "Mummy", "The baby", "He", "She"]), w = pick(PCWHEN); return SQ(`pc-${who}-${v}-${w}`, `${w} ${midS(who)} ___ (${v}).`, `was ${i}`, [`were ${i}`, `is ${i}`], { say: `${w} ${who}, blank.` }); },
+        () => { const [v, i] = pick(PCONT), who = pick(["We", "They", "You", "The children", "My friends"]), w = pick(PCWHEN); return SQ(`pd-${who}-${v}-${w}`, `${w} ${midS(who)} ___ (${v}).`, `were ${i}`, [`was ${i}`, `are ${i}`], { say: `${w} ${who}, blank.` }); },
+        () => { const [v, i] = pick(PCONT), who = P3N(); return SQ(`pe-${who}-${v}`, `Which sentence tells what ${who} was doing yesterday at noon?`, `${who} was ${i} at noon.`, [`${who} is ${i} now.`, `${who} will ${v} tomorrow.`]); }] },
+    { id: "p3-neg", nm: "Negatives & questions", icon: "🚫", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">I will go → I <b>won't</b> go.</span>`, t: "To say no, we add not. Will not is shortened to won't. Can not becomes can't. Do not becomes don't." },
+        { v: `<span class="qsent">You are hungry. → <b>Are you</b> hungry?</span>`, t: "To make a question, swap the first two words and add a question mark: You are hungry. Are you hungry?" },
+        { v: qpic("🎤"), t: "English superpower! TV interviewers ask clear questions: Will you come back? Isn't it true? Can you explain?", wow: true }],
+      gens: [() => { const n = pick(NEG); return SQ(`ng-${n[0]}`, `Make it negative: “${n[0]}”`, n[1], n[2]); },
+        () => { const c = pick(CONTR), o = pickN(CONTR.filter((x) => x !== c).map((x) => x[1]), 2); return SQ(`ct-${c[0]}`, `What does “${c[0]}” mean?`, c[1], o, { big: false }); },
+        () => { const c = pick(CONTR), o = pickN(CONTR.filter((x) => x !== c).map((x) => x[0]), 2); return SQ(`cs-${c[1]}`, `What is the short form of “${c[1]}”?`, c[0], o, { big: true }); },
+        () => { const n = pick(NEG), o = pick(NEG.filter((x) => x !== n)); return SQ(`wn-${n[1]}`, "Which sentence is negative (says NO)?", n[1], [n[0], o[0]]); },
+        () => { const v = pick(IRREG), who = P3N(); return SQ(`dn-${who}-${v[0]}`, `${who} didn't ___ yesterday.`, v[0], [v[1], s3(v[0])], { say: `${who} didn't, blank, yesterday.`, big: true }); },
+        () => { const q = pick(QFORM); return SQ(`qf-${q[0]}`, `Turn it into a question: “${q[0]}”`, q[1], q[2]); }] },
+    { id: "p3-feel", nm: "Feelings & describing people", icon: "😀", strand: "Words",
+      learn: [{ v: qpic("😀😢😠😨"), t: "Feeling words tell us how someone feels: happy, sad, angry, scared." },
+        { v: qpic("🏆"), t: "Ruth won first prize. How does she feel? Proud!" },
+        { v: `<span class="qsent">honest · brave · generous · polite</span>`, t: "We also use words to describe people: honest people tell the truth; brave people are not afraid; generous people share." },
+        { v: qpic("🩺"), t: "English superpower! Doctors and counsellors listen to feeling words to understand how people really are.", wow: true }],
+      gens: [() => { const f = pick(FACE), o = faceWrong(f).map((x) => x[0]); return SQ(`fe-${f[0]}`, "How does this face feel?", f[0], o, { pic: qpic(f[1]) }); },
+        () => { const s = pick(FEELSIT); return SQ(`fs-${s[0]}`, `${s[0]} How does that person feel?`, s[1], s[2]); },
+        () => { const f = pick(FACE), o = faceWrong(f); return SP(`fp-${f[0]}`, `Tap the ${f[0]} face.`, { n: f[0], e: f[1] }, o.map((x) => ({ n: x[0], e: x[1] }))); },
+        () => { const t = pick(TRAIT), o = pickN(TRAIT.filter((x) => x !== t), 2).map((x) => x[0].replace("Someone who ", "someone who ").replace(" is ___.", "")); return SQ(`tm-${t[1]}`, `What does “${t[1]}” mean?`, t[0].replace("Someone who ", "someone who ").replace(" is ___.", ""), o); },
+        () => { const f = pick(FEEL), who = P3N(), when = pick(["yesterday", "after school", "on Saturday", "at the party"]); return ST(`ft-${who}-${f[0]}-${when}`, "Tap the feeling word.", `${who} felt ${f[0]} ${when}.`, 2); },
+        () => { const t = pick(TRAIT), o = pickN(TRAIT.filter((x) => x !== t).map((x) => x[1]), 2); return SQ(`tr-${t[1]}`, t[0], t[1], o, { say: t[0].replace("___", "blank") }); }] },
+    { id: "p3-myday", nm: "Writing about my day", icon: "🌅", strand: "Writing",
+      learn: [{ v: `<span class="qsent">First · Next · Then · After that · Finally</span>`, t: "When we write about our day, we tell things in order. Time words help: first, next, then, after that, finally." },
+        { v: `<span class="qsent">I <b>woke</b> up at six o'clock.</span>`, t: "We write about yesterday in the past: I woke up, I ate, I went." },
+        { v: qpic("📔"), t: "English superpower! Explorers and scientists keep diaries of their day. Their notes help people learn for years!", wow: true }],
+      gens: [() => { const k = Math.floor(Math.random() * (DAY.length - 1)); return SQ(`dn-${k}`, `What comes next? “${DAY[k]}”`, DAY[k + 1], pickN(DAY.filter((_, j) => j !== k && j !== k + 1 && Math.abs(j - k) > 2), 2)); },
+        () => { const a = Math.floor(Math.random() * DAY.length), b = pick(DAY.map((_, j) => j).filter((j) => Math.abs(j - a) > 2)); return SQ(`df-${a}-${b}`, "Which happened first in the day?", DAY[Math.min(a, b)], [DAY[Math.max(a, b)]]); },
+        () => { const s = pick(SEQW), w = s[1] === "went" ? ["go", "goes"] : s[1] === "woke" ? ["wake", "waking"] : ["First", "After", "Finally"].filter((x) => x !== s[1]); return SQ(`sw-${s[0]}`, s[0], s[1], w, { say: s[0].replace("___", "blank"), big: true }); },
+        () => { const s = pick(DAY), w = s.split(" "), k = w.findIndex((x) => ["woke", "brushed", "ate", "walked", "learnt", "played", "came", "did", "went"].includes(x)); if (k < 0) return null;
+          return ST(`dv-${s}`, "Tap the verb that tells about the past.", s, k); }] },
+  ] },
+  { nm: "Term 3", sub: "Stress, heroes and holiday writing", topics: [
+    { id: "p3-stress", nm: "Stress & intonation", icon: "🎚️", strand: "Sounds & speaking",
+      learn: [{ v: `<span class="qsent big">TA-ble · to-DAY</span>`, t: "In a word, one part is said more strongly. We say TA-ble, not ta-BLE. We say to-DAY, not TO-day." },
+        { v: `<span class="qsent">Are you coming? ↗</span>`, t: "Our voice goes up at the end of a yes or no question: Are you coming?" },
+        { v: `<span class="qsent">Close the door. ↘</span>`, t: "Our voice goes down at the end of statements, commands and questions with who, what, where." },
+        { v: qpic("🎭"), t: "English superpower! Actors and pastors use stress and intonation to make their words come alive!", wow: true }],
+      gens: [() => { const s = pick(STRESS); return SQ(`ws-${s[0]}`, `How do we say “${s[0]}”? (capitals = stronger)`, s[1], [s[2]], { say: s[0], big: true }); },
+        () => { const s = pick(STYPE); return SQ(`sy-${s[0]}`, `“${s[0]}” is…`, s[1], ["a statement", "a question", "a command", "an exclamation"].filter((x) => x !== s[1]).slice(0, 2), { say: s[0] }); },
+        () => { const f = pick(STRESS.slice(0, 10)), o = pickN(STRESS.slice(10), 2); return SQ(`sf-${f[0]}`, "Which word is said strongly at the START?", f[0], o.map((x) => x[0]), { say: `Which word is said strongly at the start? ${[f[0], ...o.map((x) => x[0])].join(", ")}` }); },
+        () => { const f = pick(STRESS.slice(10)), o = pickN(STRESS.slice(0, 10), 2); return SQ(`se-${f[0]}`, "Which word is said strongly at the END?", f[0], o.map((x) => x[0]), { say: `Which word is said strongly at the end? ${[f[0], ...o.map((x) => x[0])].join(", ")}` }); },
+        () => { const t = pick(TUNE); return SQ(`tn-${t[0]}`, `Does your voice go up or down at the end? “${t[0]}”`, t[1] === "up" ? "up ↗" : "down ↘", [t[1] === "up" ? "down ↘" : "up ↗"], { say: t[0], big: true }); }] },
+    { id: "p3-comp", nm: "Road safety & national heroes", icon: "🦸", strand: "Reading",
+      learn: [{ v: qpic("🚸"), t: "Road safety: stop at the side of the road. Look left, right, then left again. Cross at a zebra crossing." },
+        { v: qpic("🇳🇬"), t: "Nigeria became independent on the first of October, 1960. Heroes like Nnamdi Azikiwe, Funmilayo Ransome-Kuti, Obafemi Awolowo and Ahmadu Bello helped build our country." },
+        { v: qpic("📖"), t: "When you read a passage, read it twice. Then look back to find each answer." },
+        { v: qpic("🏛️"), t: "English superpower! Historians read old letters and newspapers to tell the true story of our heroes.", wow: true }],
+      gens: [() => { const p = pick(COMP3), [q, a, w] = pick(p.q); return SQ(`cq-${p.t}-${q}`, q, a, w, { story: p, seq: [{ t: p.s }, 200, { t: q }] }); },
+        () => { const h = pick(HEROF), o = pickN(uniq(HEROF.map((x) => x[1])).filter((x) => x !== h[1]), 2); return SQ(`hf-${h[0]}`, h[0], h[1], o, { pic: qpic("🇳🇬") }); },
+        () => { const s = pick(SAFE); return SQ(`sf-${s[0]}`, `${s[0]} What is the safe thing to do?`, s[1], s[2], { pic: qpic("🦺") }); }] },
+    { id: "p3-perfect", nm: "has / have + done", icon: "✅", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">I <b>have finished</b> my homework.</span>`, t: "The present perfect tells about something that has just happened or is now complete: I have finished my homework." },
+        { v: `<span class="qsent">he/she/it <b>has</b> · I/we/you/they <b>have</b></span>`, t: "Use has with he, she, it and one person. Use have with I, we, you and they." },
+        { v: `<span class="qsent">eat → eaten · write → written · go → gone</span>`, t: "Some verbs add e d: washed, cleaned. Others change: eaten, written, gone, seen." },
+        { v: qpic("🏗️"), t: "English superpower! Engineers report progress: We have finished the bridge. The workers have painted the walls.", wow: true }],
+      gens: [() => { const [v, pp] = pick(PPT), who = P3N(); return SQ(`pf-${who}-${v}`, `${who} has ___ ${PPOBJ[v]}.`, pp, uniq([PASTF[v], v, v + "ing"]).filter((x) => x !== pp).slice(0, 2), { say: `${who} has, blank, ${PPOBJ[v]}.` }); },
+        () => { const [v, pp] = pick(PPT), who = pick(["I", "We", "They", "You", "He", "She", "Mummy", "The pupils"]), h = ["He", "She", "Mummy"].includes(who) ? "has" : "have";
+          return SQ(`ph-${who}-${v}`, `${who} ___ ${pp} ${PPOBJ[v]}.`, h, [h === "has" ? "have" : "has", "is"], { say: `${who}, blank, ${pp} ${PPOBJ[v]}.`, big: true }); },
+        () => { const [v, pp] = pick(PPT.filter((x) => x[0] !== "go")), o = uniq([PASTF[v], edWrong(v), v, v + "ing"]).filter((x) => x !== pp).slice(0, 2); return SQ(`pv-${v}`, `I have ___ (${v}).`, pp, o, { say: `I have, blank. ${v}.`, big: true }); }] },
+    { id: "p3-since", nm: "since & for", icon: "⏳", strand: "Grammar",
+      learn: [{ v: `<span class="qsent">since Monday · since 2019</span>`, t: "Use since with a starting point in time: since Monday, since 2019, since eight o'clock." },
+        { v: `<span class="qsent">for two days · for five years</span>`, t: "Use for with a length of time: for two days, for five years, for an hour." },
+        { v: qpic("🏥"), t: "English superpower! Doctors ask: How long have you had the fever? Since Monday? For three days?", wow: true }],
+      gens: [() => { const s = Math.random() < .5, x = s ? pick(SINCE) : pick(FOR), f = pick(SFFRAME); return SQ(`sf-${f}-${x}`, f.replace("X", x), s ? "since" : "for", [s ? "for" : "since"], { say: f.replace("___", "blank").replace("X", x), big: true }); },
+        () => { const x = pick(SINCE), o = pickN(FOR, 2); return SQ(`ss-${x}`, "Which one goes with since?", x, o); },
+        () => { const x = pick(FOR), o = pickN(SINCE, 2); return SQ(`fo-${x}`, "Which one goes with for?", x, o); }] },
+    { id: "p3-prep", nm: "Where is it? (in, on, under…)", icon: "📦", strand: "Words",
+      learn: [{ v: prepHTML("on", "⚽", "📦"), t: "Prepositions tell us where things are. The ball is on the box." },
+        { v: prepHTML("under", "⚽", "📦"), t: "The ball is under the box." }, { v: prepHTML("between", "⚽", "📦"), t: "The ball is between the boxes." },
+        { v: prepHTML("in", "⚽", "📦"), t: "The ball is in the box. Other words: beside means next to, above means higher up." },
+        { v: qpic("📦"), t: "English superpower! Delivery riders read: leave the parcel beside the gate, on the table, or under the mat!", wow: true }],
+      gens: [() => { const p = pick(PREP), [ow, oe] = pick(POBJ), [tw, te] = pick(PTHING), o = pickN(PREP.filter((x) => x !== p), 2);
+          return SQ(`pp-${p}-${ow}-${tw}`, `The ${ow} is ___ the ${tw}${p === "between" ? "es".replace("es", tw.endsWith("x") ? "es" : "s") : ""}.`, p, o, { pic: prepHTML(p, oe, te), say: `The ${ow} is, blank, the ${tw}.`, big: true }); },
+        () => { const s = pick(PREPS), o = pickN(PREP.filter((x) => x !== s[1]), 2); return SQ(`pt-${s[0]}`, s[0], s[1], o, { say: s[0].replace("___", "blank"), big: true }); }] },
+    { id: "p3-holiday", nm: "My last holiday (composition)", icon: "🏖️", strand: "Writing",
+      learn: [{ v: `<span class="qsent">During the last holiday, I went to…</span>`, t: "A holiday composition tells where you went, what you did, and how you felt." },
+        { v: `<span class="qsent">went · saw · played · ate</span>`, t: "It happened in the past, so we use past verbs: went, saw, played, ate." },
+        { v: `<span class="qsent">It was the best holiday ever.</span>`, t: "End with how you felt. Every sentence must be about the holiday!" },
+        { v: qpic("🧳"), t: "English superpower! Travel writers describe places like Obudu and Yankari so well that people want to visit.", wow: true }],
+      gens: [() => { const g = pick(holGaps()); return SQ(`hg-${g.fi}-${g.k}`, `Fill the gap: ${g.s}`, g.a, g.w, { say: g.s.replace("___", "blank") }); },
+        () => { const off = pick(HOLOFF), F = pick(HOL); return SQ(`hn-${off}-${F[0]}`, "Which sentence does NOT belong in a composition about my last holiday?", off, [F[0], F[19]]); },
+        () => { const F = pick(HOL), g = pick([1, 4, 7, 10, 13, 16]); return SQ(`hf-${F[0]}`, "Which is the best FIRST sentence?", F[0], [F[g].replace("___", F[g + 1]), F[19]]); },
+        () => { const F = pick(HOL), g = pick([1, 4, 7, 10, 13, 16]), body = F[g].replace("___", F[g + 1]); return SQ(`hc-${body}`, "Which sentence is written correctly?", body, breakSentence(body)); }] },
   ] },
 ] };
 

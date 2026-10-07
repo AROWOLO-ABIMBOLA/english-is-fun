@@ -38,8 +38,9 @@ Open <https://github.com/AROWOLO-ABIMBOLA/english-is-fun/upload/main>, drag in t
 
 ### School English (Primary 1–6)
 - Follows the NERDC English Studies curriculum used in Nigerian primary schools. Each class has **3 terms**, each term has **6 topics** across sounds and speaking, reading, grammar, words and writing.
-- **Primary 1 and Primary 2 are ready now.** Primary 3 to 6 are being added, one class at a time.
+- **Primary 1, 2 and 3 are ready now.** Primary 4 to 6 are being added, one class at a time.
 - Primary 2 topics: short and long vowels, picture reading, this/that/these/those, things we do every day, describing words, spelling and capitals (Term 1); sh, ch and th, reading along with Echo, yesterday words, happening now (-ing), my/your/his/her/mine/yours, sentences about me (Term 2); rhymes, who/what/where/when stories, more than one (boxes, babies, children), 's and will, opposites and male/female words, and a guided composition, "My best friend" (Term 3).
+- Primary 3 topics: consonant clusters, timetables and calendars, helping verbs (is, can, may, will), plurals (sheep, leaves, mangoes), shapes, sizes and number words, capitals, commas and question marks (Term 1); vowels and diphthongs, the main idea of a passage or poem, was/were + -ing, negatives and questions (won't, isn't), feelings and describing people, writing about my day (Term 2); word stress and intonation, road safety and national heroes (Azikiwe, Ransome-Kuti, Awolowo, Ahmadu Bello, Tafawa Balewa, Margaret Ekpo), has/have + done, since and for, in/on/under/between, and a composition, "My last holiday" (Term 3).
 - Every topic has four steps:
   1. **Learn**: short picture slides read aloud. The last slide is the *English superpower*: how real Nigerians (teachers, doctors, traders, farmers) use this skill.
   2. **Try**: 3 easy questions with a **Hint** button that takes away a wrong answer.
@@ -88,4 +89,4 @@ Open <https://github.com/AROWOLO-ABIMBOLA/english-is-fun/upload/main>, drag in t
 | `icons/` | App icons and the link-preview picture |
 | `.nojekyll` | Tells GitHub to publish the files exactly as they are |
 
-Storage names: browser storage prefix `sd.` (shared with the earlier phonics game at the same address, so a child's stars carry over), recordings database `soundDanfo`, offline cache `english-is-fun-v2`.
+Storage names: browser storage prefix `sd.` (shared with the earlier phonics game at the same address, so a child's stars carry over), recordings database `soundDanfo`, offline cache `english-is-fun-v3`.
