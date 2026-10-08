@@ -77,7 +77,7 @@ svg.i { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor;
 .toy.green { --face: var(--sign); --fg: #FFFFFF; }
 .toy.round { width: 50px; padding: 0; border-radius: 50%; }
 /* the ticket: a stub, a dashed tear line, then the rider's name */
-.ticket { padding: 0 14px 0 0; overflow: hidden; }
+.ticket { padding: 0 14px 0 0; overflow: hidden; } #riderTx { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
 .ticket .stub { align-self: stretch; display: grid; place-items: center; padding: 0 9px; background: var(--danfo); color: #1E1F24; border-right: 3px dashed var(--ink); }
 /* a road-sign arrow for "next stop" */
 .signwrap { filter: drop-shadow(0 4px 0 var(--ink)); display: inline-flex; }
@@ -147,6 +147,28 @@ svg.i { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor;
 .sheet input { font: inherit; font-size: 22px; font-family: var(--read); padding: 8px 12px; border-radius: 14px; border: 3px solid var(--ink); background: var(--paper2); color: var(--ink); width: 100%; box-sizing: border-box; }
 .pickbtn { border: 3px solid var(--ink); background: var(--paper2); border-radius: 16px; padding: 8px 14px; font-weight: 800; box-shadow: 0 4px 0 var(--ink); display: grid; text-align: left; gap: 0; font-size: 18px; }
 .pickbtn small { font-weight: 600; color: var(--soft); font-size: 13px; }
+.pics .pickbtn { font-size: 28px; padding: 4px 8px; line-height: 1.1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.pics .pickbtn.taken { opacity: .35; }
+#riderPic .emo { font-size: 22px; line-height: 1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.whosheet { width: min(640px, 100%); }
+.players { display: grid; grid-template-columns: repeat(auto-fill, minmax(128px, 1fr)); gap: 12px; }
+.pcard { position: relative; border: 3px solid var(--ink); border-radius: 20px; background: var(--paper2); color: var(--ink); box-shadow: 0 5px 0 var(--ink); padding: 10px 6px 8px; display: grid; justify-items: center; gap: 2px; text-align: center; min-height: 128px; }
+.pcard:active { transform: translateY(3px); box-shadow: 0 2px 0 var(--ink); }
+.pcard .pp { font-size: 46px; line-height: 1.1; font-family: "Apple Color Emoji", "Segoe UI Emoji", "Noto Color Emoji", sans-serif; }
+.pcard b { font-size: 18px; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.pcard small { font-weight: 700; color: var(--soft); font-size: 12.5px; }
+.pcard.now { background: var(--danfo); color: #1E1F24; } .pcard.now small { color: #3A3420; }
+.pcard .tag { position: absolute; top: -10px; left: 50%; transform: translateX(-50%); background: var(--leaf); color: #fff; font-size: 11px; font-weight: 800; padding: 1px 8px; border-radius: 999px; border: 2px solid var(--ink); white-space: nowrap; }
+.pcard.add { background: var(--paper); border-style: dashed; }
+.pcard .x { position: absolute; top: -10px; right: -8px; width: 34px; height: 34px; border-radius: 50%; background: var(--pick); color: #fff; border: 3px solid var(--ink); font-weight: 900; font-size: 16px; display: none; place-items: center; }
+.players.manage .pcard .x { display: grid; } .players.manage .pcard:not(.add) { border-color: var(--pick); border-style: dashed; } .players.manage .pcard.add { display: none; }
+.delbox { border: 3px solid var(--pick); border-radius: 16px; padding: 10px 12px; background: var(--paper); }
+.delbox p { margin: 0 0 8px; font-weight: 700; }
+.holddel { position: relative; overflow: hidden; background: var(--pick); color: #fff; }
+.holddel .fill { position: absolute; inset: 0; width: 0; background: rgba(0, 0, 0, .35); }
+.holddel .tx { position: relative; }
+.whoacts { flex-wrap: wrap; }
+@media (prefers-reduced-motion: reduce) { .players.manage .pcard { animation: none !important; } }
 .pickbtn[aria-pressed="true"] { background: var(--danfo); color: #1E1F24; } .pickbtn[aria-pressed="true"] small { color: #3A3420; }
 .pickbtn:active { transform: translateY(3px); box-shadow: 0 1px 0 var(--ink); }
 .age { min-width: 52px; min-height: 52px; text-align: center; display: grid; place-items: center; font-size: 20px; padding: 0; }
@@ -529,7 +551,7 @@ svg.i { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor;
   <header class="top">
     <button class="toy" id="parkBtn" hidden aria-label="Back to the motor park"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="3"/><path d="M10 17V7h3a3 3 0 0 1 0 6h-3"/></svg>Park</button>
     <div class="brand"><h1>ENGLISH <span>IS FUN!</span></h1><p id="tagline">Hop on. Every bus, a new adventure.</p></div>
-    <button class="toy ticket" id="rider" aria-label="Who is riding"><span class="stub" aria-hidden="true"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/></svg></span><span id="riderTx">Hop on</span></button>
+    <button class="toy ticket" id="rider" aria-label="Who's playing: log in, switch player or log out"><span class="stub" aria-hidden="true" id="riderPic"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/></svg></span><span id="riderTx">Hop on</span></button>
     <button class="toy" id="beeBtn" aria-label="Spelling Bee Hive"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><ellipse cx="12" cy="13" rx="6" ry="7.5" fill="var(--danfo)"/><path d="M6.5 11h11M6.2 14.5h11.6M7.5 18h9"/><path d="M9 6c-3-3-6-1-5 1.5S8 9 9 7.5M15 6c3-3 6-1 5 1.5S16 9 15 7.5"/></svg>Bee</button>
     <button class="toy" id="arcadeBtn"><svg class="i" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="14" width="18" height="7" rx="2.5"/><path d="M12 14V8.5"/><circle cx="12" cy="6" r="3" fill="currentColor"/><circle cx="17" cy="17.5" r="1.2" fill="currentColor"/></svg>Arcade</button>
     <button class="lockbtn" id="lockTop" aria-label="Grown-ups: press and hold"><span class="fill"></span><svg class="i" viewBox="0 0 24 24"><rect x="5" y="11" width="14" height="10" rx="2"/><path d="M8 11V8a4 4 0 0 1 8 0v3"/></svg></button>
@@ -544,6 +566,8 @@ svg.i { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor;
     <h3>Who's riding today?</h3>
     <label for="nameIn">Your name</label>
     <input id="nameIn" maxlength="20" placeholder="Type your name" required>
+    <label id="picLbl">Pick your picture (you tap it to log in)</label>
+    <div class="row pics" role="group" aria-labelledby="picLbl" id="pics"></div>
     <label id="voiceLbl">Boy or girl? (this picks your reading voice)</label>
     <div class="row" role="group" aria-labelledby="voiceLbl">
       <button type="button" class="pickbtn" data-g="girls" aria-pressed="false">Girl<small>a lady's voice reads to you</small></button>
@@ -556,6 +580,24 @@ svg.i { width: 26px; height: 26px; flex: none; fill: none; stroke: currentColor;
     <p class="hint" id="startHint">Your age picks the stop where your danfo starts. You can ride to any stop later.</p>
     <div class="acts"><button class="toy yellow" type="submit">All aboard!</button><button class="toy" type="button" id="signCancel">Not now</button></div>
   </form>
+</div>
+
+<div class="veil" id="who" hidden>
+  <div class="sheet whosheet" role="dialog" aria-labelledby="whoTitle">
+    <h3 id="whoTitle">Who's playing?</h3>
+    <p class="hint" id="whoHint">Tap your picture to log in.</p>
+    <div class="players" id="players"></div>
+    <div class="delbox" id="delBox" hidden>
+      <p id="delMsg"></p>
+      <div class="acts"><button class="toy holddel" type="button" id="delHold"><span class="fill"></span><span class="tx">Hold to remove</span></button><button class="toy" type="button" id="delCancel">Keep</button></div>
+    </div>
+    <div class="acts whoacts">
+      <button class="toy yellow" type="button" id="whoEdit">Edit my profile</button>
+      <button class="toy" type="button" id="whoOut">Log out</button>
+      <button class="toy" type="button" id="whoManage">Remove a player</button>
+      <button class="toy" type="button" id="whoClose">Close</button>
+    </div>
+  </div>
 </div>
 
 <div class="veil" id="arcade" hidden>
@@ -925,17 +967,26 @@ const esc = (s) => String(s).replace(/[&<>"]/g, (c) => ({ "&": "&amp;", "<": "&l
 
 /* ---------- rider, sign-up, arcade ---------- */
 function renderRider() {
-  $("riderTx").textContent = rider ? rider.name : "Hop on";
+  $("riderTx").textContent = rider ? rider.name : typeof players !== "undefined" && players.length ? "Log in" : "Hop on";
+  $("riderPic").innerHTML = rider && rider.pic ? `<span class="emo">${rider.pic}</span>` : '<svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 21c1-5 4-7 8-7s7 2 8 7"/></svg>';
+  if (rider && typeof players !== "undefined") store.set("players", players);
   $("tagline").textContent = VIEW === "road" ? (rider ? `Reading Road: ride on, ${rider.name}!` : "Reading Road: every stop, a new sound.") : rider ? `Welcome back, ${rider.name}! Pick a bus.` : "Hop on. Every bus, a new adventure.";
   $("parkBtn").hidden = VIEW !== "road";
 }
-let draft = { g: null, age: null, pre: null };
+let draft = { g: null, age: null, pre: null, mode: "new", pic: null };
+const AVATARS = ["🦁", "🐘", "🦒", "🐢", "🦜", "🐬", "🐝", "🦋", "🐯", "🐼", "🦊", "🐸", "🐰", "🦄", "🐙", "🐧"];
 function ageStop(a) { return a <= 3 ? 0 : a === 4 ? 1 : a === 5 ? 2 : a === 6 ? 3 : a <= 8 ? 4 : a <= 10 ? 5 : 6; }
-function openSignup(pre) {
-  draft = { g: rider ? rider.voice : null, age: rider ? rider.age : null, cls: rider && rider.cls !== undefined ? rider.cls : null, pre };
+function openSignup(pre, mode) {
+  mode = mode || (rider ? "edit" : "new"); const me = mode === "edit" ? rider : null;
+  draft = { g: me ? me.voice : null, age: me ? me.age : null, cls: me && me.cls !== undefined ? me.cls : null, pre, mode, pic: me ? me.pic : null };
+  if (!draft.pic) { const used = players.map((p) => p.pic); draft.pic = AVATARS.find((x) => !used.includes(x)) || AVATARS[players.length % AVATARS.length]; }
+  const taken = players.filter((p) => !me || p.id !== me.id).map((p) => p.pic);
+  $("pics").innerHTML = AVATARS.map((e) => `<button type="button" class="pickbtn ${taken.includes(e) ? "taken" : ""}" data-p="${e}" aria-pressed="${draft.pic === e}" aria-label="picture ${e}">${e}</button>`).join("");
+  $("pics").querySelectorAll("[data-p]").forEach((b) => b.onclick = () => { draft.pic = b.dataset.p; $("pics").querySelectorAll("[data-p]").forEach((x) => x.setAttribute("aria-pressed", x === b)); });
+  $("signForm").querySelector("h3").textContent = mode === "edit" ? `Edit ${me.name}'s profile` : players.length ? "New player" : "Who's riding today?";
   $("clss").innerHTML = ["Not yet", "P1", "P2", "P3", "P4", "P5", "P6"].map((c, k) => `<button type="button" class="pickbtn age cls" data-c="${k}" aria-pressed="${draft.cls === k}">${c}</button>`).join("");
   $("clss").querySelectorAll(".cls").forEach((b) => b.onclick = () => { draft.cls = +b.dataset.c; $("clss").querySelectorAll(".cls").forEach((x) => x.setAttribute("aria-pressed", x === b)); hintStart(); });
-  $("nameIn").value = rider ? rider.name : "";
+  $("nameIn").value = me ? me.name : "";
   $("ages").innerHTML = Array.from({ length: 11 }, (_, k) => k + 2).map((a) => `<button type="button" class="pickbtn age" data-a="${a}" aria-pressed="${draft.age === a}">${a}</button>`).join("");
   $("ages").querySelectorAll(".age").forEach((b) => b.onclick = () => { draft.age = +b.dataset.a; $("ages").querySelectorAll(".age").forEach((x) => x.setAttribute("aria-pressed", x === b)); hintStart(); });
   document.querySelectorAll(".pickbtn[data-g]").forEach((b) => b.setAttribute("aria-pressed", b.dataset.g === draft.g));
@@ -954,7 +1005,12 @@ $("signForm").addEventListener("submit", (e) => {
   if (!name) { $("nameIn").focus(); return; }
   if (!draft.g) { $("startHint").textContent = "Tap Girl or Boy, so we know which voice reads to you."; return; }
   if (!draft.age) { $("startHint").textContent = "Tap your age, so we know which bus is yours."; return; }
-  rider = { name, voice: draft.g, age: draft.age, cls: draft.cls || 0, start: ageStop(draft.age) }; voice = rider.voice; store.set("rider", rider);
+  const editing = draft.mode === "edit" && rider, clash = players.find((p) => p.name.toLowerCase() === name.toLowerCase() && (!editing || p.id !== rider.id));
+  if (clash) { $("startHint").textContent = `There is already a player called ${clash.name}. Tap their picture in Who's playing, or add a surname.`; $("nameIn").focus(); return; }
+  const prof = { name, voice: draft.g, age: draft.age, cls: draft.cls || 0, start: ageStop(draft.age), pic: draft.pic };
+  if (editing) { const old = rider.name; Object.assign(rider, prof); if (old !== name) movePlayerData(old, name); }
+  else { rider = Object.assign({ id: "p" + Date.now().toString(36), made: Date.now() }, prof); players.push(rider); }
+  rider.seen = Date.now(); voice = rider.voice; savePlayers();
   $("signup").hidden = true; sel = rider.start; if (rider.cls >= 1 && YEARS[rider.cls]) SCH.y = rider.cls; renderRider();
   if (VIEW === "park") { ROUTE = Math.max(0, myRoute()); draw(); renderCard(); setTimeout(() => play([A().lines.start, 300, { t: ROUTES[ROUTE].call }], $("rider")), 300); }
   else { goTo(rider.start, false); setTimeout(() => play([A().lines.start, 400, A().lines["c" + rider.start]], $("rider")), 300); }
@@ -4384,8 +4440,71 @@ function renderParkCard() {
 }
 
 ROUTE = Math.max(0, myRoute());
+/* =====================================================================
+   PLAYERS: several children share one phone or laptop. Each child logs in by tapping their picture,
+   can log out, and a grown-up can remove a player (press and hold, so it never happens by accident).
+   Progress stays keyed by name, so it is moved when a name changes and wiped when a player is removed.
+   ===================================================================== */
+const PKEYS = ["garden", "market", "say", "hive", "school"];
+let players = store.get("players", []) || [];
+if (rider) { let me = players.find((p) => (rider.id && p.id === rider.id) || p.name.toLowerCase() === rider.name.toLowerCase());
+  if (!me) { me = { id: "p" + Date.now().toString(36), made: Date.now(), pic: AVATARS.find((x) => !players.map((p) => p.pic).includes(x)) || AVATARS[0] }; players.push(me); }
+  Object.assign(me, rider, { id: me.id, pic: me.pic || rider.pic }); rider = me; store.set("players", players); store.set("rider", rider); }
+function savePlayers() { store.set("players", players); store.set("rider", rider); }
+function movePlayerData(from, to) {
+  PKEYS.forEach((k) => { let v = null; try { v = localStorage.getItem(`sd.${k}.${from}`); } catch (e) {} if (v !== null) { try { localStorage.setItem(`sd.${k}.${to}`, v); localStorage.removeItem(`sd.${k}.${from}`); } catch (e) {} } });
+  retagTakes(from, to); }
+async function retagTakes(from, to) { const db = await vdb(); if (!db) return;
+  try { const os = db.transaction("takes", "readwrite").objectStore("takes"), q = os.getAll();
+    q.onsuccess = () => q.result.forEach((r) => { if (r.who !== from) return; if (to === null) os.delete(r.t); else { r.who = to; os.put(r); } }); } catch (e) {} }
+function playerSum(p) { const sc = store.get(`school.${p.name}`, {}) || {}, hv = store.get(`hive.${p.name}`, {}) || {};
+  return { topics: Object.values(sc.t || {}).filter((x) => x && x.pass).length, certs: Object.keys(sc.cert || {}).length, bee: Object.values(hv).filter((x) => x && x.pass).length }; }
+let whoManage = false, delTarget = null, delTimer = null;
+function openWho(talk) { whoManage = false; delTarget = null; $("delBox").hidden = true; renderWho(); $("who").hidden = false;
+  if (talk) play([{ t: players.length ? "Who's playing? Tap your picture." : "Let's add a player!" }]); }
+function renderWho() {
+  const box = $("players"); box.classList.toggle("manage", whoManage);
+  box.innerHTML = players.map((p) => { const s = playerSum(p), now = rider && rider.id === p.id, bits = [s.topics ? `🏅 ${s.topics}` : "", s.certs ? `🎓 ${s.certs}` : "", s.bee ? `🐝 ${s.bee}` : ""].filter(Boolean).join(" · ");
+    return `<button type="button" class="pcard ${now ? "now" : ""}" data-id="${p.id}" aria-label="${esc(p.name)}${now ? ", playing now" : ""}">${now ? '<span class="tag">Playing now</span>' : ""}<span class="pp" aria-hidden="true">${p.pic || "🙂"}</span><b>${esc(p.name)}</b><small>${p.cls >= 1 ? "Primary " + p.cls : "Age " + p.age}</small>${bits ? `<small>${bits}</small>` : ""}<span class="x" aria-hidden="true">✕</span></button>`; }).join("")
+    + `<button type="button" class="pcard add" id="addP"><span class="pp" aria-hidden="true">➕</span><b>New player</b><small>Add a child</small></button>`;
+  box.querySelectorAll(".pcard[data-id]").forEach((b) => b.onclick = () => { const p = players.find((x) => x.id === b.dataset.id); if (whoManage) askDelete(p); else logIn(p); });
+  $("addP").onclick = () => { $("who").hidden = true; openSignup(null, "new"); };
+  $("whoHint").textContent = whoManage ? "Grown-ups: tap the player you want to remove." : players.length ? "Tap your picture to log in." : "No players yet. Tap New player.";
+  $("whoEdit").hidden = !rider || whoManage; $("whoOut").hidden = !rider || whoManage; $("whoManage").hidden = !players.length;
+  $("whoManage").textContent = whoManage ? "Done" : "Remove a player"; $("whoClose").hidden = whoManage;
+}
+function logIn(p) {
+  stop(); rider = p; rider.seen = Date.now(); voice = rider.voice; sel = rider.start; if (rider.cls >= 1 && YEARS[rider.cls]) SCH.y = rider.cls; savePlayers();
+  $("who").hidden = true; $("gm").hidden = true; VIEW = "park"; ROUTE = Math.max(0, myRoute()); renderRider(); draw(); renderCard();
+  setTimeout(() => play([{ t: `Welcome back, ${rider.name}!` }, 250, { t: ROUTES[ROUTE].call }], $("rider")), 250);
+}
+function logOut() {
+  stop(); const was = rider ? rider.name : ""; rider = null; savePlayers(); $("gm").hidden = true; VIEW = "park"; renderRider(); draw(); renderCard(); openWho(false);
+  play([{ t: was ? `Bye bye, ${was}! See you soon.` : "Who's playing?" }]);
+}
+function askDelete(p) { delTarget = p; $("delMsg").textContent = `Remove ${p.name}? All of ${p.name}'s stars, badges and certificates on this device will be deleted. This cannot be undone.`; $("delBox").hidden = false; $("delHold").focus(); }
+function deletePlayer(p) {
+  PKEYS.forEach((k) => { try { localStorage.removeItem(`sd.${k}.${p.name}`); } catch (e) {} }); retagTakes(p.name, null);
+  players = players.filter((x) => x.id !== p.id); if (rider && rider.id === p.id) rider = null; savePlayers();
+  delTarget = null; $("delBox").hidden = true; if (!players.length) whoManage = false; renderRider(); draw(); renderCard(); renderWho(); play([{ t: `${p.name} has been removed.` }]);
+}
+(() => { const b = $("delHold"), f = b.querySelector(".fill"), HOLD = 2000; let t0 = 0, raf = 0;
+  const end = () => { cancelAnimationFrame(raf); clearTimeout(delTimer); f.style.width = "0"; };
+  const start = (e) => { if (!delTarget) return; e.preventDefault(); t0 = performance.now(); const tick = (n) => { f.style.width = Math.min(100, (n - t0) / HOLD * 100) + "%"; raf = requestAnimationFrame(tick); }; raf = requestAnimationFrame(tick);
+    delTimer = setTimeout(() => { end(); deletePlayer(delTarget); }, HOLD); };
+  b.addEventListener("pointerdown", start); ["pointerup", "pointerleave", "pointercancel"].forEach((ev) => b.addEventListener(ev, end));
+  b.addEventListener("keydown", (e) => { if ((e.key === "Enter" || e.key === " ") && !e.repeat) start(e); }); b.addEventListener("keyup", end);
+  b.addEventListener("click", (e) => e.preventDefault()); })();
+$("delCancel").onclick = () => { delTarget = null; $("delBox").hidden = true; };
+$("whoManage").onclick = () => { whoManage = !whoManage; delTarget = null; $("delBox").hidden = true; renderWho(); };
+$("whoOut").onclick = logOut;
+$("whoEdit").onclick = () => { $("who").hidden = true; openSignup(null, "edit"); };
+$("whoClose").onclick = () => { $("who").hidden = true; stop(); };
+$("rider").onclick = () => (players.length ? openWho(true) : openSignup(null, "new"));
+
 let rz; new ResizeObserver(() => { clearTimeout(rz); rz = setTimeout(draw, 80); }).observe($("scene"));
 renderRider(); renderCard();
+if (!rider && players.length) openWho(false);
 </script>
 
 <script>

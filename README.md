@@ -33,7 +33,13 @@ Open <https://github.com/AROWOLO-ABIMBOLA/english-is-fun/upload/main>, drag in t
 
 ## For parents: how it works
 
-- **Who's riding?** The first time, your child types a name, picks girl or boy (this picks the reading voice), their age and their class. The class picks their bus: from Primary 1 up, it's **School English**; younger children start on the **Reading Road**. Every bus stays open to everyone.
+- **Players (log in and log out):** each child has their own player with a name, a picture, their age and class, and their own stars, badges and certificates. Several children can share one phone or laptop.
+  - **Log in:** tap the name button at the top, then tap your picture on the **Who's playing?** screen. Young children who can't read yet just find their animal picture.
+  - **Add a player:** tap **New player** on the same screen. Each child picks a name, a picture, girl or boy (this picks the reading voice), their age and their class. Names must be different.
+  - **Log out:** tap your name at the top, then **Log out**. The next child can log in.
+  - **Edit my profile:** change the name, picture, age or class. Stars move with a new name.
+  - **Remove a player (grown-ups):** tap **Remove a player**, tap the child, then press and hold **Hold to remove** for 2 seconds. This deletes that child's stars, badges and certificates on this device and cannot be undone.
+- **The bus:** the class picks each child's bus: from Primary 1 up, it's **School English**; younger children start on the **Reading Road**. Every bus stays open to everyone.
 - **The motor park:** tap a bus to hear the conductor call its route, then tap **Board the bus**. **Next bus** shows the next one.
 
 ### School English (Primary 1–6)
@@ -92,4 +98,4 @@ Open <https://github.com/AROWOLO-ABIMBOLA/english-is-fun/upload/main>, drag in t
 | `icons/` | App icons and the link-preview picture |
 | `.nojekyll` | Tells GitHub to publish the files exactly as they are |
 
-Storage names: browser storage prefix `sd.` (shared with the earlier phonics game at the same address, so a child's stars carry over), recordings database `soundDanfo`, offline cache `english-is-fun-v5`.
+Storage names: player list `sd.players`, current player `sd.rider`, browser storage prefix `sd.` (shared with the earlier phonics game at the same address, so a child's stars carry over), recordings database `soundDanfo`, offline cache `english-is-fun-v6`.
